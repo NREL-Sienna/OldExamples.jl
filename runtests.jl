@@ -1,7 +1,7 @@
 using Test
 using Pkg
 
-@test Pkg.activate("env") == "/Users/cbarrows/Documents/repos/Examples/env/Project.toml"
+@test Pkg.activate("env") == joinpath(pwd(),"env/Project.toml")
 @test Pkg.instantiate()==nothing
 @test Pkg.resolve()==nothing
 @test using PowerSystems == nothing
