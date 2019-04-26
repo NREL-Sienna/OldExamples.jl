@@ -1,7 +1,9 @@
 using Test
 using Pkg
+using Test
 
-@test Pkg.activate("env") == joinpath(pwd(),"env/Project.toml")
+obj = Pkg.activate("env")
+@test (obj == joinpath(pwd(),"env","Project.toml")) | (obj == nothing)
 @test Pkg.instantiate()==nothing
 @test Pkg.resolve()==nothing
 @test using PowerSystems == nothing
