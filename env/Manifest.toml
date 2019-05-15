@@ -107,9 +107,9 @@ version = "0.1.1"
 
 [[DataFrames]]
 deps = ["CategoricalArrays", "Compat", "IteratorInterfaceExtensions", "Missings", "PooledArrays", "Printf", "REPL", "Reexport", "SortingAlgorithms", "Statistics", "StatsBase", "TableTraits", "Tables", "Unicode"]
-git-tree-sha1 = "61528683a3ef43e203adb300958ef89a91492cab"
+git-tree-sha1 = "3891a62fd843662af9f78f25bdd415530b9b9c1e"
 uuid = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-version = "0.18.0"
+version = "0.18.2"
 
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections", "Random", "Serialization", "Test"]
@@ -429,10 +429,8 @@ uuid = "c36e90e8-916a-50a6-bd94-075b64ef4655"
 version = "0.10.0"
 
 [[PowerSimulations]]
-deps = ["AxisArrays", "Compat", "DataFrames", "Dates", "JuMP", "LinQuadOptInterface", "LinearAlgebra", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "TimeSeries"]
-git-tree-sha1 = "268f1c69f5bc476ba3e78fc1aadd4688e018d303"
-repo-rev = "master"
-repo-url = "https://github.com/nrel/PowerSimulations.jl"
+deps = ["AxisArrays", "DataFrames", "Dates", "JuMP", "LinearAlgebra", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "TimeSeries"]
+git-tree-sha1 = "ce1401149ac43f2c80f73d426c3fbbd2840de6af"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 version = "0.1.0"
 
