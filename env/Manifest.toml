@@ -225,9 +225,9 @@ uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[GLPK]]
 deps = ["BinaryProvider", "Libdl", "MathOptInterface", "SparseArrays"]
-git-tree-sha1 = "93be0c23900ce7a23db56bdcb29daf9fb38b12ef"
+git-tree-sha1 = "514692c8ffb0cb4f37afcb0f175573f31551c408"
 uuid = "60bf3e95-4087-53dc-ae20-288a0d20c6a6"
-version = "0.11.3"
+version = "0.11.4"
 
 [[GR]]
 deps = ["Base64", "DelimitedFiles", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test"]
@@ -264,6 +264,12 @@ deps = ["JuMP", "Memento"]
 git-tree-sha1 = "4739474cbd631b821dba4253c05150f1d1880d22"
 uuid = "2030c09a-7f63-5d83-885d-db604e0e9cc0"
 version = "0.3.2"
+
+[[InfrastructureSystems]]
+deps = ["CSV", "DataFrames", "Dates", "InteractiveUtils", "JSON", "JSON2", "Logging", "Mustache", "Test", "TimeSeries", "UUIDs", "YAML"]
+git-tree-sha1 = "d04166a61e199e50621528f1a4b032d5d9502696"
+uuid = "2cd47ed4-ca9b-11e9-27f2-ab636a7671f1"
+version = "0.1.1"
 
 [[IniFile]]
 deps = ["Test"]
@@ -517,17 +523,17 @@ uuid = "c36e90e8-916a-50a6-bd94-075b64ef4655"
 version = "0.12.5"
 
 [[PowerSimulations]]
-deps = ["DataFrames", "Dates", "Feather", "JuMP", "LinearAlgebra", "MathOptFormat", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "RecipesBase", "TimeSeries"]
-git-tree-sha1 = "3b9f6c8ee4a9cb7d29454e16b48ca6e3348fc5c4"
+deps = ["DataFrames", "Dates", "Feather", "InfrastructureSystems", "JuMP", "LinearAlgebra", "MathOptFormat", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "RecipesBase", "TimeSeries"]
+git-tree-sha1 = "22404a3163faf92c4b2e6b365d78051809cffab6"
 repo-rev = "jd/sim_update"
 repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 version = "0.2.0"
 
 [[PowerSystems]]
-deps = ["CSV", "DataFrames", "Dates", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "9eedad4a66e9e2fbccd63cea63f85db3ac619f3f"
-repo-rev = "dev"
+deps = ["CSV", "DataFrames", "Dates", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
+git-tree-sha1 = "8e62bcc6ce9f5baceb3df86401c8cc88ba862e25"
+repo-rev = "master"
 repo-url = "https://github.com/NREL/PowerSystems.jl.git"
 uuid = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
 version = "0.4.0"
