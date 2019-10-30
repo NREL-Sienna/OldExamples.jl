@@ -9,14 +9,14 @@
 #' An example of how to parse MATPOWER files and create a `System` using [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
 
 #' ### Environemnt
-#' This notebook depends on the SIIPExamples.jl environment
+#' This notebook depends on the SIIPExamples.jl environment which is loaded by default
 
 using Pkg
-Pkg.activate("../../.")
+Pkg.status()
 
 
 #' ### Dependencies
-
+using SIIPExamples
 using PowerSystems
 using TimeSeries
 const PSY = PowerSystems
@@ -29,6 +29,5 @@ PSY.download(PSY.TestData; branch = "master")
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 #' ### Create a `System`
-sys = PSY.parse_standard_files(joinpath(base_dir, "data/matpower/RTS_GMLC.m"));
-
+sys = PSY.parse_standard_files(joinpath(base_dir, "data/matpower", "case5_re.m"))
 sys

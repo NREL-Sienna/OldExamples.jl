@@ -9,14 +9,14 @@
 #' An example of how to parse PSS/e files and create a `System` using [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
 
 #' ### Environemnt
-#' This notebook depends on the SIIPExamples.jl environment
+#' This notebook depends on the SIIPExamples.jl environment which is loaded by default
 
 using Pkg
-Pkg.activate("../../.")
+Pkg.status()
 
 
 #' ### Dependencies
-
+using SIIPExamples
 using PowerSystems
 using TimeSeries
 const PSY = PowerSystems

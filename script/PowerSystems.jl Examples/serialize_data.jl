@@ -11,7 +11,9 @@
 
 #' ### Dependencies
 #' Let's use a dataset from one of the parsing examples
-include("../../script/PowerSystems.jl Examples/parse_tabulardata.jl")
+using SIIPExamples
+pkgpath = dirname(dirname(pathof(SIIPExamples)))
+include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_tabulardata.jl"))
 
 #' ### Write data to a temporary directory
 

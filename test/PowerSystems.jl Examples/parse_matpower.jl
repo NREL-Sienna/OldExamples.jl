@@ -1,8 +1,9 @@
 
 using Pkg
-Pkg.activate("../../.")
+Pkg.status()
 
 
+using SIIPExamples
 using PowerSystems
 using TimeSeries
 const PSY = PowerSystems
@@ -13,7 +14,6 @@ PSY.download(PSY.TestData; branch = "master")
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 
-sys = PSY.parse_standard_files(joinpath(base_dir, "data/matpower/RTS_GMLC.m"));
-
+sys = PSY.parse_standard_files(joinpath(base_dir, "data/matpower", "case5_re.m"))
 sys
 

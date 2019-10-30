@@ -1,101 +1,45 @@
 #' ---
-#' title: Parsing MATPOWER Files
+#' title: Add Forecasts
 #' ---
 
 #' **Originally Contributed by**: Clayton Barrows
 
 #' ## Introduction
 
-#' An example of how to parse MATPOWER files and create a `System` using [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
-
-#' ### Environemnt
-#' This notebook depends on the SIIPExamples.jl environment
-
-using Pkg
-Pkg.activate("../../.")
-
-
+#' An example of how to parse add time series data to a `System` using [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
+#'
+#' For example, a `System` created by [parsing a MATPOWER file](../../notebook/PowerSystems.jl Examples/parse_matpower.ipynb)
+#' doesn't contain any time series data. So a user may want to add forecasts to the `System`
 #' ### Dependencies
+#' Let's use the 5-bus dataset we parsed in the MATPOWER example
+using SIIPExamples
+pkgpath = dirname(dirname(pathof(SIIPExamples)))
+include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_matpower.jl"))
 
-using PowerSystems
-using TimeSeries
-const PSY = PowerSystems
-const IS = PSY.InfrastructureSystems;
+#' ### Define pointers to time series files
+#' For example, if we want to add a bunch of time series files, say one for each load and 
+#' one for each renewable generator, we need to define pointers to each .csv file cotaining 
+#' the time series in the following format (PowerSystems.jl also supports a CSV format for this file)
 
-#' ### Fetch Data
-#' PowerSystems.jl links to some test data that is suitable for this example. 
-#' Let's download the test data
-PSY.download(PSY.TestData; branch = "master")
-base_dir = dirname(dirname(pathof(PowerSystems)));
+FORECASTS_DIR = joinpath(base_dir,"data/forecasts/5bus_ts")
+fname = joinpath(FORECASTS_DIR,"timeseries_pointers_da.json")
+open(fname,"r") do f
+    for line in eachline(f)
+        println(line)
+    end
+end
 
-#' ### Create a `System`
-sys_matpower = PSY.parse_standard_files(joinpath(base_dir, "data/matpower/RTS_GMLC.m"));
-
-sys_matpower
-
-
-
-
-
-sys_psse = PSY.parse_standard_files(joinpath(base_dir,"data/psse_raw/RTS-GMLC.RAW"));
-
-sys_psse
-
-sys_psse
-
-
-
-
-
-RTS_GMLC_DIR = joinpath(base_dir,"data/RTS_GMLC");
-
-#parse in tabular data
-rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR,"user_descriptors.yaml"))
-
-#create an hourly model from tabular data
-sys = System(rawsys; forecast_resolution = Dates.Hour(1));
-
-sys
-
-
-
-
-
-FORECASTS_DIR = joinpath(base_dir,"data/forecasts/")
-
-
-sys_5 = PSY.parse_standard_files(joinpath(base_dir, "data/matpower", "case5_re.m"))
+#' ### Map labels to fields in `PowerSystemTypes`
+#' next we need to define the fields that each time series file references. The above file
+#' has two unique combinations of `category` and `label`, so we need to make a label mapping
+#' to match each of those to the `component` fields.
 
 label_mapping = Dict(("electricload","MW Load") => "maxactivepower",
     ("generator","PMax MW") => "rating")
 
-ts_pointers = IS.read_time_series_metadata(joinpath(FORECASTS_DIR,
-                            "5bus_ts","timeseries_pointers_da.json"), label_mapping)
+#' ### Read the pointers and label mappings
+ts_pointers = IS.read_time_series_metadata(fname, label_mapping)
 
-fieldnames(PowerLoad)
-
-add_forecasts!(sys_5, ts_pointers)
-sys_5
-
-
-
-
-
-
-
-path, io = mktemp()
-@info "Serializing to $path"
-to_json(io, sys)
-close(io)
-
-filesize(path)/1000000 #MB
-
-sys2 = System(path)
-
-
-
-
-
-
-
-
+#' ### Read and assign forecasts to `System`
+add_forecasts!(sys, ts_pointers)
+sys

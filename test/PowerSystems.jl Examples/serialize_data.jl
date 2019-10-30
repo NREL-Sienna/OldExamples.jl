@@ -1,5 +1,7 @@
 
-include("../../script/PowerSystems.jl Examples/parse_tabulardata.jl")
+using SIIPExamples
+pkgpath = dirname(dirname(pathof(SIIPExamples)))
+include(joinpath(pkgpath,"script/PowerSystems.jl Examples/parse_tabulardata.jl"))
 
 
 path, io = mktemp()

@@ -1,8 +1,9 @@
 
 using Pkg
-Pkg.activate("../../.")
+Pkg.status()
 
 
+using SIIPExamples
 using PowerSystems
 using TimeSeries
 const PSY = PowerSystems
