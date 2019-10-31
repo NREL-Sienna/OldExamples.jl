@@ -8,7 +8,7 @@
 
 #' An example of how to parse MATPOWER files and create a `System` using [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
 
-#' ### Environemnt
+#' ### Environment
 #' This notebook depends on the SIIPExamples.jl environment which is loaded by default
 
 using Pkg

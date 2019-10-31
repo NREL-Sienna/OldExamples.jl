@@ -315,9 +315,9 @@ version = "0.3.2"
 
 [[InfrastructureSystems]]
 deps = ["CSV", "DataFrames", "Dates", "HDF5", "InteractiveUtils", "JSON", "JSON2", "Logging", "Mustache", "Test", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "4a778b4797a5aeb3ea2f06c687aed5a317c72d81"
+git-tree-sha1 = "5d997524092149d1c02e6082d54fbc29f3c62c34"
 uuid = "2cd47ed4-ca9b-11e9-27f2-ab636a7671f1"
-version = "0.2.2"
+version = "0.2.3"
 
 [[IniFile]]
 deps = ["Test"]
@@ -430,9 +430,9 @@ version = "0.2.2"
 
 [[MathOptInterface]]
 deps = ["BenchmarkTools", "LinearAlgebra", "OrderedCollections", "SparseArrays", "Test", "Unicode"]
-git-tree-sha1 = "0d0e9987440b0b5c03f8df9cd30694f1acec81bb"
+git-tree-sha1 = "78427dcc212e0c0ad9658049bc56a50303ad9737"
 uuid = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
-version = "0.9.6"
+version = "0.9.7"
 
 [[MathProgBase]]
 deps = ["Compat"]
@@ -579,19 +579,19 @@ version = "0.13.0"
 
 [[PowerSimulations]]
 deps = ["DataFrames", "Dates", "Feather", "InfrastructureSystems", "JuMP", "LinearAlgebra", "MathOptFormat", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "RecipesBase", "Requires", "TimeSeries"]
-git-tree-sha1 = "8478504bc2211da6099a3c439f13dc4aa60b515b"
-repo-rev = "master"
+git-tree-sha1 = "1b3fcaa063a59d929c066527d68315849693c16c"
+repo-rev = "jd/updates_to_canonical"
 repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 version = "0.2.0"
 
 [[PowerSystems]]
 deps = ["CSV", "DataFrames", "Dates", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "238efe39a162265449bede55f97be78b2192f673"
+git-tree-sha1 = "98795508dc5a9b4cb847d274bd008f9e2f434d36"
 repo-rev = "master"
 repo-url = "https://github.com/NREL/PowerSystems.jl.git"
 uuid = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
-version = "0.5.0"
+version = "0.5.1"
 
 [[Printf]]
 deps = ["Unicode"]
