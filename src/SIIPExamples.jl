@@ -1,5 +1,7 @@
 module SIIPExamples
 
+export print_struct
+
 using Weave
 
 repo_directory = dirname(joinpath(@__DIR__))
@@ -66,6 +68,20 @@ function weave_all(;force=false)
     for folder in readdir(joinpath(repo_directory,"script"))
         weave_folder(folder; force = force)
     end
+end
+
+"""
+`print_struct()`
+
+Prints the definition of a struct.
+"""
+function print_struct(type)
+    mutable = type.mutable ? "mutable" : ""
+    println("$mutable struct $type")
+    for (fn, ft) in zip(fieldnames(type),fieldtypes(type))
+        println("    $fn::$ft")
+    end
+    println("end")
 end
 
 end

@@ -70,10 +70,10 @@ uuid = "00ebfdb7-1f24-5e51-bd34-a7502290713f"
 version = "1.0.0"
 
 [[CSV]]
-deps = ["CategoricalArrays", "DataFrames", "Dates", "FilePathsBase", "LazyArrays", "Mmap", "Parsers", "PooledArrays", "Profile", "Tables", "Unicode", "WeakRefStrings"]
-git-tree-sha1 = "0c3201d16c65a1453be158189d48df7c357eb7fb"
+deps = ["CategoricalArrays", "DataFrames", "Dates", "Mmap", "Parsers", "PooledArrays", "Profile", "Tables", "Unicode", "WeakRefStrings"]
+git-tree-sha1 = "5e7c67bc2873b347cd20ee742c93d243f3df9e93"
 uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-version = "0.5.14"
+version = "0.5.13"
 
 [[Calculus]]
 deps = ["Compat"]
@@ -223,20 +223,8 @@ git-tree-sha1 = "a963f89bc16735af00cd28ac60d4145cd7fe2abd"
 uuid = "becb17da-46f6-5d3c-ad1b-1c5fe96bc73c"
 version = "0.5.3"
 
-[[FilePathsBase]]
-deps = ["Dates", "LinearAlgebra", "Printf", "Test", "UUIDs"]
-git-tree-sha1 = "2ee1d999c462425e2f848524f732ed51bc1ab63a"
-uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
-version = "0.6.2"
-
 [[FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
-
-[[FillArrays]]
-deps = ["LinearAlgebra", "Random", "SparseArrays"]
-git-tree-sha1 = "de38b0253ade98340fabaf220f368f6144541938"
-uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
-version = "0.7.4"
 
 [[FixedPointNumbers]]
 git-tree-sha1 = "d14a6fa5890ea3a7e5dcab6811114f132fec2b4b"
@@ -315,9 +303,9 @@ version = "0.3.2"
 
 [[InfrastructureSystems]]
 deps = ["CSV", "DataFrames", "Dates", "HDF5", "InteractiveUtils", "JSON", "JSON2", "Logging", "Mustache", "Test", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "5d997524092149d1c02e6082d54fbc29f3c62c34"
+git-tree-sha1 = "df3389c4ee317ca01216bc6e1a8816a658a87a45"
 uuid = "2cd47ed4-ca9b-11e9-27f2-ab636a7671f1"
-version = "0.2.3"
+version = "0.2.4"
 
 [[IniFile]]
 deps = ["Test"]
@@ -392,12 +380,6 @@ deps = ["Compat", "MacroTools", "Test"]
 git-tree-sha1 = "aec38c7e7f255a678af22651c74100e3cd39ea20"
 uuid = "50d2b5c4-7a5e-59d5-8109-a42b560f39c0"
 version = "0.13.2"
-
-[[LazyArrays]]
-deps = ["FillArrays", "LinearAlgebra", "MacroTools", "StaticArrays"]
-git-tree-sha1 = "01ec151cd0418fb05294b0230471765e0a65adb1"
-uuid = "5078a376-72f3-5289-bfd5-ec5146d43c02"
-version = "0.12.3"
 
 [[LibGit2]]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
@@ -579,7 +561,7 @@ version = "0.13.0"
 
 [[PowerSimulations]]
 deps = ["DataFrames", "Dates", "Feather", "InfrastructureSystems", "JuMP", "LinearAlgebra", "MathOptFormat", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "RecipesBase", "Requires", "TimeSeries"]
-git-tree-sha1 = "1b3fcaa063a59d929c066527d68315849693c16c"
+git-tree-sha1 = "fd147a09144732369cfc53a6ea6fc260995a9f04"
 repo-rev = "jd/updates_to_canonical"
 repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
@@ -587,11 +569,11 @@ version = "0.2.0"
 
 [[PowerSystems]]
 deps = ["CSV", "DataFrames", "Dates", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "98795508dc5a9b4cb847d274bd008f9e2f434d36"
+git-tree-sha1 = "9a6707ded89792255aead7bbdfcbcc89db2a3d97"
 repo-rev = "master"
 repo-url = "https://github.com/NREL/PowerSystems.jl.git"
 uuid = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
-version = "0.5.1"
+version = "0.5.2"
 
 [[Printf]]
 deps = ["Unicode"]

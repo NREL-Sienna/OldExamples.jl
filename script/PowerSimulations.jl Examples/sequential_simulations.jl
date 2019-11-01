@@ -88,10 +88,10 @@ model_ref_ed= ModelReference(CopperPlatePowerModel, devices, branches, services)
 #' ### Day-Ahead UC stage
 #' The UC stage is defined with:
 #'  - formulation = `model_ref_uc`
+#'  - Run once per step
 #'  - `System` = `sys`
 #'  - Optimized with the 'Cbc_optimizer'
-#'  - Synchronized with ??
-#'  - Run once?
+#'  - feedforward - from self... grab last value of this stage to initialize next run
 DA_stage = Stage(model_ref_uc, 1, sys, Cbc_optimizer,  Dict(0 => Sequential()))
 
 #' ### Real-Time ED stage
@@ -102,10 +102,10 @@ DA_stage = Stage(model_ref_uc, 1, sys, Cbc_optimizer,  Dict(0 => Sequential()))
 #'  - Synchronized with ??
 #'  - Run 6x
 RT_stage = Stage(model_ref_ed, 
-                6, 
+                96, 
                 sys_RT, 
                 Cbc_optimizer, 
-                Dict(1 => Synchronize(12,4), 
+                Dict(1 => Synchronize(24,4), 
                      0 => Sequential()), 
                 TimeStatusChange(:ON_ThermalStandard))
 

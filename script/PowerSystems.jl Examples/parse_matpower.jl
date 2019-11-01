@@ -25,9 +25,8 @@ const IS = PSY.InfrastructureSystems;
 #' ### Fetch Data
 #' PowerSystems.jl links to some test data that is suitable for this example. 
 #' Let's download the test data
-PSY.download(PSY.TestData; branch = "master")
-base_dir = dirname(dirname(pathof(PowerSystems)));
+base_dir = PSY.download(PSY.TestData; branch = "master");
 
 #' ### Create a `System`
-sys = PSY.parse_standard_files(joinpath(base_dir, "data/matpower", "case5_re.m"))
+sys = PSY.parse_standard_files(joinpath(base_dir, "matpower", "case5_re.m"))
 sys
