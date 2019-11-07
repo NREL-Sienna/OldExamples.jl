@@ -26,12 +26,6 @@ Cbc_optimizer = JuMP.with_optimizer(Cbc.Optimizer, logLevel=1, ratioGap=0.1)
 const PSI = PowerSimulations;
 const PSY = PowerSystems;
 
-# path to "reformat-DC" branch of RTS-GMLC repo: https://github.com/GridMod/RTS-GMLC/
-# RTSDIR = "../RTS-GMLC/RTS_Data/SourceData/."
-
-# only do this if you want the full annual data (currently breaks models and simulations below)
-#rawsys = PSY.PowerSystemTableData(RTSDIR, 100.0,joinpath(RTSDIR,"../FormattedData/SIIP/user_descriptors.yaml"))
-
 #' ### Make a system from the 5-minute data
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
@@ -61,7 +55,7 @@ devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStanda
                                     )       
 
 
-model_ref_uc= ModelReference(CopperPlatePowerModel, devices, branches, services);
+model_ref_uc= OperationsTemplate(CopperPlatePowerModel, devices, branches, services);
 
 
 #' ### Define the reference model for the economic dispatch 
@@ -79,7 +73,7 @@ devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStanda
                                     #:ILoads =>  DeviceModel(PSY.InterruptibleLoad, PSI.DispatchablePowerLoad),
                                     )       
 
-model_ref_ed= ModelReference(CopperPlatePowerModel, devices, branches, services);
+model_ref_ed= OperationsTemplate(CopperPlatePowerModel, devices, branches, services);
 
 #' ## Define the stages
 #' Stages define a model. The actual problem will change as the stage gets updated to represent
@@ -88,25 +82,41 @@ model_ref_ed= ModelReference(CopperPlatePowerModel, devices, branches, services)
 #' ### Day-Ahead UC stage
 #' The UC stage is defined with:
 #'  - formulation = `model_ref_uc`
-#'  - Run once per step
+#'  - each problem contains 24 time periods
+#'  - each execution steps forward with a 1 day interval
+#'  - executed once before moving on to RT stage
 #'  - `System` = `sys`
 #'  - Optimized with the 'Cbc_optimizer'
-#'  - feedforward - from self... grab last value of this stage to initialize next run
-DA_stage = Stage(model_ref_uc, 1, sys, Cbc_optimizer,  Dict(0 => Sequential()))
+#'  - Each exection has information coming from self (0)
+DA_stage = Stage(model_ref_uc, 
+                 24, 
+                 Dates.Hour(24), 
+                 1, 
+                 sys, 
+                 Cbc_optimizer, 
+                 Dict(0=> Sequential()))
 
 #' ### Real-Time ED stage
+#' First, lets define how the stage get's information from other executions:
+#'  - Information is passed from previous executions of RT problems (`0 => Sequential()`)
+#'  - Information is passed from previous executions of DA problems by gathering results from 24 DA periods (hours) and using each period value in 4 15-minute RT periods (`1 => Synchronize(24,4)`)
+chrono = Dict(1 => Synchronize(24,4), 0 => Sequential())
+
 #' The ED stage is defined with:
 #'  - formulation = `model_ref_ed`
+#'  - each problem contains 3 time periods
+#'  - each execution steps forward with a 15 minute interval
+#'  - executed 96x (4x24) before returning to DA stage
 #'  - `System` = `sys_RT`
 #'  - Optimized with the 'Cbc_optimizer'
-#'  - Synchronized with ??
-#'  - Run 6x
+#'  - Each exection has information coming from self (0), and DA stage (1). Where DA infromation is 
 RT_stage = Stage(model_ref_ed, 
+                3,
+                Dates.Minute(15),
                 96, 
                 sys_RT, 
                 Cbc_optimizer, 
-                Dict(1 => Synchronize(24,4), 
-                     0 => Sequential()), 
+                chrono, 
                 TimeStatusChange(:ON_ThermalStandard))
 
 #' Put the stages in a dict
@@ -116,8 +126,5 @@ stages = Dict(1 => DA_stage,
 #' ### Build the simulation
 sim = Simulation("test", 1, stages, "/Users/cbarrows/Downloads/"; verbose = true, system_to_file = false, horizon=1)
 
-
-
-res = run_sim_model!(sim)
-
-
+#' ### Execute the simulation
+res = execute!(sim, verbose=true)
