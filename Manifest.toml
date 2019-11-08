@@ -561,7 +561,9 @@ version = "0.13.0"
 
 [[PowerSimulations]]
 deps = ["DataFrames", "Dates", "Feather", "InfrastructureSystems", "JSON", "JuMP", "LinearAlgebra", "MathOptFormat", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "RecipesBase", "Requires", "TimeSeries"]
-path = "../PowerSimulations.jl"
+git-tree-sha1 = "657844318e93e1119a9d54b36d95009bbaa41e30"
+repo-rev = "cb/sim_stage_updates"
+repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 version = "0.2.0"
 
