@@ -1,7 +1,7 @@
 
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_tabulardata.jl"))
+include(joinpath(pkgpath,"test/PowerSystems_examples/parse_tabulardata.jl"))
 
 
 path, io = mktemp()

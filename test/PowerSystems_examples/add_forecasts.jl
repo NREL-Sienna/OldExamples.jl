@@ -1,7 +1,7 @@
 
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_matpower.jl"))
+include(joinpath(pkgpath,"test/PowerSystems_examples/parse_matpower.jl"))
 
 
 FORECASTS_DIR = joinpath(base_dir,"data/forecasts/5bus_ts")

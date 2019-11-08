@@ -13,7 +13,7 @@
 #' Let's use a dataset from one of the parsing examples
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_tabulardata.jl"))
+include(joinpath(pkgpath,"test/PowerSystems_examples/parse_tabulardata.jl"))
 
 #' ### Write data to a temporary directory
 

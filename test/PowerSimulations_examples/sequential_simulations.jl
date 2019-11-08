@@ -1,7 +1,7 @@
 
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_tabulardata.jl"))
+include(joinpath(pkgpath,"test/PowerSystems_examples/parse_tabulardata.jl"))
 
 
 using DataFrames
@@ -60,20 +60,20 @@ model_ref_ed= OperationsTemplate(CopperPlatePowerModel, devices, branches, servi
 
 DA_stage = Stage(model_ref_uc, 
                  24, 
-                 Dates.Hour(24), 
+                 Dates.Hour(12), 
                  1, 
                  sys, 
                  Cbc_optimizer, 
                  Dict(0=> Sequential()))
 
 
-chrono = Dict(1 => Synchronize(24,4), 0 => Sequential())
+chrono = Dict(1 => Synchronize(12,4), 0 => Sequential())
 
 
 RT_stage = Stage(model_ref_ed, 
                 3,
                 Dates.Minute(15),
-                96, 
+                48, 
                 sys_RT, 
                 Cbc_optimizer, 
                 chrono, 
@@ -88,4 +88,7 @@ sim = Simulation("test", 1, stages, "/Users/cbarrows/Downloads/"; verbose = true
 
 
 res = execute!(sim, verbose=true)
+
+
+rt_results = load_simulation_results("stage-2",res)
 

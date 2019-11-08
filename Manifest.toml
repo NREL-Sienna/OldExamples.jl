@@ -184,10 +184,10 @@ uuid = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
 version = "0.0.4"
 
 [[DiffRules]]
-deps = ["Random", "Test"]
-git-tree-sha1 = "dc0869fb2f5b23466b32ea799bd82c76480167f7"
+deps = ["NaNMath", "Random", "SpecialFunctions"]
+git-tree-sha1 = "f734b5f6bc9c909027ef99f6d91d5d9e4b111eed"
 uuid = "b552c78f-8df3-52c6-915a-8e097449b14b"
-version = "0.0.10"
+version = "0.1.0"
 
 [[Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
@@ -239,9 +239,9 @@ version = "0.5.4"
 
 [[ForwardDiff]]
 deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "NaNMath", "Random", "SpecialFunctions", "StaticArrays"]
-git-tree-sha1 = "adf88d6da1f0294058f38295becf8807986bb7d0"
+git-tree-sha1 = "4407e7b76999eca2646abdb68203bd4302476168"
 uuid = "f6369f11-7733-5829-9624-2563aa707210"
-version = "0.10.5"
+version = "0.10.6"
 
 [[FunctionalCollections]]
 deps = ["Test"]
@@ -273,15 +273,15 @@ version = "0.7.6"
 
 [[HDF5]]
 deps = ["BinaryProvider", "Blosc", "CMakeWrapper", "Libdl", "Mmap"]
-git-tree-sha1 = "c14a84878428b66222fccea6ed89cdafa7c22ae4"
+git-tree-sha1 = "d3ea5532668bf9bdd5e8d5f16571e0b520cbbb9f"
 uuid = "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f"
-version = "0.12.4"
+version = "0.12.5"
 
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "MbedTLS", "Sockets"]
-git-tree-sha1 = "f1e1b417a34cf73a70cbed919915bf8f8bad1806"
+git-tree-sha1 = "806f2a5d66d1b78e5349fd463a41f0c10ca5fff3"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.8.6"
+version = "0.8.7"
 
 [[Hiccup]]
 deps = ["MacroTools", "Test"]
@@ -303,9 +303,9 @@ version = "0.3.2"
 
 [[InfrastructureSystems]]
 deps = ["CSV", "DataFrames", "Dates", "HDF5", "InteractiveUtils", "JSON", "JSON2", "Logging", "Mustache", "Test", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "9e2623168ee2bfbe94711d64f4ce9a578ec1076b"
+git-tree-sha1 = "3e939b4f481ab517700daf0eb32a02a82e189aba"
 uuid = "2cd47ed4-ca9b-11e9-27f2-ab636a7671f1"
-version = "0.3.0"
+version = "0.4.0"
 
 [[IniFile]]
 deps = ["Test"]
@@ -567,11 +567,11 @@ version = "0.2.0"
 
 [[PowerSystems]]
 deps = ["CSV", "DataFrames", "Dates", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "d38157289081c41a46188e3dc345f6e3a0e48249"
+git-tree-sha1 = "0770fb231eda84d1f423f37e8af467f3ecf443f6"
 repo-rev = "master"
 repo-url = "https://github.com/NREL/PowerSystems.jl.git"
 uuid = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
-version = "0.6.0"
+version = "0.6.1"
 
 [[Printf]]
 deps = ["Unicode"]
@@ -643,9 +643,9 @@ version = "0.8.0"
 
 [[StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "1e9c5d89cba8047d518f1ffef432906ef1a3e8bd"
+git-tree-sha1 = "5a3bcb6233adabde68ebc97be66e95dcb787424c"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "0.12.0"
+version = "0.12.1"
 
 [[Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]

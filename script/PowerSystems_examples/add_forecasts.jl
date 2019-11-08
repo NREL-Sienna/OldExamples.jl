@@ -14,7 +14,7 @@
 #' Let's use the 5-bus dataset we parsed in the MATPOWER example
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_matpower.jl"))
+include(joinpath(pkgpath,"test/PowerSystems_examples/parse_matpower.jl"))
 
 #' ### Define pointers to time series files
 #' For example, if we want to add a bunch of time series files, say one for each load and 

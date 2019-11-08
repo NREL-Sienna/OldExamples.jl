@@ -14,7 +14,7 @@
 #' Let's use the basic RTS-GMLC dataset from one of the parsing examples
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems.jl Examples/parse_tabulardata.jl"))
+include(joinpath(pkgpath,"test/PowerSystems_examples/parse_tabulardata.jl"))
 
 #' ### Modeling Packages
 using DataFrames
@@ -83,14 +83,14 @@ model_ref_ed= OperationsTemplate(CopperPlatePowerModel, devices, branches, servi
 #' The UC stage is defined with:
 #'  - formulation = `model_ref_uc`
 #'  - each problem contains 24 time periods
-#'  - each execution steps forward with a 1 day interval
+#'  - each execution steps forward with a 1/2 day interval
 #'  - executed once before moving on to RT stage
 #'  - `System` = `sys`
 #'  - Optimized with the 'Cbc_optimizer'
 #'  - Each exection has information coming from self (0)
 DA_stage = Stage(model_ref_uc, 
                  24, 
-                 Dates.Hour(24), 
+                 Dates.Hour(12), 
                  1, 
                  sys, 
                  Cbc_optimizer, 
@@ -99,21 +99,21 @@ DA_stage = Stage(model_ref_uc,
 #' ### Real-Time ED stage
 #' First, lets define how the stage get's information from other executions:
 #'  - Information is passed from previous executions of RT problems (`0 => Sequential()`)
-#'  - Information is passed from previous executions of DA problems by gathering results from 24 DA periods (hours) and using each period value in 4 15-minute RT periods (`1 => Synchronize(24,4)`)
-chrono = Dict(1 => Synchronize(24,4), 0 => Sequential())
+#'  - Information is passed from previous executions of DA problems by gathering results from 12 DA periods (hours) and using each period value in 4 15-minute RT periods (`1 => Synchronize(24,4)`)
+chrono = Dict(1 => Synchronize(12,4), 0 => Sequential())
 
 #' The ED stage is defined with:
 #'  - formulation = `model_ref_ed`
 #'  - each problem contains 3 time periods
 #'  - each execution steps forward with a 15 minute interval
-#'  - executed 96x (4x24) before returning to DA stage
+#'  - executed 48x (4x12) before returning to DA stage
 #'  - `System` = `sys_RT`
 #'  - Optimized with the 'Cbc_optimizer'
 #'  - Each exection has information coming from self (0), and DA stage (1). Where DA infromation is 
 RT_stage = Stage(model_ref_ed, 
                 3,
                 Dates.Minute(15),
-                96, 
+                48, 
                 sys_RT, 
                 Cbc_optimizer, 
                 chrono, 
@@ -128,3 +128,6 @@ sim = Simulation("test", 1, stages, "/Users/cbarrows/Downloads/"; verbose = true
 
 #' ### Execute the simulation
 res = execute!(sim, verbose=true)
+
+#' ### Examine results
+rt_results = load_simulation_results("stage-2",res)
