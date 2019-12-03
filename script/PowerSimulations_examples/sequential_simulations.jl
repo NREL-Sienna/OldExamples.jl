@@ -55,7 +55,7 @@ devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStanda
                                     )       
 
 
-model_ref_uc= OperationsTemplate(CopperPlatePowerModel, devices, branches, services);
+model_ref_uc= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
 
 
 #' ### Define the reference model for the economic dispatch 
@@ -73,7 +73,7 @@ devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStanda
                                     #:ILoads =>  DeviceModel(PSY.InterruptibleLoad, PSI.DispatchablePowerLoad),
                                     )       
 
-model_ref_ed= OperationsTemplate(CopperPlatePowerModel, devices, branches, services);
+model_ref_ed= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
 
 #' ## Define the stages
 #' Stages define a model. The actual problem will change as the stage gets updated to represent
@@ -124,10 +124,11 @@ stages = Dict(1 => DA_stage,
               2 => RT_stage)
 
 #' ### Build the simulation
-sim = Simulation("test", 1, stages, "/Users/cbarrows/Downloads/"; verbose = true, system_to_file = false, horizon=1)
+mkdir("./tmp")
+sim = Simulation("test", 1, stages, "./tmp/"; verbose = true, system_to_file = false, horizon=1)
 
 #' ### Execute the simulation
 res = execute!(sim, verbose=true)
 
 #' ### Examine results
-rt_results = load_simulation_results("stage-2",res)
+rt_results = load_simulation_results(res,2)

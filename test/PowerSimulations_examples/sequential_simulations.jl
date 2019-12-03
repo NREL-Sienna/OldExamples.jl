@@ -38,7 +38,7 @@ devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStanda
                                     )       
 
 
-model_ref_uc= OperationsTemplate(CopperPlatePowerModel, devices, branches, services);
+model_ref_uc= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
 
 
 branches = Dict{Symbol, DeviceModel}(#:L => DeviceModel(PSY.Line, PSI.StaticLine),
@@ -55,7 +55,7 @@ devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStanda
                                     #:ILoads =>  DeviceModel(PSY.InterruptibleLoad, PSI.DispatchablePowerLoad),
                                     )       
 
-model_ref_ed= OperationsTemplate(CopperPlatePowerModel, devices, branches, services);
+model_ref_ed= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
 
 
 DA_stage = Stage(model_ref_uc, 
@@ -84,11 +84,12 @@ stages = Dict(1 => DA_stage,
               2 => RT_stage)
 
 
-sim = Simulation("test", 1, stages, "/Users/cbarrows/Downloads/"; verbose = true, system_to_file = false, horizon=1)
+mkdir("./tmp")
+sim = Simulation("test", 1, stages, "./tmp/"; verbose = true, system_to_file = false, horizon=1)
 
 
 res = execute!(sim, verbose=true)
 
 
-rt_results = load_simulation_results("stage-2",res)
+rt_results = load_simulation_results(res,2)
 

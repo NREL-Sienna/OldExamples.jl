@@ -10,7 +10,7 @@ const PSY = PowerSystems
 const IS = PSY.InfrastructureSystems;
 
 
-PSY.download(PSY.TestData; branch = "master")
+PSY.download(PSY.TestData; branch = "master", force=true)
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 
