@@ -1,21 +1,19 @@
-#' ---
-#' title: Serializing PowerSystem Data
-#' ---
+# # Serializing PowerSystem Data
 
-#' **Originally Contributed by**: Clayton Barrows
+# **Originally Contributed by**: Clayton Barrows
 
-#' ## Introduction
+# ## Introduction
 
-#' PowerSystems.jl supports serializing/deserializing data with JSON. This notebook 
-#' provides an example of how to write and read a `System` to/from disk.
+# PowerSystems.jl supports serializing/deserializing data with JSON. This notebook 
+# provides an example of how to write and read a `System` to/from disk.
 
-#' ### Dependencies
-#' Let's use a dataset from one of the parsing examples
+# ### Dependencies
+# Let's use a dataset from one of the parsing examples
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 include(joinpath(pkgpath,"test/PowerSystems_examples/parse_tabulardata.jl"))
 
-#' ### Write data to a temporary directory
+# ### Write data to a temporary directory
 
 path, io = mktemp()
 @info "Serializing to $path"
@@ -24,7 +22,7 @@ close(io)
 
 filesize(path)/1000000 #MB
 
-#' ### Read the JSON file and create a new `System`
+# ### Read the JSON file and create a new `System`
 sys2 = System(path)
 
 
