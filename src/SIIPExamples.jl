@@ -28,6 +28,68 @@ function read_json(filename)
     end
 end
 
+
+abstract type AbstractOS end
+abstract type Unix <: AbstractOS end
+abstract type BSD <: Unix end
+
+abstract type Windows <: AbstractOS end
+abstract type MacOS <: BSD end
+abstract type Linux <: BSD end
+
+if Sys.iswindows()
+    const os = Windows
+elseif Sys.isapple()
+    const os = MacOS
+else
+    const os = Linux
+end
+
+abstract type TestData end
+
+"""
+Download Data from `branch="master"` name into a "data" folder in given argument path.
+Skip the actual download if the folder already exists and force=false.
+Defaults to the root of the PowerSystems package.
+
+Returns the downloaded folder name.
+"""
+function download(
+    repo::AbstractString,
+    folder::AbstractString = abspath(joinpath(@__DIR__, "..")),
+    branch::String = "master",
+    force::Bool = false,
+)
+
+    if Sys.iswindows()
+        DATA_URL = "$repo/archive/$branch.zip"
+    else
+        DATA_URL = "$repo/archive/$branch.tar.gz"
+    end
+    directory = abspath(normpath(folder))
+    reponame = splitpath(repo)[end]
+    data = joinpath(directory, "$reponame-$branch")
+    if !isdir(data) || force
+        @info "Downloading $DATA_URL"
+        tempfilename = Base.download(DATA_URL)
+        mkpath(directory)
+        @info "Extracting data to $data"
+        unzip(os, tempfilename, directory)
+        #mv(joinpath(directory, "$reponame-$branch"), data, force = true)
+    end
+
+    return data
+end
+
+function unzip(::Type{<:BSD}, filename, directory)
+    @assert success(`tar -xvf $filename -C $directory`) "Unable to extract $filename to $directory"
+end
+
+function unzip(::Type{Windows}, filename, directory)
+    home = (Base.VERSION < v"0.7-") ? JULIA_HOME : Sys.BINDIR
+    @assert success(`$home/7z x $filename -y -o$directory`) "Unable to extract $filename to $directory"
+end
+
 """
 `literate_file(folder::AbstractString, file::AbstractString)`
 
@@ -44,14 +106,13 @@ function literate_file(folder, file; force = false, kwargs...)
     testpath = joinpath(repo_directory, "test", folder)
     notebookpath = joinpath(repo_directory, "notebook", folder)
     notebookfilepath = joinpath(notebookpath, join([filename,".ipynb"]))
-    @show configpath = joinpath(repo_directory, "script", folder, filename * "_config.json")
+    configpath = joinpath(repo_directory, "script", folder, filename * "_config.json")
 
     config = get(kwargs, :config, Dict())
     if isfile(configpath)
         @info "found config file for $filename"
         config = read_json(configpath)
     end
-    @show config       
 
     if mtime(srcpath) > mtime(testpath) || mtime(testpath)==0.0 || force
         @warn "Updating tests for $filename as it has been updated since the last literate."
