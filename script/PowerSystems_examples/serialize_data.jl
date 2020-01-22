@@ -8,10 +8,10 @@
 # provides an example of how to write and read a `System` to/from disk.
 
 # ### Dependencies
-# Let's use a dataset from one of the parsing examples
+# Let's use a dataset from the [tabular data parsing example](../../notebook/PowerSystems_examples/parse_matpower.ipynb)
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems_examples/parse_tabulardata.jl"))
+include(joinpath(pkgpath,"test/PowerSystems_examples/parse_matpower.jl"))
 
 # ### Write data to a temporary directory
 
