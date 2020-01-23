@@ -1,134 +1,166 @@
-#' ---
-#' title: Sequential Simulations with [PowerSimulations.jl](https://github.com/NREL/PowerSimulations.jl)
-#' ---
+# # Sequential Simulations with [PowerSimulations.jl](https://github.com/NREL/PowerSimulations.jl)
 
-#' **Originally Contributed by**: Clayton Barrows
+# **Originally Contributed by**: Clayton Barrows
 
-#' ## Introduction
+# ## Introduction
 
-#' PowerSimulations.jl supports simulations that consist of sequential optimization problems 
-#' where results from previous problems inform subsequent problems in a variety of ways this 
-#' notebook demonstrates some of these capabilities to represent electricitty market clearing.
+# PowerSimulations.jl supports simulations that consist of sequential optimization problems 
+# where results from previous problems inform subsequent problems in a variety of ways this 
+# notebook demonstrates some of these capabilities to represent electricitty market clearing.
 
-#' ### Dependencies
-#' Let's use the basic RTS-GMLC dataset from one of the parsing examples
+# ## Dependencies
+# Since the `OperatiotnsProblem` is the fundamental building block of a sequential 
+# simulation in PowerSimulations, we will build on the [OperationsProblem example](../../notebook/PowerSimulations_examples/operations_problems.ipynb)
+# by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems_examples/parse_tabulardata.jl"))
+include(joinpath(pkgpath,"test/PowerSimulations_examples/operations_problems.jl"))
 
-#' ### Modeling Packages
-using DataFrames
-using PowerSimulations
-using JuMP
-using Cbc
-Cbc_optimizer = JuMP.with_optimizer(Cbc.Optimizer, logLevel=1, ratioGap=0.1)
+# ### 5-Minute system
+# We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.
+# The RTS data also includes 5-minute resolution time series data. So, we can create another
+# `System`:
 
-const PSI = PowerSimulations;
-const PSY = PowerSystems;
-
-#' ### Make a system from the 5-minute data
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
-#' ### Define inittial times for simulatiton
-#' We can create a vector of initial times for a system by defining the step length and the 
-#' horizon. For example, we can create a set of initial times that represent 12hr steps every
-#' 6hrs from the hourly `system`.
-DA_initial_times = PSY.generate_initial_times(sys, Dates.Hour(6), 12)
+# ## `OperationsProblemTemplate`s define `Stage`s
+# Sequential simulations in PowerSimulations are created by defining `OperationsProblems`
+# that represent `Stages`, and how information flows between executions of a `Stage` and
+# between different `Stage`s.
+# 
+# Let's start by defining a two stage simulation that might look like a typical day-Ahead
+# and real-time electricity market clearing process.
 
-#' Similarly, we can create a set of initial times corresponding to 2hr (24x5min) steps every
-#' 1hr from the 5-minute `system`.
-RT_initial_times = PSY.generate_initial_times(sys_RT, Dates.Hour(1), 24)
+# ### Define the reference model for the day-ahead unit commitment
+# We defined a basic UC template in the [OperationsProblem example](../../notebook/PowerSimulations_examples/operations_problems.ipynb)
+# so we can use that.
 
-#' ### Define the reference model for the unit commitment
-branches = Dict{Symbol, DeviceModel}(#:L => DeviceModel(PSY.Line, PSI.StaticLine),
-                                     #:T => DeviceModel(PSY.Transformer2W, PSI.StaticTransformer),
-                                     #:TT => DeviceModel(PSY.TapTransformer, PSI.StaticTransformer),
-                                     #:dc_line => DeviceModel(PSY.HVDCLine, PSI.HVDCDispatch)
+#nb # print(template_uc)
+
+# ### Define the reference model for the real-time economic dispatch 
+# For the most part, this can be pretty similar to the `template_uc` definition. But 
+# we should change a few things to be consistent with typical economic dispatch specifications.
+
+# First, let's change the injection device specification to represent `ThermalStandard`
+# generators with a dispatch formulation. Otherwise, we can keep the rest of the injection
+# `DeviceModel`s the same.
+
+devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
+                                    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
+                                    :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
+                                    :HydroROR => DeviceModel(HydroFix, HydroFixed),
+                                    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+                                    :ILoads =>  DeviceModel(InterruptibleLoad, DispatchablePowerLoad),
                                     )
 
-services = Dict{Symbol, PSI.ServiceModel}()
+# Finally, let's create an economic dispatch `OperationsProblemTemplate` with the new
+# injetion devices dict, and with an empty dict for the services (we can release all 
+# reserves in the real-time). 
 
-devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStandard, PSI.ThermalBasicUnitCommitment),
-                                    :Ren => DeviceModel(PSY.RenewableDispatch, PSI.RenewableFullDispatch),
-                                    :Loads =>  DeviceModel(PSY.PowerLoad, PSI.StaticPowerLoad),
-                                    #:ILoads =>  DeviceModel(PSY.InterruptibleLoad, PSI.StaticPowerLoad),
-                                    )       
+template_ed= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, Dict());
 
+# ### Define the `Stage`s
+# Stages define models. The actual problem will change as the stage gets updated to represent
+# different time periods, but the formulations applied to the components is constant within 
+# a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s 
+# and the `System`s that we've already created.
 
-model_ref_uc= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
+stages_definition = Dict("UC" => Stage(GenericOpProblem, template_uc, sys, Cbc_optimizer),
+                            "ED" => Stage(GenericOpProblem, template_ed, sys_RT, Cbc_optimizer))
 
+# ### `SimulationSequence`
+# Similar to an `OperationsProblemTemplate`, the `SimulationSequence` provides a template of
+# how to execute a sequential set of operations problems.
 
-#' ### Define the reference model for the economic dispatch 
-branches = Dict{Symbol, DeviceModel}(#:L => DeviceModel(PSY.Line, PSI.StaticLine),
-                                     #:T => DeviceModel(PSY.Transformer2W, PSI.StaticTransformer),
-                                     #:TT => DeviceModel(PSY.TapTransformer, PSI.StaticTransformer),
-                                     #:dc_line => DeviceModel(PSY.HVDCLine, PSI.HVDCDispatch)
-                                        )
+#nb # print_struct(SimulationSequence)
 
-services = Dict{Symbol, PSI.ServiceModel}()
+# Let's review some of the `SimulationSequence` arguments.
 
-devices = Dict{Symbol, DeviceModel}(:Generators => DeviceModel(PSY.ThermalStandard, PSI.ThermalDispatch, SemiContinuousFF(:P, :ON)),
-                                    :Ren => DeviceModel(PSY.RenewableDispatch, PSI.RenewableFullDispatch),
-                                    :Loads =>  DeviceModel(PSY.PowerLoad, PSI.StaticPowerLoad),
-                                    #:ILoads =>  DeviceModel(PSY.InterruptibleLoad, PSI.DispatchablePowerLoad),
-                                    )       
+# ### Chrologies 
+# In PowerSimulations, chronologies define where information is flowing. There are two types
+# of chronogies.
+#  - inter-stage chronologies: Define how information flows between stages. e.g. day-ahead 
+# solutions are used to inform economic dispatch problems 
+#  - intra-stage chronologies: Define how information flows between multiple executions of a 
+# single stage. e.g. the dispatch setpoints of the first period of an economic dispatch problem
+# are constrained by the ramping limits from setpoints in the final period of the previous problem.
+# 
 
-model_ref_ed= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
+# Let's define an inter-stage chronolgy that synchronizes information from 24 periods of
+# the first stage with a set of executions of the second stage:
 
-#' ## Define the stages
-#' Stages define a model. The actual problem will change as the stage gets updated to represent
-#' different time periods, but the formulations applied to the components is constant within a stage.
+inter_stage_chronologies = Dict(("UC"=>"ED") => Synchronize(periods = 24))
 
-#' ### Day-Ahead UC stage
-#' The UC stage is defined with:
-#'  - formulation = `model_ref_uc`
-#'  - each problem contains 24 time periods
-#'  - each execution steps forward with a 1/2 day interval
-#'  - executed once before moving on to RT stage
-#'  - `System` = `sys`
-#'  - Optimized with the 'Cbc_optimizer'
-#'  - Each exection has information coming from self (0)
-DA_stage = Stage(model_ref_uc, 
-                 24, 
-                 Dates.Hour(12), 
-                 1, 
-                 sys, 
-                 Cbc_optimizer, 
-                 Dict(0=> Sequential()))
+# Next, let's define an intra-stage chronology (initial condition chronology) that informs 
+# problem initial conditions from previous executions of the same stage.
 
-#' ### Real-Time ED stage
-#' First, lets define how the stage get's information from other executions:
-#'  - Information is passed from previous executions of RT problems (`0 => Sequential()`)
-#'  - Information is passed from previous executions of DA problems by gathering results from 12 DA periods (hours) and using each period value in 4 15-minute RT periods (`1 => Synchronize(24,4)`)
-chrono = Dict(1 => Synchronize(12,4), 0 => Sequential())
+ini_cond_chronology = Dict("UC" => Consecutive(), "ED" => Consecutive())
 
-#' The ED stage is defined with:
-#'  - formulation = `model_ref_ed`
-#'  - each problem contains 3 time periods
-#'  - each execution steps forward with a 15 minute interval
-#'  - executed 48x (4x12) before returning to DA stage
-#'  - `System` = `sys_RT`
-#'  - Optimized with the 'Cbc_optimizer'
-#'  - Each exection has information coming from self (0), and DA stage (1). Where DA infromation is 
-RT_stage = Stage(model_ref_ed, 
-                3,
-                Dates.Minute(15),
-                48, 
-                sys_RT, 
-                Cbc_optimizer, 
-                chrono, 
-                TimeStatusChange(:ON_ThermalStandard))
+# ### `FeedForward` and `Cache`
+# The definition of exactly what information is passed using the defined chronologies is 
+# accomplished with `FeedForward` and `Cache` objects. Specifically, `FeedForward` is used
+# to define what to do with information being passed with an inter-stage chronology. Let's 
+# define a `FeedForward` that affects the semi-continus range constraints of thermal generators
+# in the economic dispatch problems based on the value of the unit-commitment variables.
 
-#' Put the stages in a dict
-stages = Dict(1 => DA_stage,
-              2 => RT_stage)
+feed_forward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from_stage = Symbol(PSI.ON),
+                                                         affected_variables = [Symbol(PSI.REAL_POWER)]))
 
-#' ### Build the simulation
-mkdir("./tmp")
-sim = Simulation("test", 1, stages, "./tmp/"; verbose = true, system_to_file = false, horizon=1)
+# The `Cache` is simply a way to preserve needed information for later use. In the case of 
+# a typical day-ahead - real-time market simulaiton, there are many economic dispatch executions
+# in between each unit-commitment execution. Rather than keeping the full set of results from 
+# previous unit-commitment simulations in memory to be used in later executions, we can define
+# exactly which results will be needed and carry them through a cache in the economic dispatch
+# problems for later use.
 
-#' ### Execute the simulation
-res = execute!(sim, verbose=true)
+cache = Dict("ED" => [TimeStatusChange(PSI.ON, PSY.ThermalStandard)])
 
-#' ### Examine results
-rt_results = load_simulation_results(res,2)
+# ### Sequencing
+# The stage problem length, look-ahead, and other details surrounding the temporal Sequencing
+# of stages are controled using the `order`, `horizons`, and `intervals` arguments.
+#  - order::Dictt(Int, String) : the hierarchical order of stages in the simulation
+#  - horizons::Dict(String, Int) : defines the number of time periods in each stage (problem length)
+#  - intervals::Dict(String, Dates.Period) : defines the interval with which stage problems 
+# advance after each execution. e.g. day-ahead problems have an interval of 24-hours
+# 
+# So, to define a typical day-ahead - real-time sequence, we can define the following:
+#  - Day ahead problems should represent 48 hours, advancing 24 hours after each execution (24-hour look-ahead)
+#  - Real time problems should represent 1 hour (12 5-minute periods), advancing 1 hour after each execution (no look-ahead)
+
+order = Dict(1 => "UC", 2 => "ED")
+horizons = Dict("UC" => 48, "ED" =>12)
+intervals = Dict("UC" => Hour(24), "ED" => Hour(1))
+
+# Finally, we can put it all together:
+
+DA_RT_sequence = SimulationSequence(order = order,
+                                    horizons = horizons,
+                                    intervals = intervals,
+                                    intra_stage_chronologies = inter_stage_chronologies,
+                                    ini_cond_chronology = ini_cond_chronology,
+                                    feed_forward = feed_forward,
+                                    cache = cache)
+
+# ## `Simulation`
+# Now, we can build and executte a simulation using the `SimulationSequence` and `Stage`s 
+# that we've defined.
+
+file_path = tempdir()
+sim = Simulation(name = "rts-test",
+                steps = 2, step_resolution = Hour(24),
+                stages = stages_definition,
+                stages_sequence = DA_RT_sequence,
+                simulation_folder = file_path)
+
+# ### Build simulaiton
+
+build!(sim)
+
+# ### Execute simulation
+
+sim_results = execute!(sim)
+
+# ## Results
+uc_results = load_simulation_results(sim_results, "UC");
+ed_results = load_simulation_results(sim_results, "ED");
+
