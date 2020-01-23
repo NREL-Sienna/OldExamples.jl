@@ -1,0 +1,4 @@
+jupyter contrib nbextension install --user
+jupyter nbextension enable splitcell/splitcell
+jupyter labextension install webio --user
+jupyter labextension enable webio/jupyterlab_entry
