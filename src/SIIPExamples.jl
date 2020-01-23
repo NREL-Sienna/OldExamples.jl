@@ -93,15 +93,14 @@ end
 """
 `literate_file(folder::AbstractString, file::AbstractString)`
 
-Checks if the file has been modified since the last Literate and updates the notebook accordingly.
-
+Checks if the file has been modified since the last Weave and updates the notebook and tests accordingly.
 * `folder` = Name of the folder the tutorial is in
 * `file` = Name of the tutorial file
-* `force` = foce literate irrespective of file changes
+* `force` = foce weave irrespective of file changes
 """
 function literate_file(folder, file; force = false, kwargs...)
     
-    filename = split(file, ".")[1]
+    filename = splitext(file)[1]
     srcpath = joinpath(repo_directory, "script", folder, file)
     testpath = joinpath(repo_directory, "test", folder)
     notebookpath = joinpath(repo_directory, "notebook", folder)
