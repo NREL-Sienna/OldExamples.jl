@@ -31,8 +31,6 @@ rawsys = PSY.PowerSystemTableData(rts_src_dir,
 
 sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 
-DisplayTypeTree(PSI.AbstractDeviceFormulation, scopesep="\n")
-
 branches = Dict{Symbol, DeviceModel}(:L => DeviceModel(Line, StaticLine),
                                      :T => DeviceModel(Transformer2W, StaticTransformer),
                                      :TT => DeviceModel(TapTransformer , StaticTransformer))
@@ -42,7 +40,7 @@ devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCo
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
                                     :HydroROR => DeviceModel(HydroFix, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
-                                    #:ILoads =>  DeviceModel(InterruptibleLoad, StaticPowerLoad),
+                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptablePowerLoad),
                                     )
 
 services = Dict(:ReserveUp => ServiceModel(VariableReserve{ReserveUp}, RangeReserve),
@@ -57,29 +55,6 @@ op_problem = OperationsProblem(GenericOpProblem,
                                sys;
                                optimizer = Cbc_optimizer,
                                horizon = 12)
-
-print_struct(typeof(op_problem.psi_container))
-
-res = solve_op_problem!(op_problem);
-
-print_struct(PSI.SimulationResults)
-
-res.optimizer_log
-
-res.total_cost
-
-res.variables
-
-res.variables[:P_ThermalStandard]
-
-res.time_stamp
-
-using Plots
-plotly();
-
-bar_plot(res, [:P_ThermalStandard,:P_RenewableDispatch])
-
-flush(logger)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
