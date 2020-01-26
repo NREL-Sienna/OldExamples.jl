@@ -9,7 +9,7 @@ devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin)
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
                                     :HydroROR => DeviceModel(HydroFix, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
-                                    :ILoads =>  DeviceModel(InterruptibleLoad, DispatchablePowerLoad),
+                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
                                     )
 
 template_ed= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, Dict());

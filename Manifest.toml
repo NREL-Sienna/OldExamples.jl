@@ -258,9 +258,9 @@ version = "0.8.8"
 
 [[InfrastructureModels]]
 deps = ["JuMP", "Memento"]
-git-tree-sha1 = "4739474cbd631b821dba4253c05150f1d1880d22"
+git-tree-sha1 = "3f2fae880e01320c76f8b4bbaff7b545d800cfcf"
 uuid = "2030c09a-7f63-5d83-885d-db604e0e9cc0"
-version = "0.3.2"
+version = "0.3.3"
 
 [[InfrastructureSystems]]
 deps = ["CSV", "DataFrames", "Dates", "HDF5", "InteractiveUtils", "JSON", "JSON2", "Logging", "Mustache", "Test", "TimeSeries", "UUIDs", "YAML"]
@@ -474,7 +474,7 @@ version = "0.13.2"
 
 [[PowerSimulations]]
 deps = ["CSV", "Colors", "DataFrames", "Dates", "Feather", "InfrastructureSystems", "JSON", "JuMP", "LinearAlgebra", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "RecipesBase", "Requires", "SHA", "TimeSeries"]
-git-tree-sha1 = "39f85d34bb71da103f833e14b0c631cac6b62b13"
+git-tree-sha1 = "cf03dd528bdf3f4ee095e047fbe19d78c5cd3716"
 repo-rev = "dev0-2"
 repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
@@ -482,9 +482,9 @@ version = "0.2.0"
 
 [[PowerSystems]]
 deps = ["CSV", "DataFrames", "Dates", "DocStringExtensions", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "f96958488946022cc9bc89f329b317e0f64e8100"
+git-tree-sha1 = "54801004641c6c7893b8683de81515597b43b7b4"
 uuid = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
-version = "0.8.3"
+version = "0.8.4"
 
 [[Printf]]
 deps = ["Unicode"]
@@ -596,9 +596,9 @@ version = "0.16.1"
 
 [[TimeZones]]
 deps = ["Dates", "EzXML", "Mocking", "Printf", "Serialization", "Unicode"]
-git-tree-sha1 = "24a7474411886cede89529f9b848989b783d954e"
+git-tree-sha1 = "649a6ded860273aa6c808b0627bd88b5fb385211"
 uuid = "f269a46b-ccf7-5d73-abea-4c690281aa53"
-version = "0.10.5"
+version = "0.11.0"
 
 [[TranscodingStreams]]
 deps = ["Random", "Test"]

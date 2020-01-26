@@ -5,8 +5,8 @@
 # ## Introduction
 
 # PowerSimulations.jl supports simulations that consist of sequential optimization problems 
-# where results from previous problems inform subsequent problems in a variety of ways this 
-# notebook demonstrates some of these capabilities to represent electricitty market clearing.
+# where results from previous problems inform subsequent problems in a variety of ways. This 
+# example demonstrates some of these capabilities to represent electricitty market clearing.
 
 # ## Dependencies
 # Since the `OperatiotnsProblem` is the fundamental building block of a sequential 
@@ -50,7 +50,7 @@ devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin)
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
                                     :HydroROR => DeviceModel(HydroFix, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
-                                    :ILoads =>  DeviceModel(InterruptibleLoad, DispatchablePowerLoad),
+                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
                                     )
 
 # Finally, let's create an economic dispatch `OperationsProblemTemplate` with the new

@@ -62,7 +62,7 @@ sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 # each dispatching to different methods for populating optimization problem objectives, variables,
 # and constraints.
 
-#nb DisplayTypeTree(PSI.AbstractDeviceFormulation, scopesep="\n")
+#nb TypeTree(PSI.AbstractDeviceFormulation, scopesep="\n")
 
 # ### Branch Formulations
 # Here is an example of relatively standard branch formulations. Other formulations allow
@@ -85,7 +85,7 @@ devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCo
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
                                     :HydroROR => DeviceModel(HydroFix, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
-                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptablePowerLoad),
+                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
                                     )
 
 # ### Service Formulations

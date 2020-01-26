@@ -40,7 +40,7 @@ devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCo
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
                                     :HydroROR => DeviceModel(HydroFix, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
-                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptablePowerLoad),
+                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
                                     )
 
 services = Dict(:ReserveUp => ServiceModel(VariableReserve{ReserveUp}, RangeReserve),
