@@ -474,8 +474,8 @@ version = "0.13.2"
 
 [[PowerSimulations]]
 deps = ["CSV", "Colors", "DataFrames", "Dates", "Feather", "InfrastructureSystems", "JSON", "JuMP", "LinearAlgebra", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "RecipesBase", "Requires", "SHA", "TimeSeries"]
-git-tree-sha1 = "cf03dd528bdf3f4ee095e047fbe19d78c5cd3716"
-repo-rev = "dev0-2"
+git-tree-sha1 = "7a56d0f0707bf3c3d024a8a4653626dfed3ee054"
+repo-rev = "cb/hydro-2"
 repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 version = "0.2.0"
