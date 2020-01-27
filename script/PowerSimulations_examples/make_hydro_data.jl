@@ -19,10 +19,10 @@ hydro_generators5(nodes5) = [ #src
         0.0, #src
         0.0, #src
         TechHydro( #src
-            0.600, #src
+            2.0, #src
             PowerSystems.HY, #src
-            (min = 0.0, max = 60.0), #src
-            (min = 0.0, max = 60.0), #src
+            (min = 0.5, max = 2.0), #src
+            (min = -2.0, max = 2.0), #src
             nothing, #src
             nothing, #src
         ), #src
@@ -34,11 +34,11 @@ hydro_generators5(nodes5) = [ #src
         0.0, #src
         0.0, #src
         TechHydro( #src
-            0.600, #src
+            3.1, #src
             PowerSystems.HY, #src
-            (min = 0.0, max = 60.0), #src
-            (min = 0.0, max = 60.0), #src
-            (up = 10.0, down = 10.0), #src
+            (min = 1.0, max = 3.1), #src
+            (min = -3.1, max = 3.1), #src
+            (up = 1.0, down = 1.0), #src
             nothing, #src
         ), #src
         TwoPartCost(15.0, 0.0), #src
@@ -51,14 +51,21 @@ hydro_generators5(nodes5) = [ #src
 # We can add some random time series information too. #src
 #src
 hydro_timeseries_DA = [ #src
-    [TimeSeries.TimeArray(DayAhead, wind_ts_DA)], #src
-    [TimeSeries.TimeArray(DayAhead + Day(1), wind_ts_DA)], #src
+    [TimeArray(DayAhead, wind_ts_DA)], #src
+    [TimeArray(DayAhead + Day(1), wind_ts_DA)], #src
 ]; #src
 #src
 #src
 hydro_timeseries_RT = [ #src
     [TimeArray(RealTime, repeat(wind_ts_DA, inner = 12))], #src
     [TimeArray(RealTime + Day(1), repeat(wind_ts_DA, inner = 12))], #src
+]; #src
+#src
+hydro_load_timeseries_DA = [ #src
+    repeat([TimeArray(DayAhead, 0.3 .* ones(length(DayAhead)))], #src
+        length(get_components(StaticLoad,c_sys5_hy))), #src
+    repeat([TimeArray(DayAhead + Day(1), 0.3 .* ones(length(DayAhead)))], #src
+        length(get_components(StaticLoad,c_sys5_hy))) #src
 ]; #src
 #src
 # Now we can create a system with hourly resolution and add forecast data to it. #src
@@ -83,7 +90,7 @@ for t = 1:2 #src
         add_forecast!( #src
             c_sys5_hy, #src
             l, #src
-            Deterministic("get_maxactivepower", load_timeseries_DA[t][ix]), #src
+            Deterministic("get_maxactivepower", hydro_load_timeseries_DA[t][ix]), #src
         ) #src
     end #src
     for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy)) #src

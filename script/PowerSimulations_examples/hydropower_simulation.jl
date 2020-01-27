@@ -63,6 +63,7 @@ TypeTree(PSI.AbstractHydroFormulation)
 devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
     :Hyd2 => DeviceModel(HydroFix, HydroFixed),
+    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
@@ -79,6 +80,7 @@ op_problem.psi_container.JuMPmodel
 devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchReservoirFlow),
     :Hyd2 => DeviceModel(HydroFix, HydroDispatchRunOfRiver),
+    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
@@ -95,6 +97,7 @@ op_problem.psi_container.JuMPmodel
 devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchReservoirStorage),
     :Hyd2 => DeviceModel(HydroFix, HydroDispatchRunOfRiver),
+    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
@@ -111,6 +114,7 @@ op_problem.psi_container.JuMPmodel
 devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroDispatch, HydroCommitmentReservoirStorage),
     :Hyd2 => DeviceModel(HydroFix, HydroDispatchRunOfRiver),
+    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
