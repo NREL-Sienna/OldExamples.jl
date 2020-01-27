@@ -87,7 +87,7 @@ devices = Dict(
 template_ed = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
 stages_definition = Dict(
-    "UC" => Stage(GenericOpProblem, template_uc, c_sys5_hy, Cbc_optimizer),
+    "UC" => Stage(GenericOpProblem, template_uc, c_sys5_hy_uc, Cbc_optimizer),
     "ED" => Stage(GenericOpProblem, template_ed, c_sys5_hy_ed, Cbc_optimizer),
 )
 
@@ -144,7 +144,7 @@ template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 
 stages_definition = Dict(
     "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, Cbc_optimizer),
-    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy, Cbc_optimizer),
+    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
 )
 
 sequence = SimulationSequence(

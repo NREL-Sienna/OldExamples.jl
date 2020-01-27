@@ -34,11 +34,11 @@ hydro_generators5(nodes5) = [ #src
         0.0, #src
         0.0, #src
         TechHydro( #src
-            3.1, #src
+            10.1, #src
             PowerSystems.HY, #src
-            (min = 1.0, max = 3.1), #src
-            (min = -3.1, max = 3.1), #src
-            (up = 1.0, down = 1.0), #src
+            (min = 3.0, max = 15.1), #src
+            (min = -10.1, max = 15.1), #src
+            (up = 5.0, down = 5.0), #src
             nothing, #src
         ), #src
         TwoPartCost(15.0, 0.0), #src
@@ -62,10 +62,10 @@ hydro_timeseries_RT = [ #src
 ]; #src
 #src
 hydro_load_timeseries_DA = [ #src
-    repeat([TimeArray(DayAhead, 0.3 .* ones(length(DayAhead)))], #src
-        length(get_components(StaticLoad,c_sys5_hy))), #src
-    repeat([TimeArray(DayAhead + Day(1), 0.3 .* ones(length(DayAhead)))], #src
-        length(get_components(StaticLoad,c_sys5_hy))) #src
+    repeat([TimeArray(DayAhead, ones(length(DayAhead)))], #src
+        length(get_components(PowerLoad,c_sys5_hy))), #src
+    repeat([TimeArray(DayAhead + Day(1), ones(length(DayAhead)))], #src
+        length(get_components(PowerLoad,c_sys5_hy))) #src
 ]; #src
 #src
 # Now we can create a system with hourly resolution and add forecast data to it. #src
@@ -123,6 +123,65 @@ for t = 1:2 #src
     for (ix, i) in enumerate(get_components(InterruptibleLoad, c_sys5_hy)) #src
         add_forecast!( #src
             c_sys5_hy, #src
+            i, #src
+            Deterministic("get_maxactivepower", Iload_timeseries_DA[t][ix]), #src
+        ) #src
+    end #src
+end #src
+#src
+c_sys5_hy_uc = System( #src
+    nodes, #src
+    vcat( #src
+        thermal_generators5_uc_testing(nodes), #src
+        hydro_generators5(nodes), #src
+        renewable_generators5(nodes), #src
+    ), #src
+    loads5(nodes), #src
+    branches5(nodes), #src
+    nothing, #src
+    100.0, #src
+    nothing, #src
+    nothing, #src
+) #src
+#src
+for t = 1:2 #src
+    for (ix, l) in enumerate(get_components(PowerLoad, c_sys5_hy_uc)) #src
+        add_forecast!( #src
+        c_sys5_hy_uc, #src
+            l, #src
+            Deterministic("get_maxactivepower", load_timeseries_DA[t][ix]), #src
+        ) #src
+    end #src
+    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy_uc)) #src
+        add_forecast!( #src
+        c_sys5_hy_uc, #src
+            h, #src
+            Deterministic("get_rating", hydro_timeseries_DA[t][ix]), #src
+        ) #src
+    end #src
+    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy_uc)) #src
+        add_forecast!( #src
+        c_sys5_hy_uc, #src
+            h, #src
+            Deterministic("get_storage_capacity", hydro_timeseries_DA[t][ix]), #src
+        ) #src
+    end #src
+    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy_uc)) #src
+        add_forecast!( #src
+        c_sys5_hy_uc, #src
+            h, #src
+            Deterministic("get_inflow", hydro_timeseries_DA[t][ix]), #src
+        ) #src
+    end #src
+    for (ix, h) in enumerate(get_components(HydroFix, c_sys5_hy_uc)) #src
+        add_forecast!(c_sys5_hy_uc, h, Deterministic("get_rating", hydro_timeseries_DA[t][ix])) #src
+    end #src
+    for (ix, r) in enumerate(get_components(RenewableGen, c_sys5_hy_uc)) #src
+        add_forecast!(c_sys5_hy_uc, r, Deterministic("get_rating", ren_timeseries_DA[t][ix])) #src
+    end #src
+    for (ix, i) in enumerate(get_components(InterruptibleLoad, c_sys5_hy_uc)) #src
+        add_forecast!( #src
+        c_sys5_hy_uc, #src
             i, #src
             Deterministic("get_maxactivepower", Iload_timeseries_DA[t][ix]), #src
         ) #src
