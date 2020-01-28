@@ -59,11 +59,15 @@ TypeTree(PSI.AbstractHydroFormulation)
 # Let's see what some of the different combinations create. First, let's apply the
 # `HydroDispatchRunOfRiver` formulation to the `HydroDispatch` generators, and the
 # `HydroFixed` formulation to `HydroFix` generators.
+#  - The `HydroFixed` formulaton just acts
+# like a load subtractor, forcing the system to accept it's generation.
+#  - The `HydroDispatchRunOfRiver` formulation represents the the energy flowing out of
+# a reservoir. The model can choose to produce power with that energy or just let it spill by.
 
 devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
     :Hyd2 => DeviceModel(HydroFix, HydroFixed),
-    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
+    :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
@@ -74,13 +78,19 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizo
 
 op_problem.psi_container.JuMPmodel
 
-# Next, let's apply the `HydroDispatchReservoirFlow` formulation to the `HydroDispatch` generators, and the
-# `HydroDispatchRunOfRiver` formulation to `HydroFix` generators.
+# The first two constraints are the power balance constraints that require the generation
+# from the controllable `HydroDispatch` generators to be equal to the load (flat 10.0 for all time periods)
+# minus the generation from the `HydroFix` generators [1.97, 1.983, ...]. The 3rd and 4th
+# constraints limit the output of the `HydroDispatch` generator to the limit defined by the
+# `max_activepwoer` forecast. And the last 4 constraints are the lower and upper bounds of
+# the `HydroDispatch` operating range.
 
+#-
+
+# Next, let's apply the `HydroDispatchReservoirFlow` formulation to the `HydroDispatch` generators.
 devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchReservoirFlow),
-    :Hyd2 => DeviceModel(HydroFix, HydroDispatchRunOfRiver),
-    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
+    :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
@@ -91,37 +101,18 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizo
 
 op_problem.psi_container.JuMPmodel
 
-# Next, let's apply the `HydroDispatchReservoirStorage` formulation to the `HydroDispatch` generators, and the
-# `HydroDispatchRunOfRiver` formulation to `HydroFix` generators.
+# Finally, let's apply the `HydroDispatchReservoirStorage` formulation to the `HydroDispatch` generators.
 
 devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchReservoirStorage),
-    :Hyd2 => DeviceModel(HydroFix, HydroDispatchRunOfRiver),
-    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
+    :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
 op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizon = 2)
 
-# -
-
-op_problem.psi_container.JuMPmodel
-
-# Finally, let's see the `HydroCommitmentReservoirFlow` formulation applied to the `HydroDispatch` generators, and the
-# `HydroDispatchRunOfRiver` formulation to `HydroFix` generators.
-
-devices = Dict{Symbol,DeviceModel}(
-    :Hyd1 => DeviceModel(HydroDispatch, HydroCommitmentReservoirStorage),
-    :Hyd2 => DeviceModel(HydroFix, HydroDispatchRunOfRiver),
-    :Load => DeviceModel(PowerLoad, StaticPowerLoad)
-);
-
-template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
-
-op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizon = 2)
-
-# -
+#-
 
 op_problem.psi_container.JuMPmodel
 
@@ -129,73 +120,11 @@ op_problem.psi_container.JuMPmodel
 # The purpsoe of a multi-stage simulaiton is to represent scheduling decisions consistently
 # with the time scales that govern different elements of power systems.
 
-# UC model template
-devices = Dict(
-    :Generators => DeviceModel(ThermalStandard, ThermalBasicUnitCommitment),
-    :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroDispatch => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-)
-template_uc = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-# ED model template
-
-devices = Dict(
-    :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
-    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
-    :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :ILoads => DeviceModel(InterruptibleLoad, DispatchablePowerLoad),
-    :HydroDispatch => DeviceModel(HydroDispatch, HydroDispatchReservoirFlow),
-)
-template_ed = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
-
-# Simulaiton setup
-
-stages_definition = Dict(
-    "UC" => Stage(GenericOpProblem, template_uc, c_sys5_hy_uc, Cbc_optimizer),
-    "ED" => Stage(GenericOpProblem, template_ed, c_sys5_hy_ed, Cbc_optimizer),
-)
-
-sequence = SimulationSequence(
-    order = Dict(1 => "UC", 2 => "ED"),
-    intra_stage_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24)),
-    horizons = Dict("UC" => 24, "ED" => 12),
-    intervals = Dict("UC" => Hour(24), "ED" => Hour(1)),
-    feed_forward = Dict(
-        ("ED", :devices, :Generators) => SemiContinuousFF(
-            binary_from_stage = Symbol(PSI.ON),
-            affected_variables = [Symbol(PSI.REAL_POWER)],
-        ),
-        ("ED", :devices, :HydroDispatch) => IntegralLimitFF(
-            variable_from_stage = Symbol(PSI.REAL_POWER),
-            affected_variables = [Symbol(PSI.REAL_POWER)],
-        ),
-    ),
-    cache = Dict("ED" => [TimeStatusChange(PSI.ON, PSY.ThermalStandard)]),
-
-    ini_cond_chronology = Dict("UC" => Consecutive(), "ED" => Consecutive()),
-
-)
-
-file_path = tempdir()
-sim = Simulation(
-    name = "hydro",
-    steps = 2,
-    step_resolution = Hour(24),
-    stages = stages_definition,
-    stages_sequence = sequence,
-    simulation_folder = file_path,
-    verbose = true,
-)
-
-build!(sim)
-
-
-sim_results = execute!(sim; verbose = true)
-
-# ### Multi-Day to Daily
+# Multi-Day to Daily Simulation:
 
 # In the multi-day model, we'll use a really simple representation of all system devices
-# so thatt we can maintain computational tractability while getting an estimate of system
+# so that we can maintain computational tractability while getting an estimate of system
 # requirements/capabilities.
 
 devices = Dict(
@@ -215,12 +144,16 @@ devices = Dict(
 )
 template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-#
+#-
 
 stages_definition = Dict(
     "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, Cbc_optimizer),
     "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
 )
+
+# Thsi builds the sequence and passes the the enregy dispatch schedule for the `HydroDispatch`
+# generatorfrom the "MD" stage to the "DA" stage in the form of an energy limit over the
+# synchronized periods.
 
 sequence = SimulationSequence(
     order = Dict(1 => "MD", 2 => "DA"),
@@ -231,10 +164,12 @@ sequence = SimulationSequence(
         ("DA", :devices, :HydroDispatch) =>
                 IntegralLimitFF(variable_from_stage = :P, affected_variables = [:P]),
     ),
-    # Dont know why this doesn't work, could be fixed in the new update
-    # cache = Dict("UC" => [TimeStatusChange(:ON_ThermalStandard)]),
     ini_cond_chronology = Dict("MD" => Consecutive(), "DA" => Consecutive()),
 )
+
+#-
+
+file_path = tempdir()
 
 sim = Simulation(
     name = "hydro",
@@ -245,5 +180,68 @@ sim = Simulation(
     simulation_folder = file_path,
     verbose = true,
 )
+
+build!(sim)
+
+# We can look at the "MD" Model
+
+sim.stages["MD"].internal.psi_container.JuMPmodel
+
+# And we can look at the "DA" model
+
+sim.stages["DA"].internal.psi_container.JuMPmodel
+
+# And we can execute the simulation by running the following command
+# ```julia
+#sim_results = execute!(sim)
+#```
+#-
+
+# 3-Stage Simulation:
+
+stages_definition = Dict(
+    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, Cbc_optimizer),
+    "UC" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
+    "ED" => Stage(GenericOpProblem, template_da, c_sys5_hy_ed, Cbc_optimizer),
+)
+
+sequence = SimulationSequence(
+    order = Dict(1 => "MD", 2 => "UC", 3 => "ED"),
+    intra_stage_chronologies = Dict(
+        ("MD" => "UC") => Synchronize(periods = 2),
+        ("UC" => "ED") => Synchronize(periods = 24),
+    ),
+    horizons = Dict("MD" => 2, "UC" => 24, "ED" => 12),
+    intervals = Dict("MD" => Hour(48), "UC" => Hour(24), "ED" => Hour(1)),
+    feed_forward = Dict(
+        ("UC", :devices, :HydroDispatch) => IntegralLimitFF(
+            variable_from_stage = Symbol(PSI.REAL_POWER),
+            affected_variables = [Symbol(PSI.REAL_POWER)],
+        ),
+        ("ED", :devices, :HydroDispatch) => IntegralLimitFF(
+            variable_from_stage = Symbol(PSI.REAL_POWER),
+            affected_variables = [Symbol(PSI.REAL_POWER)],
+        ),
+    ),
+    ini_cond_chronology = Dict(
+        "DA" => Consecutive(),
+        "UC" => Consecutive(),
+        "ED" => Consecutive(),
+    ),
+)
+
+#-
+
+sim = Simulation(
+    name = "hydro",
+    steps = 1,
+    step_resolution = Hour(48),
+    stages = stages_definition,
+    stages_sequence = sequence,
+    simulation_folder = file_path,
+    verbose = true,
+)
+
+#-
 
 build!(sim)

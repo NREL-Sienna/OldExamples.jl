@@ -111,7 +111,7 @@ Checks if the file has been modified since the last Weave and updates the notebo
 * `force` = foce weave irrespective of file changes
 """
 function literate_file(folder, file; force = false, kwargs...)
-    
+
     filename = splitext(file)[1]
     srcpath = joinpath(repo_directory, "script", folder, file)
     testpath = joinpath(repo_directory, "test", folder)
@@ -125,19 +125,24 @@ function literate_file(folder, file; force = false, kwargs...)
         config = read_json(configpath)
     end
 
-    if mtime(srcpath) > mtime(testpath) || mtime(testpath) == 0.0 || force
-        @warn "Updating tests for $filename as it has been updated since the last literate."
-        fn = Literate.script(srcpath, testpath; config = config, kwargs...)
-        rm_if_empty(fn)
+    @show literate = get(config, "literate", true)
+    if literate
+        if mtime(srcpath) > mtime(testpath) || mtime(testpath) == 0.0 || force
+            @warn "Updating tests for $filename."
+            fn = Literate.script(srcpath, testpath; config = config, kwargs...)
+            rm_if_empty(fn)
+        else
+            @warn "Skipping tests for $filename."
+        end
+        if mtime(srcpath) > mtime(notebookfilepath) || mtime(notebookfilepath) == 0.0 || force
+            @warn "Converting $filename to Jupyter Notebook."
+            fn = Literate.notebook(srcpath, notebookpath; config = config, kwargs...)
+            rm_if_empty(fn)
+        else
+            @warn "Skipping Jupyter Notebook for $filename."
+        end
     else
-        @warn "Skipping tests for $filename as it has not been updated."
-    end
-    if mtime(srcpath) > mtime(notebookfilepath) || mtime(notebookfilepath) == 0.0 || force
-        @warn "Converting $filename to Jupyter Notebook as it has been updated since the last literate."
-        fn = Literate.notebook(srcpath, notebookpath; config = config, kwargs...)
-        rm_if_empty(fn)
-    else
-        @warn "Skipping Jupyter Notebook for $filename as it has not been updated."
+        @warn "Skipping literate for $filename per config"
     end
 end
 
