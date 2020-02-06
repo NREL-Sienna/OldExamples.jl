@@ -1,4 +1,4 @@
-# SIIPExamples.jl [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/Examples/master)
+# SIIPExamples.jl [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/Examples/master) [![Build Status](https://travis-ci.org/NREL-SIIP/Examples.svg?branch=master)](https://travis-ci.org/NREL-SIIP/Examples)
 
 
 This repository contains examples and tutorials for Scalable Integrated Infrastructure Planning (SIIP) packages developed at the [National Renewable Energy Laboratory (NREL)](nrel.gov). This repository uses a template established by [JuMPTutorials.jl](https://github.com/JuliaOpt/JuMPTutorials.jl).
