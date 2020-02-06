@@ -22,4 +22,4 @@ To try out any of the tutorials in the browser without downloading Julia, click 
 - [PowerSimulations.jl](github.com/NREL/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/nrel-siip/examples/blob/master/notebook/PowerSimulationss_examples/operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/nrel-siip/examples/blob/master/notebook/PowerSimulationss_examples/sequential_simulations.ipynb)
-  - Hydro Modeling *TODO*
+  - [Hydro Modeling](https://nbviewer.jupyter.org/github/nrel-siip/examples/blob/master/notebook/PowerSimulationss_examples/hydropower_simulation.ipynb)
