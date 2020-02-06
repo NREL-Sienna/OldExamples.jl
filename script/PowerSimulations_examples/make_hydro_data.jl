@@ -344,7 +344,7 @@ for t = 1:1
         add_forecast!(
             c_sys5_hy_wk,
             h,
-            Deterministic("get_inflow", hydro_dispatch_timeseries_WK[t][1] .* 0.8),
+            Deterministic("get_inflow", hydro_dispatch_timeseries_WK[t][1] .* 100.0),
         )
     end
 end

@@ -20,11 +20,11 @@ include(joinpath(pkgpath, "script/PowerSimulations_examples/make_hydro_data.jl")
 
 TypeTree(PSY.HydroGen)
 
-TypeTree(PSI.AbstractHydroFormulation)
+TypeTree(PSI.AbstractHydroFormulation, scopesep="\n", init_expand = 5)
 
 devices = Dict{Symbol,DeviceModel}(
-    :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-    :Hyd2 => DeviceModel(HydroFix, HydroFixed),
+    :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
+    :Hyd2 => DeviceModel(HydroDispatch, HydroFixed),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
@@ -35,7 +35,7 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizo
 op_problem.psi_container.JuMPmodel
 
 devices = Dict{Symbol,DeviceModel}(
-    :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchReservoirFlow),
+    :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
@@ -46,7 +46,7 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizo
 op_problem.psi_container.JuMPmodel
 
 devices = Dict{Symbol,DeviceModel}(
-    :Hyd1 => DeviceModel(HydroDispatch, HydroDispatchReservoirStorage),
+    :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
@@ -59,14 +59,14 @@ op_problem.psi_container.JuMPmodel
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroDispatch => DeviceModel(HydroDispatch, HydroDispatchReservoirStorage),
+    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
 )
 template_md = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroDispatch => DeviceModel(HydroDispatch, HydroDispatchReservoirFlow),
+    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
 )
 template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
@@ -81,7 +81,7 @@ sequence = SimulationSequence(
     horizons = Dict("MD" => 2, "DA" => 24),
     intervals = Dict("MD" => Hour(48), "DA" => Hour(24)),
     feed_forward = Dict(
-        ("DA", :devices, :HydroDispatch) =>
+        ("DA", :devices, :HydroEnergyReservoir) =>
                 IntegralLimitFF(variable_from_stage = :P, affected_variables = [:P]),
     ),
     ini_cond_chronology = Dict("MD" => Consecutive(), "DA" => Consecutive()),
@@ -105,37 +105,36 @@ sim.stages["MD"].internal.psi_container.JuMPmodel
 
 sim.stages["DA"].internal.psi_container.JuMPmodel
 
-```julia
-sim_results = execute!(sim)
-```
+#sim_results = execute!(sim)
+#```
 
 stages_definition = Dict(
     "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, Cbc_optimizer),
-    "UC" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
+    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
     "ED" => Stage(GenericOpProblem, template_da, c_sys5_hy_ed, Cbc_optimizer),
 )
 
 sequence = SimulationSequence(
-    order = Dict(1 => "MD", 2 => "UC", 3 => "ED"),
+    order = Dict(1 => "MD", 2 => "DA", 3 => "ED"),
     intra_stage_chronologies = Dict(
-        ("MD" => "UC") => Synchronize(periods = 2),
-        ("UC" => "ED") => Synchronize(periods = 24),
+        ("MD" => "DA") => Synchronize(periods = 2),
+        ("DA" => "ED") => Synchronize(periods = 24),
     ),
-    horizons = Dict("MD" => 2, "UC" => 24, "ED" => 12),
-    intervals = Dict("MD" => Hour(48), "UC" => Hour(24), "ED" => Hour(1)),
+    horizons = Dict("MD" => 2, "DA" => 24, "ED" => 12),
+    intervals = Dict("MD" => Hour(48), "DA" => Hour(24), "ED" => Hour(1)),
     feed_forward = Dict(
-        ("UC", :devices, :HydroDispatch) => IntegralLimitFF(
+        ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
             variable_from_stage = Symbol(PSI.REAL_POWER),
             affected_variables = [Symbol(PSI.REAL_POWER)],
         ),
-        ("ED", :devices, :HydroDispatch) => IntegralLimitFF(
+        ("ED", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
             variable_from_stage = Symbol(PSI.REAL_POWER),
             affected_variables = [Symbol(PSI.REAL_POWER)],
         ),
     ),
     ini_cond_chronology = Dict(
+        "MD" => Consecutive(),
         "DA" => Consecutive(),
-        "UC" => Consecutive(),
         "ED" => Consecutive(),
     ),
 )
@@ -151,6 +150,12 @@ sim = Simulation(
 )
 
 build!(sim)
+
+sim.stages["MD"].internal.psi_container.JuMPmodel
+
+sim.stages["DA"].internal.psi_container.JuMPmodel
+
+sim.stages["ED"].internal.psi_container.JuMPmodel
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

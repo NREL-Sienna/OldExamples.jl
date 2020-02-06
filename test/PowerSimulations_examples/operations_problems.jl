@@ -38,7 +38,7 @@ branches = Dict{Symbol, DeviceModel}(:L => DeviceModel(Line, StaticLine),
 devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
                                     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
-                                    :HydroROR => DeviceModel(HydroFix, HydroFixed),
+                                    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
                                     :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
                                     )
