@@ -14,11 +14,6 @@ using DataFrames
 using JuMP
 using Cbc #solver
 
-using Logging
-logger = IS.configure_logging(console_level = Logging.Info,
-                              file_level = Logging.Info,
-                              filename = "op_problem_log.txt")
-
 rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
 rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
 rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP")
@@ -38,7 +33,7 @@ branches = Dict{Symbol, DeviceModel}(:L => DeviceModel(Line, StaticLine),
 devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
                                     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
-                                    :HydroROR => DeviceModel(HydroFix, HydroFixed),
+                                    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
                                     :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
                                     )

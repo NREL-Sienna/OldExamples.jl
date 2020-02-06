@@ -7,7 +7,7 @@ sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
                                     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
                                     :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
-                                    :HydroROR => DeviceModel(HydroFix, HydroFixed),
+                                    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
                                     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
                                     :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
                                     )
@@ -22,9 +22,9 @@ inter_stage_chronologies = Dict(("UC"=>"ED") => Synchronize(periods = 24))
 ini_cond_chronology = Dict("UC" => Consecutive(), "ED" => Consecutive())
 
 feed_forward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from_stage = Symbol(PSI.ON),
-                                                         affected_variables = [Symbol(PSI.REAL_POWER)]))
+                                                         affected_variables = [Symbol(PSI.ACTIVE_POWER)]))
 
-cache = Dict("ED" => [TimeStatusChange(PSI.ON, PSY.ThermalStandard)])
+cache = Dict("ED" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
 
 order = Dict(1 => "UC", 2 => "ED")
 horizons = Dict("UC" => 48, "ED" =>12)
@@ -40,7 +40,7 @@ DA_RT_sequence = SimulationSequence(order = order,
 
 file_path = tempdir()
 sim = Simulation(name = "rts-test",
-                steps = 2, step_resolution = Hour(24),
+                steps = 1, step_resolution = Hour(24),
                 stages = stages_definition,
                 stages_sequence = DA_RT_sequence,
                 simulation_folder = file_path)
