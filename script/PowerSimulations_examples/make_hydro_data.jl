@@ -12,8 +12,8 @@ include(joinpath(pathof(PSI), "../../test/test_utils/get_test_data.jl"))
 
 # Additionally, let's add two hydro generators. One of each type supported by PowerSystems.
 hydro_generators5(nodes5) = [
-    HydroFix(
-        "HydroFix",
+    HydroDispatch(
+        "HydroDispatch",
         true,
         nodes5[2],
         0.0,
@@ -27,8 +27,8 @@ hydro_generators5(nodes5) = [
             nothing,
         ),
     ),
-    HydroDispatch(
-        "HydroDispatch",
+    HydroEnergyReservoir(
+        "HydroEnergyReservoir",
         true,
         nodes5[3],
         0.0,
@@ -93,28 +93,28 @@ for t = 1:2
             Deterministic("get_maxactivepower", hydro_load_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy))
+    for (ix, h) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy))
         add_forecast!(
             c_sys5_hy,
             h,
             Deterministic("get_rating", hydro_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy))
+    for (ix, h) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy))
         add_forecast!(
             c_sys5_hy,
             h,
             Deterministic("get_storage_capacity", 2.0 .* hydro_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy))
+    for (ix, h) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy))
         add_forecast!(
             c_sys5_hy,
             h,
             Deterministic("get_inflow", hydro_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroFix, c_sys5_hy))
+    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy))
         add_forecast!(c_sys5_hy, h, Deterministic("get_rating", hydro_timeseries_DA[t][ix]))
     end
     for (ix, r) in enumerate(get_components(RenewableGen, c_sys5_hy))
@@ -152,28 +152,28 @@ for t = 1:2
             Deterministic("get_maxactivepower", load_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy_uc))
+    for (ix, h) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy_uc))
         add_forecast!(
         c_sys5_hy_uc,
             h,
             Deterministic("get_rating", hydro_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy_uc))
+    for (ix, h) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy_uc))
         add_forecast!(
         c_sys5_hy_uc,
             h,
             Deterministic("get_storage_capacity", 2.0 .* hydro_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy_uc))
+    for (ix, h) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy_uc))
         add_forecast!(
         c_sys5_hy_uc,
             h,
             Deterministic("get_inflow", hydro_timeseries_DA[t][ix]),
         )
     end
-    for (ix, h) in enumerate(get_components(HydroFix, c_sys5_hy_uc))
+    for (ix, h) in enumerate(get_components(HydroDispatch, c_sys5_hy_uc))
         add_forecast!(c_sys5_hy_uc, h, Deterministic("get_rating", hydro_timeseries_DA[t][ix]))
     end
     for (ix, r) in enumerate(get_components(RenewableGen, c_sys5_hy_uc))
@@ -213,7 +213,7 @@ for t = 1:2
             add_forecast!(c_sys5_hy_ed, l, Deterministic("get_maxactivepower", data))
         end
     end
-    for (ix, l) in enumerate(get_components(HydroDispatch, c_sys5_hy_ed))
+    for (ix, l) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy_ed))
         ta = hydro_timeseries_DA[t][ix]
         for i = 1:length(ta) # loop over hours
             ini_time = timestamp(ta[i]) # get the hour
@@ -229,7 +229,7 @@ for t = 1:2
             add_forecast!(c_sys5_hy_ed, l, Deterministic("get_rating", data))
         end
     end
-    for (ix, l) in enumerate(get_components(HydroDispatch, c_sys5_hy_ed))
+    for (ix, l) in enumerate(get_components(HydroEnergyReservoir, c_sys5_hy_ed))
         ta = 2.0 .* hydro_timeseries_DA[t][ix]
         for i = 1:length(ta) # loop over hours
             ini_time = timestamp(ta[i]) # get the hour
@@ -245,7 +245,7 @@ for t = 1:2
             add_forecast!(c_sys5_hy_ed, l, Deterministic("get_maxactivepower", data))
         end
     end
-    for (ix, l) in enumerate(get_components(HydroFix, c_sys5_hy_ed))
+    for (ix, l) in enumerate(get_components(HydroDispatch, c_sys5_hy_ed))
         ta = hydro_timeseries_DA[t][ix]
         for i = 1:length(ta) # loop over hours
             ini_time = timestamp(ta[i]) # get the hour
@@ -326,21 +326,21 @@ for t = 1:1
             Deterministic("get_maxactivepower", load_timeseries_WK[t][ix]),
         )
     end
-    for h in get_components(HydroDispatch, c_sys5_hy_wk)
+    for h in get_components(HydroEnergyReservoir, c_sys5_hy_wk)
         add_forecast!(
             c_sys5_hy_wk,
             h,
             Deterministic("get_rating", hydro_dispatch_timeseries_WK[t][1]),
         )
     end
-    for h in get_components(HydroDispatch, c_sys5_hy_wk)
+    for h in get_components(HydroEnergyReservoir, c_sys5_hy_wk)
         add_forecast!(
             c_sys5_hy_wk,
             h,
             Deterministic("get_storage_capacity", 2.0 .* hydro_dispatch_timeseries_WK[t][1]),
         )
     end
-    for h in get_components(HydroDispatch, c_sys5_hy_wk)
+    for h in get_components(HydroEnergyReservoir, c_sys5_hy_wk)
         add_forecast!(
             c_sys5_hy_wk,
             h,

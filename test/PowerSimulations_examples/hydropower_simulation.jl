@@ -124,12 +124,12 @@ sequence = SimulationSequence(
     intervals = Dict("MD" => Hour(48), "DA" => Hour(24), "ED" => Hour(1)),
     feed_forward = Dict(
         ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_from_stage = Symbol(PSI.REAL_POWER),
-            affected_variables = [Symbol(PSI.REAL_POWER)],
+            variable_from_stage = Symbol(PSI.ACTIVE_POWER),
+            affected_variables = [Symbol(PSI.ACTIVE_POWER)],
         ),
         ("ED", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_from_stage = Symbol(PSI.REAL_POWER),
-            affected_variables = [Symbol(PSI.REAL_POWER)],
+            variable_from_stage = Symbol(PSI.ACTIVE_POWER),
+            affected_variables = [Symbol(PSI.ACTIVE_POWER)],
         ),
     ),
     ini_cond_chronology = Dict(

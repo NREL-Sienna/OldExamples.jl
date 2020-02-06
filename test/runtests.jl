@@ -1,10 +1,15 @@
 using SIIPExamples
+using InfrastructureSystems
+using Logging
+
 using Test
 
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 testpath = joinpath(pkgpath,"test")
 
 exclude = []
+
+logger = InfrastructureSystems.configure_logging(console_level = Logging.Error)
 
 for (root, dirs, files) in walkdir(testpath)
     if root!=testpath

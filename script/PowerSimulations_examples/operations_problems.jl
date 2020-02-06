@@ -30,12 +30,12 @@ using DataFrames
 using JuMP
 using Cbc #solver
 
-# ### Logging
-# Using InfrastructureSystems, we can configure the console and file logging verbosity.
-using Logging
-logger = IS.configure_logging(console_level = Logging.Info,
-                              file_level = Logging.Info,
-                              filename = "op_problem_log.txt")
+#!jl  ### Logging
+#!jl Using InfrastructureSystems, we can configure the console and file logging verbosity.
+#!jl using Logging
+#!jl logger = IS.configure_logging(console_level = Logging.Info,
+#!jl                               file_level = Logging.Info,
+#!jl                               filename = "op_problem_log.txt")
 
 # ### Data
 # This data depends upon the [RTS-GMLC](https://github.com/grid-mod/rts-gmlc) dataset. Let's

@@ -147,7 +147,7 @@ DA_RT_sequence = SimulationSequence(order = order,
 
 file_path = tempdir()
 sim = Simulation(name = "rts-test",
-                steps = 2, step_resolution = Hour(24),
+                steps = 1, step_resolution = Hour(24),
                 stages = stages_definition,
                 stages_sequence = DA_RT_sequence,
                 simulation_folder = file_path)
