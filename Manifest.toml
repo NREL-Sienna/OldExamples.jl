@@ -468,9 +468,9 @@ version = "1.0.1"
 
 [[PlotUtils]]
 deps = ["Colors", "Dates", "Printf", "Random", "Reexport"]
-git-tree-sha1 = "22bd7d0a1f4665d66317d6c89a57f6bba9f2560d"
+git-tree-sha1 = "a146cb72ec962aec81d478de49d1011db06dd754"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "0.6.2"
+version = "0.6.3"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "FFMPEG", "FixedPointNumbers", "GR", "GeometryTypes", "JSON", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "Reexport", "Requires", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
@@ -492,7 +492,7 @@ version = "0.13.2"
 
 [[PowerSimulations]]
 deps = ["Arrow", "CSV", "DataFrames", "Dates", "Feather", "InfrastructureSystems", "JSON", "JuMP", "JuliaFormatter", "LinearAlgebra", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "Requires", "SHA", "TimeSeries"]
-git-tree-sha1 = "a92a9743f675c6dcd28c3fd6590a83ba82ddcce4"
+git-tree-sha1 = "e25f34e1063ded2940a155173f01e314669b7e59"
 repo-rev = "dev0-2"
 repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
@@ -500,9 +500,9 @@ version = "0.2.0"
 
 [[PowerSystems]]
 deps = ["CSV", "DataFrames", "Dates", "DocStringExtensions", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "1650d7f21605e0678eec40ee13055f0c58eca8f4"
+git-tree-sha1 = "8c9d7cc111b75bf141805389df949a4abd367879"
 uuid = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
-version = "0.9.0"
+version = "0.9.1"
 
 [[Printf]]
 deps = ["Unicode"]
