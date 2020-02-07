@@ -42,6 +42,6 @@ addons:
 #  - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; fi
 
 ## uncomment the following lines to override the default test script
-script:
+#script:
   #- julia --project --color=yes -e "import Pkg; Pkg.build(); Pkg.instantiate()"
-  - julia --check-bounds=yes --depwarn=no --inline=no --color=yes --project -e "include(\"test/runtests.jl\")"
+  #- julia --check-bounds=yes --depwarn=no --inline=no --color=yes --project -e "include(\"test/runtests.jl\")"
