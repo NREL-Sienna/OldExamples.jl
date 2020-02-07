@@ -43,5 +43,5 @@ addons:
 
 ## uncomment the following lines to override the default test script
 script:
-  - julia --project --color=yes -e "import Pkg; Pkg.build(); Pkg.instantiate()"
+  - julia --project --color=yes -e "import Pkg; Pkg.instantiate()"
   - julia --check-bounds=yes --depwarn=no --inline=no --color=yes --project -e "include(\"test/runtests.jl\")"
