@@ -29,7 +29,7 @@ cache:
 
 script:
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-  - julia --project --color=yes -e "import Pkg; Pkg.add(Pkg.PackageSpec(path=pwd())); Pkg.update(); Pkg.build(); Pkg.instantiate()"
+  - julia --project --color=yes -e "import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.update(); Pkg.build(); Pkg.instantiate()"
   - julia --project --check-bounds=yes --color=yes -e "using Pkg; Pkg.test(coverage=true);"
   - kill %1
   - echo "Test successful."
