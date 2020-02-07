@@ -4,7 +4,7 @@ os:
   - osx
 
 julia:
-  - 1.1
+  - 1.3
   - nightly
 
 notifications:
@@ -44,4 +44,4 @@ addons:
 ## uncomment the following lines to override the default test script
 script:
   #- julia --project --color=yes -e "import Pkg; Pkg.build(); Pkg.instantiate()"
-  - julia --check-bounds=yes --depwarn=no --inline=no --color=yes --project -e "include(\"runtests.jl\")"
+  - julia --check-bounds=yes --depwarn=no --inline=no --color=yes --project -e "include(\"test/runtests.jl\")"
