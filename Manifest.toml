@@ -2,9 +2,9 @@
 
 [[AbstractTrees]]
 deps = ["Markdown"]
-git-tree-sha1 = "940760b82db1f7090f7d16fe6e4b121cc181db45"
+git-tree-sha1 = "86d092c2599f1f7bb01668bf8eb3412f98d61e47"
 uuid = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
-version = "0.3.1"
+version = "0.3.2"
 
 [[Arrow]]
 deps = ["CategoricalArrays", "Dates"]
@@ -332,9 +332,9 @@ version = "0.20.1"
 
 [[JuliaFormatter]]
 deps = ["CSTParser", "Test", "Tokenize"]
-git-tree-sha1 = "7fdcaa57869c9a821e7c9af5724b7dec105e156c"
+git-tree-sha1 = "c32816a0b649beb9ad3e27708c1d371a265e77c8"
 uuid = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
-version = "0.3.2"
+version = "0.3.3"
 
 [[LibGit2]]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
