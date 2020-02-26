@@ -151,21 +151,27 @@ stages_definition = Dict(
     "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
 )
 
-# Thsi builds the sequence and passes the the enregy dispatch schedule for the `HydroEnergyReservoir`
+# This builds the sequence and passes the the enregy dispatch schedule for the `HydroEnergyReservoir`
 # generatorfrom the "MD" stage to the "DA" stage in the form of an energy limit over the
-# synchronized periods.
+    # synchronized periods.
 
-sequence = SimulationSequence(
-    order = Dict(1 => "MD", 2 => "DA"),
-    intra_stage_chronologies = Dict(("MD" => "DA") => Synchronize(periods = 2)),
-    horizons = Dict("MD" => 2, "DA" => 24),
-    intervals = Dict("MD" => Hour(48), "DA" => Hour(24)),
-    feed_forward = Dict(
-        ("DA", :devices, :HydroEnergyReservoir) =>
-                IntegralLimitFF(variable_from_stage = :P, affected_variables = [:P]),
-    ),
-    ini_cond_chronology = Dict("MD" => Consecutive(), "DA" => Consecutive()),
-)
+    sequence = SimulationSequence(
+        step_resolution = Hour(48),
+        order = Dict(1 => "MD", 2 => "DA"),
+        feedforward_chronologies = Dict(("MD" => "DA") => Synchronize(periods = 2)),
+        horizons = Dict("MD" => 2, "DA" => 24),
+        intervals = Dict(
+            "MD" => (Hour(48), Consecutive()),
+            "DA" => (Hour(24), Consecutive()),
+        ),
+        feedforward = Dict(
+            ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
+                variable_from_stage = PSI.ACTIVE_POWER,
+                affected_variables = [PSI.ACTIVE_POWER],
+            ),
+        ),
+        ini_cond_chronology = InterStageChronology(),
+    );
 
 #-
 
@@ -174,11 +180,9 @@ file_path = tempdir()
 sim = Simulation(
     name = "hydro",
     steps = 1,
-    step_resolution = Hour(48),
     stages = stages_definition,
     stages_sequence = sequence,
     simulation_folder = file_path,
-    verbose = true,
 )
 
 build!(sim)
@@ -206,40 +210,39 @@ stages_definition = Dict(
 )
 
 sequence = SimulationSequence(
+    step_resolution = Hour(48),
     order = Dict(1 => "MD", 2 => "DA", 3 => "ED"),
-    intra_stage_chronologies = Dict(
+    feedforward_chronologies = Dict(
         ("MD" => "DA") => Synchronize(periods = 2),
         ("DA" => "ED") => Synchronize(periods = 24),
     ),
+    intervals = Dict(
+        "MD" => (Hour(48), Consecutive()),
+        "DA" => (Hour(24), Consecutive()),
+        "ED" => (Hour(1), Consecutive()),
+    ),
     horizons = Dict("MD" => 2, "DA" => 24, "ED" => 12),
-    intervals = Dict("MD" => Hour(48), "DA" => Hour(24), "ED" => Hour(1)),
-    feed_forward = Dict(
+    feedforward = Dict(
         ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_from_stage = Symbol(PSI.ACTIVE_POWER),
-            affected_variables = [Symbol(PSI.ACTIVE_POWER)],
+            variable_from_stage = PSI.ACTIVE_POWER,
+            affected_variables = [PSI.ACTIVE_POWER],
         ),
         ("ED", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_from_stage = Symbol(PSI.ACTIVE_POWER),
-            affected_variables = [Symbol(PSI.ACTIVE_POWER)],
+            variable_from_stage = PSI.ACTIVE_POWER,
+            affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
-    ini_cond_chronology = Dict(
-        "MD" => Consecutive(),
-        "DA" => Consecutive(),
-        "ED" => Consecutive(),
-    ),
-)
+    ini_cond_chronology = InterStageChronology(),
+);
 
 #-
 
 sim = Simulation(
     name = "hydro",
     steps = 1,
-    step_resolution = Hour(48),
     stages = stages_definition,
     stages_sequence = sequence,
     simulation_folder = file_path,
-    verbose = true,
 )
 
 #-

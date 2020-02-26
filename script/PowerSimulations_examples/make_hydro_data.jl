@@ -20,7 +20,7 @@ hydro_generators5(nodes5) = [
         0.0,
         TechHydro(
             2.0,
-            PowerSystems.HY,
+            PSY.PrimeMovers.HY,
             (min = 0.5, max = 2.0),
             (min = -2.0, max = 2.0),
             nothing,
@@ -35,7 +35,7 @@ hydro_generators5(nodes5) = [
         0.0,
         TechHydro(
             18.1,
-            PowerSystems.HY,
+            PSY.PrimeMovers.HY,
             (min = 3.0, max = 18.1),
             (min = -18.1, max = 18.1),
             (up = 5.0, down = 5.0),
