@@ -19,7 +19,6 @@ using SIIPExamples
 using PowerSystems
 using TimeSeries
 using Dates
-using Logging
 const PSY = PowerSystems
 const IS = PSY.InfrastructureSystems;
 
@@ -28,11 +27,6 @@ const IS = PSY.InfrastructureSystems;
 # Let's download the test data
 PSY.download(PSY.TestData; branch = "master", force=true)
 base_dir = dirname(dirname(pathof(PowerSystems)));
-
-#!jl  ### Configure log messages
-#!jl  The tabular data parser can be quite verbose. For the purpose of this demo, we'll configure
-#!jl  the console logger to be pretty quiet. But we'll make sure that
-#!jl logger = IS.configure_logging(console_level = Logging.Error)
 
 # ### The tabular data format relies on a folder containing `*.csv` files and a `user_descriptors.yaml` file
 # First, we'll read the tabular data
@@ -47,11 +41,3 @@ rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR,"use
 
 sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 sys
-
-# ### Log file
-# Above, we configured the logger to send messages to the
-# [tabulardata.log file](../../notebook/PowerSystems_examples/tabulardata.log). So, you can
-# check out that file to see what the parsing process produced.
-# *Note: you may have to run the following `flush` command to populate the log file*
-
-flush(logger)

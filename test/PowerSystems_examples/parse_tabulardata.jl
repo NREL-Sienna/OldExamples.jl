@@ -5,7 +5,6 @@ using SIIPExamples
 using PowerSystems
 using TimeSeries
 using Dates
-using Logging
 const PSY = PowerSystems
 const IS = PSY.InfrastructureSystems;
 
@@ -17,8 +16,6 @@ rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR,"use
 
 sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 sys
-
-flush(logger)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

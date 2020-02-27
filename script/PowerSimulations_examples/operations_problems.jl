@@ -30,13 +30,6 @@ using DataFrames
 using JuMP
 using Cbc #solver
 
-#!jl  ### Logging
-#!jl Using InfrastructureSystems, we can configure the console and file logging verbosity.
-#!jl using Logging
-#!jl logger = IS.configure_logging(console_level = Logging.Info,
-#!jl                               file_level = Logging.Info,
-#!jl                               filename = "op_problem_log.txt")
-
 # ### Data
 # This data depends upon the [RTS-GMLC](https://github.com/grid-mod/rts-gmlc) dataset. Let's
 # download and extract the data.
@@ -177,6 +170,7 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb # PowerSimulaitons also provides some basic specifications for plotting `SimulationResults`.
 #nb #
 #nb # The plotting capabilities depend on the Julia Plots package.
+#nb using PowerGraphics
 #nb using Plots
 #nb plotly();
 #nb
@@ -184,7 +178,7 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb # We can create a stacked bar plot for any combination of variables to summarize values over
 #nb # all time periods.
 #nb
-#nb bar_plot(res, [:P_ThermalStandard,:P_RenewableDispatch])
+#nb bar_plot(res, [:P_ThermalStandard])
 #nb
 #nb # ### Stack Plots
 #nb # Similarly, we can create a stack plot for any combination of variable to see the time
@@ -196,11 +190,3 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb # ```julia
 #nb # stack_plot(res)
 #nb # ```
-#nb
-#nb
-#nb # ### Log file
-#nb # Remember the logger that we defined in [the logging section](#Logging). You can look at
-#nb # the [log file](./op_problem_log.txt) that we created. *Sometimes you need to flush the
-#nb # logger to get the latest output to populate to the log file. You can do so by running:*
-#nb
-#nb flush(logger)
