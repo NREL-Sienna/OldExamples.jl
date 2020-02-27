@@ -128,44 +128,44 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb # In additon to the JuMP model, an `OperationsProblem` keeps track of a bunch of metadata
 #nb # about the problem and some references to pretty nammes for constraints and variables.
 #nb # All of these details are contained within the `psi_container` field.
-#nb
+#
 #nb print_struct(typeof(op_problem.psi_container))
-#nb
+#
 #nb # ### Solve an `OperationsProblem`
-#nb
+#
 #nb res = solve_op_problem!(op_problem);
-#nb
+#
 #nb # ## Results Inspection
 #nb # PowerSimulations collects the `OperationsProblem` results into a struct:
-#nb
+#
 #nb print_struct(PSI.SimulationResults)
-#nb
+#
 #nb # ### Optimizer Log
 #nb # The optimizer summary is included
-#nb
+#
 #nb res.optimizer_log
-#nb
+#
 #nb # ### Total Cost (objective function value)
-#nb
+#
 #nb res.total_cost
-#nb
+#
 #nb # ### Variable Values
 #nb # The solution value data frames for variable in the `op_problem.psi_container.variables`
 #nb # dictionary is stored:
-#nb
+#
 #nb res.variables
-#nb
+#
 #nb # For example, we can look at the values for the `:P_ThermalStandard`
-#nb
+#
 #nb res.variables[:P_ThermalStandard]
-#nb
+#
 #nb # Note that the time stamps are missing...
 #nb #
 #nb # The time stamps for each value in the time series used in the `OperationsProblem` is
 #nb # included seperately from the variable value results.
-#nb
+#
 #nb res.time_stamp
-#nb
+#
 #nb # ## Plotting
 #nb # PowerSimulaitons also provides some basic specifications for plotting `SimulationResults`.
 #nb #
@@ -173,19 +173,19 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb using PowerGraphics
 #nb using Plots
 #nb plotly();
-#nb
+#
 #nb # ### Bar Plots
 #nb # We can create a stacked bar plot for any combination of variables to summarize values over
 #nb # all time periods.
-#nb
+#
 #nb bar_plot(res, [:P_ThermalStandard])
-#nb
+#
 #nb # ### Stack Plots
 #nb # Similarly, we can create a stack plot for any combination of variable to see the time
 #nb # series values.
-#nb
+#
 #nb # ```stack_plot(res, [:P_ThermalStandard,:P_RenewableDispatch])```
-#nb
+#
 #nb # Or, we can create a series of stack plots for every variable in the dictionary:
 #nb # ```julia
 #nb # stack_plot(res)
