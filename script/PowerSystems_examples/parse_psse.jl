@@ -17,18 +17,18 @@ Pkg.status()
 using SIIPExamples
 using PowerSystems
 using TimeSeries
-#   
+#
 const PSY = PowerSystems
 const IS = PSY.InfrastructureSystems;
 
 # ### Fetch Data
-# PowerSystems.jl links to some test data that is suitable for this example. 
+# PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
 PSY.download(PSY.TestData; branch = "master")
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 # ### Create a `System`
 
-sys = PSY.parse_standard_files(joinpath(base_dir,"data/psse_raw/RTS-GMLC.RAW"));
+sys = System(PSY.PowerModelsData(joinpath(base_dir,"data/psse_raw/RTS-GMLC.RAW")));
 
 sys

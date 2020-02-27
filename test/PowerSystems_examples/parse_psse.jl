@@ -11,7 +11,7 @@ const IS = PSY.InfrastructureSystems;
 PSY.download(PSY.TestData; branch = "master")
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
-sys = PSY.parse_standard_files(joinpath(base_dir,"data/psse_raw/RTS-GMLC.RAW"));
+sys = System(PSY.PowerModelsData(joinpath(base_dir,"data/psse_raw/RTS-GMLC.RAW")));
 
 sys
 

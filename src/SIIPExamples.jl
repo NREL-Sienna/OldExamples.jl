@@ -125,7 +125,7 @@ function literate_file(folder, file; force = false, kwargs...)
         config = read_json(configpath)
     end
 
-    @show literate = get(config, "literate", true)
+    literate = get(config, "literate", true)
     if literate
         if mtime(srcpath) > mtime(testpath) || mtime(testpath) == 0.0 || force
             @warn "Updating tests for $filename."

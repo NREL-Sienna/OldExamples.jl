@@ -25,10 +25,8 @@ sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
 # The RTS dataset has some large RE and load forecast errors that create infeasible
 # simulations. Until we enable formulations with slack variables, we need to increase the
-# amount of reservs held to handle the forecast error.
-for reserve in  get_components(Reserve, sys)
-    reserve.requirement *= 2.0
-end
+# amount of reserve held to handle the forecast error.
+get_component(VariableReserve{ReserveUp}, sys, "Flex_Up").requirement = 5.0
 
 # ## `OperationsProblemTemplate`s define `Stage`s
 # Sequential simulations in PowerSimulations are created by defining `OperationsProblems`
@@ -50,7 +48,7 @@ template_uc = template_unit_commitment(devices = devices)
 
 # ### Define the reference model for the real-time economic dispatch
 devices = Dict(
-    :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
+    :Generators => DeviceModel(ThermalStandard, ThermalDispatch),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),

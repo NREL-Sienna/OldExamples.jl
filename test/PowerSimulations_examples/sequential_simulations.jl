@@ -4,9 +4,7 @@ include(joinpath(pkgpath,"test/PowerSimulations_examples/operations_problems.jl"
 
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
-for reserve in  get_components(Reserve, sys)
-    reserve.requirement *= 2.0
-end
+get_component(VariableReserve{ReserveUp}, sys, "Flex_Up").requirement = 5.0
 
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
@@ -18,7 +16,7 @@ devices = Dict(
 template_uc = template_unit_commitment(devices = devices)
 
 devices = Dict(
-    :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
+    :Generators => DeviceModel(ThermalStandard, ThermalDispatch),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
