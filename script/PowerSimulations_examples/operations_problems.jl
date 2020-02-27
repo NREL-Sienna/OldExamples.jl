@@ -109,7 +109,7 @@ template_uc= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches,
 # `OperationsProblem` constructor. For this example, we can use the free Cbc solver with a
 # relatively relaxed MIP gap (`ratioGap`) setting to improve speed.
 
-Cbc_optimizer = JuMP.with_optimizer(Cbc.Optimizer, logLevel=1, ratioGap=0.5)
+solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
 # ### Build an `OperationsProblem`
 # The construction of an `OperationsProblem` essentially applies an `OperationsProblemTemplate`
@@ -118,7 +118,7 @@ Cbc_optimizer = JuMP.with_optimizer(Cbc.Optimizer, logLevel=1, ratioGap=0.5)
 op_problem = OperationsProblem(GenericOpProblem,
                                template_uc,
                                sys;
-                               optimizer = Cbc_optimizer,
+                               optimizer = solver,
                                horizon = 12)
 
 #nb # The principal component of the `OperationsProblem` is the JuMP model. For small problems,

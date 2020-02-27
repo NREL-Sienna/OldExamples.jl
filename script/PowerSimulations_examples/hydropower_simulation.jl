@@ -28,7 +28,7 @@ using DataFrames
 # ### Optimization packages
 using JuMP
 using Cbc # solver
-Cbc_optimizer = JuMP.with_optimizer(Cbc.Optimizer, logLevel = 1, ratioGap = 0.5)
+solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
 # ### Data
 # There is a meaningless test dataset assembled in the
@@ -147,8 +147,8 @@ template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 #-
 
 stages_definition = Dict(
-    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, Cbc_optimizer),
-    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
+    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),
+    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver),
 )
 
 # This builds the sequence and passes the the enregy dispatch schedule for the `HydroEnergyReservoir`
@@ -204,9 +204,9 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 # 3-Stage Simulation:
 
 stages_definition = Dict(
-    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, Cbc_optimizer),
-    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, Cbc_optimizer),
-    "ED" => Stage(GenericOpProblem, template_da, c_sys5_hy_ed, Cbc_optimizer),
+    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),
+    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver),
+    "ED" => Stage(GenericOpProblem, template_da, c_sys5_hy_ed, solver),
 )
 
 sequence = SimulationSequence(

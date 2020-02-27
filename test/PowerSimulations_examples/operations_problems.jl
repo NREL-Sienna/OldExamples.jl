@@ -43,12 +43,12 @@ services = Dict(:ReserveUp => ServiceModel(VariableReserve{ReserveUp}, RangeRese
 
 template_uc= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
 
-Cbc_optimizer = JuMP.with_optimizer(Cbc.Optimizer, logLevel=1, ratioGap=0.5)
+solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
 op_problem = OperationsProblem(GenericOpProblem,
                                template_uc,
                                sys;
-                               optimizer = Cbc_optimizer,
+                               optimizer = solver,
                                horizon = 12)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

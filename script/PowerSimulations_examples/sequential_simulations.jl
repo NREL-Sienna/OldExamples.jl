@@ -23,6 +23,13 @@ include(joinpath(pkgpath,"test/PowerSimulations_examples/operations_problems.jl"
 
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
+# The RTS dataset has some large RE and load forecast errors that create infeasible
+# simulations. Until we enable formulations with slack variables, we need to increase the
+# amount of reservs held to handle the forecast error.
+for reserve in  get_components(Reserve, sys)
+    reserve.requirement *= 2.0
+end
+
 # ## `OperationsProblemTemplate`s define `Stage`s
 # Sequential simulations in PowerSimulations are created by defining `OperationsProblems`
 # that represent `Stages`, and how information flows between executions of a `Stage` and
@@ -32,32 +39,24 @@ sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 # and real-time electricity market clearing process.
 
 # ### Define the reference model for the day-ahead unit commitment
-# We defined a basic UC template in the [OperationsProblem example](../../notebook/PowerSimulations_examples/operations_problems.ipynb)
-# so we can use that.
-
-#nb # print(template_uc)
+devices = Dict(
+    :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
+    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
+    :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
+    :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
+    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+)
+template_uc = template_unit_commitment(devices = devices)
 
 # ### Define the reference model for the real-time economic dispatch
-# For the most part, this can be pretty similar to the `template_uc` definition. But
-# we should change a few things to be consistent with typical economic dispatch specifications.
-
-# First, let's change the injection device specification to represent `ThermalStandard`
-# generators with a dispatch formulation. Otherwise, we can keep the rest of the injection
-# `DeviceModel`s the same.
-
-devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
-                                    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
-                                    :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
-                                    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
-                                    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
-                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
-                                    )
-
-# Finally, let's create an economic dispatch `OperationsProblemTemplate` with the new
-# injetion devices dict, and with an empty dict for the services (we can release all
-# reserves in the real-time).
-
-template_ed= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, Dict());
+devices = Dict(
+    :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
+    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
+    :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
+    :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
+    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+)
+template_ed= template_economic_dispatch(devices = devices)
 
 # ### Define the `Stage`s
 # Stages define models. The actual problem will change as the stage gets updated to represent
@@ -65,8 +64,9 @@ template_ed= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches,
 # a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s
 # and the `System`s that we've already created.
 
-stages_definition = Dict("UC" => Stage(GenericOpProblem, template_uc, sys, Cbc_optimizer),
-                            "ED" => Stage(GenericOpProblem, template_ed, sys_RT, Cbc_optimizer))
+stages_definition = Dict("UC" => Stage(GenericOpProblem, template_uc, sys, solver),
+                         "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver))
+
 
 # ### `SimulationSequence`
 # Similar to an `OperationsProblemTemplate`, the `SimulationSequence` provides a template of
@@ -89,12 +89,7 @@ stages_definition = Dict("UC" => Stage(GenericOpProblem, template_uc, sys, Cbc_o
 # Let's define an inter-stage chronolgy that synchronizes information from 24 periods of
 # the first stage with a set of executions of the second stage:
 
-inter_stage_chronologies = Dict(("UC"=>"ED") => Synchronize(periods = 24))
-
-# Next, let's define an intra-stage chronology (initial condition chronology) that informs
-# problem initial conditions from previous executions of the same stage.
-
-ini_cond_chronology = Dict("UC" => Consecutive(), "ED" => Consecutive())
+feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 
 # ### `FeedForward` and `Cache`
 # The definition of exactly what information is passed using the defined chronologies is
@@ -103,8 +98,8 @@ ini_cond_chronology = Dict("UC" => Consecutive(), "ED" => Consecutive())
 # define a `FeedForward` that affects the semi-continus range constraints of thermal generators
 # in the economic dispatch problems based on the value of the unit-commitment variables.
 
-feed_forward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from_stage = Symbol(PSI.ON),
-                                                         affected_variables = [Symbol(PSI.ACTIVE_POWER)]))
+feedforward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from_stage = PSI.ON,
+                                                         affected_variables = [PSI.ACTIVE_POWER]))
 
 # The `Cache` is simply a way to preserve needed information for later use. In the case of
 # a typical day-ahead - real-time market simulaiton, there are many economic dispatch executions
@@ -113,7 +108,7 @@ feed_forward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_fro
 # exactly which results will be needed and carry them through a cache in the economic dispatch
 # problems for later use.
 
-cache = Dict("ED" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
+cache = Dict("UC" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
 
 # ### Sequencing
 # The stage problem length, look-ahead, and other details surrounding the temporal Sequencing
@@ -128,18 +123,21 @@ cache = Dict("ED" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
 #  - Real time problems should represent 1 hour (12 5-minute periods), advancing 1 hour after each execution (no look-ahead)
 
 order = Dict(1 => "UC", 2 => "ED")
-horizons = Dict("UC" => 48, "ED" =>12)
-intervals = Dict("UC" => Hour(24), "ED" => Hour(1))
+horizons = Dict("UC" => 24, "ED" =>12)
+intervals = Dict("UC" => (Hour(24), Consecutive()),
+                 "ED" => (Hour(1), Consecutive()))
 
 # Finally, we can put it all together:
 
-DA_RT_sequence = SimulationSequence(order = order,
+DA_RT_sequence = SimulationSequence(step_resolution = Hour(24),
+                                    order = order,
                                     horizons = horizons,
                                     intervals = intervals,
-                                    intra_stage_chronologies = inter_stage_chronologies,
-                                    ini_cond_chronology = ini_cond_chronology,
-                                    feed_forward = feed_forward,
-                                    cache = cache)
+                                    ini_cond_chronology = InterStageChronology(),
+                                    feedforward_chronologies = feedforward_chronologies,
+                                    feedforward = feedforward,
+                                    cache = cache,
+                                    )
 
 # ## `Simulation`
 # Now, we can build and executte a simulation using the `SimulationSequence` and `Stage`s
@@ -147,7 +145,7 @@ DA_RT_sequence = SimulationSequence(order = order,
 
 file_path = tempdir()
 sim = Simulation(name = "rts-test",
-                steps = 1, step_resolution = Hour(24),
+                steps = 1,
                 stages = stages_definition,
                 stages_sequence = DA_RT_sequence,
                 simulation_folder = file_path)
