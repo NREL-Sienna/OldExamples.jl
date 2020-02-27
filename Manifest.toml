@@ -320,9 +320,9 @@ version = "0.12.5"
 
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "MbedTLS", "Sockets"]
-git-tree-sha1 = "003d2e773b019fccb93a447bb0517256fda1a71e"
+git-tree-sha1 = "d52325a46b4df64bdf38ffbbaef00f0a0296943c"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.8.10"
+version = "0.8.11"
 
 [[Hiccup]]
 deps = ["MacroTools", "Test"]
@@ -658,9 +658,9 @@ version = "0.2.2"
 
 [[PowerSystems]]
 deps = ["CSV", "DataFrames", "Dates", "DocStringExtensions", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
-git-tree-sha1 = "b03752f29aee902a1c7461389f3ad8a11f414ce0"
+git-tree-sha1 = "4ea3bf8b5994fa76b8a537d662127ea6331bbcae"
 uuid = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
-version = "0.11.1"
+version = "0.11.2"
 
 [[Printf]]
 deps = ["Unicode"]
