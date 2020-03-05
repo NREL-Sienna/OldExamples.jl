@@ -637,9 +637,7 @@ version = "0.5.3"
 
 [[PowerGraphics]]
 deps = ["Colors", "DataFrames", "Dates", "GR", "InfrastructureSystems", "ORCA", "PlotlyJS", "Plots", "PowerSystems", "RecipesBase", "Weave", "WebIO"]
-git-tree-sha1 = "b21e9be3395797f24435ba50c3c01bfe164b1308"
-repo-rev = "master"
-repo-url = "https://github.com/nrel-siip/powergraphics.jl"
+git-tree-sha1 = "b44b91b0e49c834c24e2ece85f6786038257bb31"
 uuid = "5f7eddb3-86b1-49e8-a95a-ddc0f45eea41"
 version = "0.1.0"
 
