@@ -15,7 +15,7 @@ using JuMP
 using Cbc #solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
-base_dir = PSY.download(PSY.TestData; branch = "5-bus-ts");
+base_dir = PSY.download(PSY.TestData; branch = "master");
 pm_data = PSY.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
 
 FORECASTS_DIR = joinpath(base_dir,"forecasts","5bus_ts","7day")
