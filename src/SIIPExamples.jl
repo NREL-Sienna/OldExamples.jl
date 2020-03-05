@@ -85,8 +85,23 @@ function unzip(::Type{<:BSD}, filename, directory)
 end
 
 function unzip(::Type{Windows}, filename, directory)
-    home = (Base.VERSION < v"0.7-") ? JULIA_HOME : Sys.BINDIR
-    @assert success(`$home/7z x $filename -y -o$directory`) "Unable to extract $filename to $directory"
+    path_7z = if Base.VERSION < v"0.7-"
+        "$JULIA_HOME/7z"
+    else
+        sep = Sys.iswindows() ? ";" : ":"
+        withenv(
+            "PATH" => string(
+                joinpath(Sys.BINDIR, "..", "libexec"),
+                sep,
+                Sys.BINDIR,
+                sep,
+                ENV["PATH"],
+            ),
+        ) do
+            Sys.which("7z")
+        end
+    end
+    @assert success(`$path_7z x $filename -y -o$directory`) "Unable to extract $filename to $directory"
 end
 
 const empty_nb = "{\n \"cells\": [\n  {\n   \"outputs\": [],\n   \"cell_type\": \"markdown\",\n   \"source\": [\n    \"---\\n\",\n    \"\\n\",\n    \"*This notebook was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*\"\n   ],\n   \"metadata\": {}\n  }\n ],\n \"nbformat_minor\": 3,\n \"metadata\": {\n  \"language_info\": {\n   \"file_extension\": \".jl\",\n   \"mimetype\": \"application/julia\",\n   \"name\": \"julia\",\n   \"version\": \"1.3.1\"\n  },\n  \"kernelspec\": {\n   \"name\": \"julia-1.3\",\n   \"display_name\": \"Julia 1.3.1\",\n   \"language\": \"julia\"\n  }\n },\n \"nbformat\": 4\n}\n"
