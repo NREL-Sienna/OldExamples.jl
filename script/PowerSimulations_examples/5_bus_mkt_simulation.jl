@@ -6,7 +6,7 @@
 
 # PowerSimulations.jl supports simulations that consist of sequential optimization problems
 # where results from previous problems inform subsequent problems in a variety of ways. This
-# example demonstrates some of these capabilities to represent electricitty market clearing.
+# example demonstrates some of these capabilities to represent electricity market clearing.
 
 # ## Dependencies and Data
 # First, let's create `System`s to represent the Day-Ahead and Real-Time market clearing
@@ -32,7 +32,7 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 
 # ### 5-bus Data
 # The five bus system data here includes hourly day-ahead data, 5-minute real-time market
-# data, and 6-scond actual data.
+# data, and 6-second actual data.
 base_dir = PSY.download(PSY.TestData; branch = "5-bus-ts");
 pm_data = PSY.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
 
@@ -108,7 +108,7 @@ sim = Simulation(name = "5bus-test",
                 stages_sequence = DA_RT_sequence,
                 simulation_folder = file_path)
 
-# ### Build simulaiton
+# ### Build simulation
 
 build!(sim)
 

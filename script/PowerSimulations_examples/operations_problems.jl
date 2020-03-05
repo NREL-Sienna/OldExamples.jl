@@ -5,7 +5,7 @@
 # ## Introduction
 
 # PowerSimulations.jl supports the construction and solution of optimal power system
-# scheduling problems (Operations Problems). Opeartions problems form the fundamental
+# scheduling problems (Operations Problems). Operations problems form the fundamental
 # building blocks for [sequential simulations](../../notebook/PowerSimulations_examples/sequential_simulations.ipynb).
 # This example shows how to specify a the mathematics that will be applied to the data with
 # an `OperationsProblemTemplate`, build and execute an `OperationsProblem`, and access the results.
@@ -71,7 +71,7 @@ branches = Dict{Symbol, DeviceModel}(:L => DeviceModel(Line, StaticLine),
 # this case, we're defining a basic unit commitment model for thermal generators,
 # curtailable renewable generators, and fixed dispatch (net-load reduction) formulations
 # for `HydroFix` and `RenewableFix` devices. Additionally, we've enabled a simple load
-# shedding demand respons formulation for `InterruptableLoad` devices.
+# shedding demand response formulation for `InterruptableLoad` devices.
 
 devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
                                     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
@@ -98,7 +98,7 @@ template_uc= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches,
 # to create an `OperationsProblem` that we solve.
 
 # ### Optimizer
-# It's most convienent to define an optimizer instance upfront and pass it into the
+# It's most convenient to define an optimizer instance upfront and pass it into the
 # `OperationsProblem` constructor. For this example, we can use the free Cbc solver with a
 # relatively relaxed MIP gap (`ratioGap`) setting to improve speed.
 
@@ -120,13 +120,13 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb # op_problem.psi_container.JuMPmodel
 #nb # ```
 #nb #
-#nb # For anything of reasonable size, that will be unmanagable. But you can print to a file:
+#nb # For anything of reasonable size, that will be unmanageable. But you can print to a file:
 #nb # ```julia
 #nb # f = open("testmodel.txt","w"); print(f,op_problem.psi_container.JuMPmodel); close(f)
 #nb # ```
 #nb #
-#nb # In additon to the JuMP model, an `OperationsProblem` keeps track of a bunch of metadata
-#nb # about the problem and some references to pretty nammes for constraints and variables.
+#nb # In addition to the JuMP model, an `OperationsProblem` keeps track of a bunch of metadata
+#nb # about the problem and some references to pretty names for constraints and variables.
 #nb # All of these details are contained within the `psi_container` field.
 #
 #nb print_struct(typeof(op_problem.psi_container))
@@ -162,7 +162,7 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb # Note that the time stamps are missing...
 #nb #
 #nb # The time stamps for each value in the time series used in the `OperationsProblem` is
-#nb # included seperately from the variable value results.
+#nb # included separately from the variable value results.
 #
 #nb res.time_stamp
 #

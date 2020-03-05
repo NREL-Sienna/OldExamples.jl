@@ -6,7 +6,7 @@
 
 # PowerSimulations.jl supports simulations that consist of sequential optimization problems
 # where results from previous problems inform subsequent problems in a variety of ways. This
-# example demonstrates some of these capabilities to represent electricitty market clearing.
+# example demonstrates some of these capabilities to represent electricity market clearing.
 
 # ## Dependencies
 # Since the `OperatiotnsProblem` is the fundamental building block of a sequential
@@ -74,9 +74,9 @@ stages_definition = Dict("UC" => Stage(GenericOpProblem, template_uc, sys, solve
 
 # Let's review some of the `SimulationSequence` arguments.
 
-# ### Chrologies
+# ### Chronologies
 # In PowerSimulations, chronologies define where information is flowing. There are two types
-# of chronogies.
+# of chronologies.
 #  - inter-stage chronologies: Define how information flows between stages. e.g. day-ahead
 # solutions are used to inform economic dispatch problems
 #  - intra-stage chronologies: Define how information flows between multiple executions of a
@@ -93,14 +93,14 @@ feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 # The definition of exactly what information is passed using the defined chronologies is
 # accomplished with `FeedForward` and `Cache` objects. Specifically, `FeedForward` is used
 # to define what to do with information being passed with an inter-stage chronology. Let's
-# define a `FeedForward` that affects the semi-continus range constraints of thermal generators
+# define a `FeedForward` that affects the semi-continuous range constraints of thermal generators
 # in the economic dispatch problems based on the value of the unit-commitment variables.
 
 feedforward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from_stage = PSI.ON,
                                                          affected_variables = [PSI.ACTIVE_POWER]))
 
 # The `Cache` is simply a way to preserve needed information for later use. In the case of
-# a typical day-ahead - real-time market simulaiton, there are many economic dispatch executions
+# a typical day-ahead - real-time market simulation, there are many economic dispatch executions
 # in between each unit-commitment execution. Rather than keeping the full set of results from
 # previous unit-commitment simulations in memory to be used in later executions, we can define
 # exactly which results will be needed and carry them through a cache in the economic dispatch
@@ -110,8 +110,8 @@ cache = Dict("UC" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
 
 # ### Sequencing
 # The stage problem length, look-ahead, and other details surrounding the temporal Sequencing
-# of stages are controled using the `order`, `horizons`, and `intervals` arguments.
-#  - order::Dictt(Int, String) : the hierarchical order of stages in the simulation
+# of stages are controlled using the `order`, `horizons`, and `intervals` arguments.
+#  - order::Dict(Int, String) : the hierarchical order of stages in the simulation
 #  - horizons::Dict(String, Int) : defines the number of time periods in each stage (problem length)
 #  - intervals::Dict(String, Dates.Period) : defines the interval with which stage problems
 # advance after each execution. e.g. day-ahead problems have an interval of 24-hours
@@ -138,7 +138,7 @@ DA_RT_sequence = SimulationSequence(step_resolution = Hour(24),
                                     )
 
 # ## `Simulation`
-# Now, we can build and executte a simulation using the `SimulationSequence` and `Stage`s
+# Now, we can build and execute a simulation using the `SimulationSequence` and `Stage`s
 # that we've defined.
 
 file_path = tempdir()
@@ -148,7 +148,7 @@ sim = Simulation(name = "rts-test",
                 stages_sequence = DA_RT_sequence,
                 simulation_folder = file_path)
 
-# ### Build simulaiton
+# ### Build simulation
 
 build!(sim)
 

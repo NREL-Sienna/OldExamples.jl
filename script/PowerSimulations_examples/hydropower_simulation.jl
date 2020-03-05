@@ -37,10 +37,10 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 include(joinpath(pkgpath, "script/PowerSimulations_examples/make_hydro_data.jl"))
 
 # ## Two PowerSimulations features determine hydropower representation.
-# There are two prinicpal ways that we can customize hydropower representation in
+# There are two principal ways that we can customize hydropower representation in
 # PowerSimulations. First, we can play with the formulation applied to hydropower generators
-# using the `DeviceModel`. We can also adjust how simulaitons are configured to represent
-# different decison making processes and the information flow between those processes.
+# using the `DeviceModel`. We can also adjust how simulations are configured to represent
+# different decision making processes and the information flow between those processes.
 
 # ### Hydropower `DeviceModel`s
 
@@ -59,7 +59,7 @@ TypeTree(PSI.AbstractHydroFormulation, scopesep="\n", init_expand = 5)
 # Let's see what some of the different combinations create. First, let's apply the
 # `HydroDispatchRunOfRiver` formulation to the `HydroEnergyReservoir` generators, and the
 # `HydroFixed` formulation to `HydroDispatch` generators.
-#  - The `HydroFixed` formulaton just acts
+#  - The `HydroFixed` formulation just acts
 # like a load subtractor, forcing the system to accept it's generation.
 #  - The `HydroDispatchRunOfRiver` formulation represents the the energy flowing out of
 # a reservoir. The model can choose to produce power with that energy or just let it spill by.
@@ -117,7 +117,7 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizo
 op_problem.psi_container.JuMPmodel
 
 # ### Multi-Stage `SimulationSequence`
-# The purpsoe of a multi-stage simulaiton is to represent scheduling decisions consistently
+# The purpose of a multi-stage simulation is to represent scheduling decisions consistently
 # with the time scales that govern different elements of power systems.
 
 
@@ -151,8 +151,8 @@ stages_definition = Dict(
     "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver),
 )
 
-# This builds the sequence and passes the the enregy dispatch schedule for the `HydroEnergyReservoir`
-# generatorfrom the "MD" stage to the "DA" stage in the form of an energy limit over the
+# This builds the sequence and passes the the energy dispatch schedule for the `HydroEnergyReservoir`
+# generator from the "MD" stage to the "DA" stage in the form of an energy limit over the
     # synchronized periods.
 
     sequence = SimulationSequence(

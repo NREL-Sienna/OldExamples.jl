@@ -1,36 +1,36 @@
 
 # # Introduction to [PowerSystems.jl](https://github.com/NREL/PowerSystems.jl)
-# 
+#
 
 # **Originally Contributed by**: Clayton Barrows and Jose Daniel Lara
 
 # ## Introduction
 
-# This notebook is intended to show a power system data specification framework that exploits the 
-# capabilities of Julia to improve performance and allow modelers to develop modular software 
-# to create problems with different complexities and enable large scale analysis. 
-# 
+# This notebook is intended to show a power system data specification framework that exploits the
+# capabilities of Julia to improve performance and allow modelers to develop modular software
+# to create problems with different complexities and enable large scale analysis.
+#
 # ### Objective
 # PowerSystems.jl provides a type specification for bulk power system data.
-# The objecitve is to exploit Julia's integration of dynamic types to enable efficient data
-# handling and enable functional dispatch in modeling and analysis applications 
-# As explained in Julia's documentation: 
-# 
-# "Julia’s type system is dynamic, but gains some of the advantages of static type systems 
-# by making it possible to indicate that certain values are of specific types. This can be 
-# of great assistance in generating efficient code, but even more significantly, it allows 
+# The objective is to exploit Julia's integration of dynamic types to enable efficient data
+# handling and enable functional dispatch in modeling and analysis applications
+# As explained in Julia's documentation:
+#
+# "Julia’s type system is dynamic, but gains some of the advantages of static type systems
+# by making it possible to indicate that certain values are of specific types. This can be
+# of great assistance in generating efficient code, but even more significantly, it allows
 # method dispatch on the types of function arguments to be deeply integrated with the language."
-# 
+#
 # For more details on Julia types, refer to the [documentation](https://docs.julialang.org/en/v1/)
-# 
-# 
+#
+#
 # ## Environment and packages
-# 
-# PowerSystems.jl relies on a framework for data handling established in 
+#
+# PowerSystems.jl relies on a framework for data handling established in
 # [InfrastructureSystems.jl](https://github.com/NREL/InfrastructureSystems.jl).
 # Users of PowerSystems.jl should not need to interact directly with InfrastructureSystems.jl
-# 
-# The examples in this notebook depend upon Julia 1.2 and a specific set of package releases 
+#
+# The examples in this notebook depend upon Julia 1.2 and a specific set of package releases
 # as defined in the `Manifest.toml`.
 using Pkg
 Pkg.status()
@@ -41,9 +41,9 @@ using D3TypeTrees;
 
 
 # ## Types in PowerSystems
-# PowerSystems.jl provides a type hierarchy for specifying power system data. Data that 
-# describes infrastructure components is held in `struct`s. For example, a `Bus` is defined 
-# as follows with fields for the parameters required to describe a bus (along with an 
+# PowerSystems.jl provides a type hierarchy for specifying power system data. Data that
+# describes infrastructure components is held in `struct`s. For example, a `Bus` is defined
+# as follows with fields for the parameters required to describe a bus (along with an
 # `internal` field used by InfrastructureSystems to improve the efficiency of handling data).
 
 print_struct(Bus)
@@ -58,15 +58,15 @@ print_struct(Bus)
 #   - `Device`: includes descriptions of all the physical devices in a power system
 # - `PowerSystems.TechnicalParams`: includes structs that hold data describing the technical or economic capabilities of `Device`some
 # - `System`: collects all of the `Component`s
-# 
-# *The following trees are made with [D3TypeTrees](https://github.com/claytonpbarrows/D3TypeTrees.jl), 
+#
+# *The following trees are made with [D3TypeTrees](https://github.com/claytonpbarrows/D3TypeTrees.jl),
 # nodes that represent Structs will show the Fields in the hoverover tooltip.*
 
 TypeTree(PowerSystemType)
 
 # ### Composite Types
-# Julia composite types provide a useful way unify the representation of technical and 
-# economic capabilities of certian components. For example, the standard defintion of a 
+# Julia composite types provide a useful way unify the representation of technical and
+# economic capabilities of certain components. For example, the standard definition of a
 # thermal generator (`ThermalStandard`) contains `tech` and `op_cost` fields:
 
 print_struct(ThermalStandard)
@@ -76,8 +76,8 @@ print_struct(ThreePartCost)
 # ### `Forecasts`
 # Every `Component` has a `_forecasts::InfrastructureSystems.Forecasts` field (even composite types).
 # `Forecasts` are used to hold time series information that describes the temporally dependent
-# data of fields within the same struct. For example, the `ThermalStandard._forecasts` field can 
-# describe other fields in the struct (`available`, `activepower`, `reactivepower`), while 
+# data of fields within the same struct. For example, the `ThermalStandard._forecasts` field can
+# describe other fields in the struct (`available`, `activepower`, `reactivepower`), while
 # the `ThermalStandard.tech._forecasts` holds data for `rating` and other `TechThermal` fields.
 
 # `Forecast`s themselves can take the form of the following:
@@ -88,17 +88,17 @@ TypeTree(Forecast)
 
 print_struct(Deterministic)
 
-# Examples of how to create and add forecasts to system can be found in the 
+# Examples of how to create and add forecasts to system can be found in the
 # [Add Forecasts Example](../PowerSystems.jl Examples/add_forecasts.ipynb)
 
 # ### System
-# The `System` object collects all of the individual components into a single struct along 
-# with some metadta about the system itself (e.g. `basepower`)
+# The `System` object collects all of the individual components into a single struct along
+# with some metadata about the system itself (e.g. `basepower`)
 
 print_struct(System)
 
 # ## Basic example
-# PowerSystems contains a few basic data files (mostly for testing and demosntration).
+# PowerSystems contains a few basic data files (mostly for testing and demonstration).
 
 BASE_DIR = abspath(joinpath(dirname(Base.find_package("PowerSystems")), ".."))
 include(joinpath(BASE_DIR, "test", "data_5bus_pu.jl")) #.jl file containing 5-bus system data
@@ -106,22 +106,22 @@ nodes_5 = nodes5() # function to create 5-bus buses
 
 # ### Create a `System`
 
-sys = System(nodes_5, 
+sys = System(nodes_5,
              vcat(thermal_generators5(nodes_5), renewable_generators5(nodes_5)),
              loads5(nodes_5),
-             branches5(nodes_5), 
-             nothing,  
-             100.0, 
-             nothing, 
+             branches5(nodes_5),
+             nothing,
+             100.0,
+             nothing,
              nothing)
 
 
 # ### Accessing `System` Data
-# PowerSystems provides functional interfaces to all data. The following examples outline 
+# PowerSystems provides functional interfaces to all data. The following examples outline
 # the intended approach to accessing data expressed using PowerSystems.
 
 # PowerSystems enforces unique `name` fields between components of a particular concrete type.
-# So, in order to retreive a specific component, the user must specify the type of the component
+# So, in order to retrieve a specific component, the user must specify the type of the component
 # along with the name and system
 
 # #### Accessing components
@@ -159,8 +159,8 @@ iterate_forecasts(sys) |> collect
 #  - `component`
 #  - initial_time
 #  - label
-# 
-# We can find the uinique set of initial times of all the forecasts in the system:
+#
+# We can find the unique set of initial times of all the forecasts in the system:
 get_forecast_initial_times(sys)
 
 # Or for a specific component:

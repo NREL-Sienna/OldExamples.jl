@@ -36,8 +36,8 @@ rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR,"use
 # ### Create a `System`
 # Next, we'll create a `System` from the `rawsys` data. Since a `System` is predicated on a
 # forecast resolution and the `rawsys` data includes both 5-minute and 1-hour resolution
-# forecasts, we also need to specify which forecasts we want to include in the `Systeem`.
-# The `forecast_resolution` kwarg filters to only include forecsats with a matching resolution.
+# forecasts, we also need to specify which forecasts we want to include in the `System`.
+# The `forecast_resolution` kwarg filters to only include forecasts with a matching resolution.
 
 sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 sys
