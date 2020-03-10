@@ -7,7 +7,7 @@
 # PowerSimulations.jl supports the construction and solution of optimal power system
 # scheduling problems (Operations Problems). Operations problems form the fundamental
 # building blocks for [sequential simulations](../../notebook/PowerSimulations_examples/sequential_simulations.ipynb).
-# This example shows how to specify a the mathematics that will be applied to the data with
+# This example shows how to specify and customize a the mathematics that will be applied to the data with
 # an `OperationsProblemTemplate`, build and execute an `OperationsProblem`, and access the results.
 
 # ## Dependencies
@@ -36,7 +36,7 @@ using Cbc #solver
 
 rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
 rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
-rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP")
+rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP");
 
 
 # ### Create a `System` from RTS-GMLC data just like we did in the [parsing tabular data example.](../../notebook/PowerSystems_examples/parse_tabulardata.jl)
@@ -143,48 +143,50 @@ op_problem = OperationsProblem(GenericOpProblem,
 #nb # ### Optimizer Log
 #nb # The optimizer summary is included
 #
-#nb res.optimizer_log
+#nb get_optimizer_log(res)
 #
 #nb # ### Total Cost (objective function value)
 #
-#nb res.total_cost
+#nb get_total_cost(res)
 #
 #nb # ### Variable Values
 #nb # The solution value data frames for variable in the `op_problem.psi_container.variables`
 #nb # dictionary is stored:
 #
-#nb res.variables
+#nb variable_values = get_variables(res)
 #
-#nb # For example, we can look at the values for the `:P_ThermalStandard`
-#
-#nb res.variables[:P_ThermalStandard]
-#
-#nb # Note that the time stamps are missing...
+#nb # Note that the time stamps are missing from the dataframes in `variable_values`...
 #nb #
 #nb # The time stamps for each value in the time series used in the `OperationsProblem` is
 #nb # included separately from the variable value results.
 #
-#nb res.time_stamp
+#nb get_time_stamp(res)
 #
 #nb # ## Plotting
 #nb # PowerSimulaitons also provides some basic specifications for plotting `SimulationResults`.
 #nb #
 #nb # The plotting capabilities depend on the Julia Plots package.
-#nb using PowerGraphics
-#nb using Plots
-#nb plotly();
+#nb # ```julia
+#nb # using PowerGraphics
+#nb # using Plots
+#nb # plotly();
+#nb # ```
 #
 #nb # ### Bar Plots
 #nb # We can create a stacked bar plot for any combination of variables to summarize values over
 #nb # all time periods.
 #
-#nb bar_plot(res, [:P_ThermalStandard])
+#nb # ```julia
+#nb # bar_plot(res, [:P__ThermalStandard])
+#nb # ```
 #
 #nb # ### Stack Plots
 #nb # Similarly, we can create a stack plot for any combination of variable to see the time
 #nb # series values.
 #
-#nb # ```stack_plot(res, [:P_ThermalStandard,:P_RenewableDispatch])```
+#nb # ```julia
+#nb # stack_plot(res, [:P__ThermalStandard,:P__RenewableDispatch])
+#nb # ```
 #
 #nb # Or, we can create a series of stack plots for every variable in the dictionary:
 #nb # ```julia

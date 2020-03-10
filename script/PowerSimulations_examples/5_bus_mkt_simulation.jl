@@ -117,6 +117,4 @@ build!(sim)
 sim_results = execute!(sim)
 
 # ## Results
-uc_results = load_simulation_results(sim_results, "UC");
 ed_results = load_simulation_results(sim_results, "ED");
-

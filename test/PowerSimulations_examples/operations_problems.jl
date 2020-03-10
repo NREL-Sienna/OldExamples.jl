@@ -16,7 +16,7 @@ using Cbc #solver
 
 rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
 rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
-rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP")
+rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP");
 
 rawsys = PSY.PowerSystemTableData(rts_src_dir,
                                   100.0,
