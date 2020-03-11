@@ -19,6 +19,7 @@ To try out any of the tutorials in the browser without downloading Julia, click 
     - [PSS/E](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/parse_psse.ipynb)
     - [Tabular Data Parsing](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/parse_tabulardata.ipynb)
   - [Serialize data](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/serialize_data.ipynb)
+  - [Network Matrices](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/network_matrices.ipynb)
 - [PowerSimulations.jl](github.com/NREL/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/sequential_simulations.ipynb)
