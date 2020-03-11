@@ -4,7 +4,7 @@
 
 # ## Introduction
 
-# PowerSystems.jl supports serializing/deserializing data with JSON. This notebook 
+# PowerSystems.jl supports serializing/deserializing data with JSON. This notebook
 # provides an example of how to write and read a `System` to/from disk.
 
 # ### Dependencies
@@ -24,11 +24,3 @@ filesize(path)/1000000 #MB
 
 # ### Read the JSON file and create a new `System`
 sys2 = System(path)
-
-
-
-
-
-
-
-
