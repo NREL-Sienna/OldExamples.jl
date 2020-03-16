@@ -10,11 +10,11 @@
 
 # ## Dependencies
 # Since the `OperatiotnsProblem` is the fundamental building block of a sequential
-# simulation in PowerSimulations, we will build on the [OperationsProblem example](../../notebook/PowerSimulations_examples/operations_problems.ipynb)
+# simulation in PowerSimulations, we will build on the [OperationsProblem example](../../notebook/PowerSimulations_examples/1_operations_problems.ipynb)
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test", "PowerSimulations_examples", "operations_problems.jl"))
+include(joinpath(pkgpath,"test", "PowerSimulations_examples", "1_operations_problems.jl"))
 
 # ### 5-Minute system
 # We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.

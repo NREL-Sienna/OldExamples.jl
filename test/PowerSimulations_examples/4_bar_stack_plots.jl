@@ -9,6 +9,7 @@ res = load_simulation_results(simulation_folder, "UC")
 
 # Plots
 
+gr() # loads the GR backend
 bar_plot(res)
 
 plotlyjs()

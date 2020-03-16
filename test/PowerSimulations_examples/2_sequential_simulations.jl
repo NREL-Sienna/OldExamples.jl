@@ -1,6 +1,6 @@
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test", "PowerSimulations_examples", "operations_problems.jl"))
+include(joinpath(pkgpath,"test", "PowerSimulations_examples", "1_operations_problems.jl"))
 
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 

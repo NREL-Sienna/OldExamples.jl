@@ -24,6 +24,7 @@ res = load_simulation_results(simulation_folder, "UC")
 # By default, PowerGraphics uses the GR graphics package as the backend for Plots.jl to
 # generate figures. This creates static plots and should execute without any extra steps.
 # For example, we can create a stacked bar_plot:
+gr() # loads the GR backend
 bar_plot(res)
 
 # However, interactive plotting can generate much more insightful figures, especially when
