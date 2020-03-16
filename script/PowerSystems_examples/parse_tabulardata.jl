@@ -30,8 +30,8 @@ base_dir = dirname(dirname(pathof(PowerSystems)));
 
 # ### The tabular data format relies on a folder containing `*.csv` files and a `user_descriptors.yaml` file
 # First, we'll read the tabular data
-RTS_GMLC_DIR = joinpath(base_dir,"data/RTS_GMLC");
-rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR,"user_descriptors.yaml"))
+RTS_GMLC_DIR = joinpath(base_dir,"data", "RTS_GMLC");
+rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR, "user_descriptors.yaml"))
 
 # ### Create a `System`
 # Next, we'll create a `System` from the `rawsys` data. Since a `System` is predicated on a

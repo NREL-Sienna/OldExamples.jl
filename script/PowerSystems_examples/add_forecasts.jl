@@ -12,14 +12,14 @@
 # Let's use the 5-bus dataset we parsed in the MATPOWER example
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems_examples/parse_matpower.jl"))
+include(joinpath(pkgpath,"test", "PowerSystems_examples", "parse_matpower.jl"))
 
 # ### Define pointers to time series files
 # For example, if we want to add a bunch of time series files, say one for each load and
 # one for each renewable generator, we need to define pointers to each .csv file containing
 # the time series in the following format (PowerSystems.jl also supports a CSV format for this file)
 
-FORECASTS_DIR = joinpath(base_dir,"forecasts/5bus_ts")
+FORECASTS_DIR = joinpath(base_dir,"forecasts", "5bus_ts")
 fname = joinpath(FORECASTS_DIR,"timeseries_pointers_da.json")
 open(fname,"r") do f
     for line in eachline(f)

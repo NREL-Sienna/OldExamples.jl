@@ -162,33 +162,5 @@ op_problem = OperationsProblem(GenericOpProblem,
 #
 #nb get_time_stamp(res)
 #
-#nb # ## Plotting
-#nb # PowerSimulaitons also provides some basic specifications for plotting `SimulationResults`.
-#nb #
-#nb # The plotting capabilities depend on the Julia Plots package.
-#nb # ```julia
-#nb # using PowerGraphics
-#nb # using Plots
-#nb # plotly();
-#nb # ```
-#
-#nb # ### Bar Plots
-#nb # We can create a stacked bar plot for any combination of variables to summarize values over
-#nb # all time periods.
-#
-#nb # ```julia
-#nb # bar_plot(res, [:P__ThermalStandard])
-#nb # ```
-#
-#nb # ### Stack Plots
-#nb # Similarly, we can create a stack plot for any combination of variable to see the time
-#nb # series values.
-#
-#nb # ```julia
-#nb # stack_plot(res, [:P__ThermalStandard,:P__RenewableDispatch])
-#nb # ```
-#
-#nb # Or, we can create a series of stack plots for every variable in the dictionary:
-#nb # ```julia
-#nb # stack_plot(res)
-#nb # ```
+# ## Plotting
+# Take a look at the examples in [the plotting folder.](../../notebook/PowerSimulations_examples/Plotting)

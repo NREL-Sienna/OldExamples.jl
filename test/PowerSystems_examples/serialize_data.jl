@@ -1,6 +1,6 @@
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems_examples/parse_matpower.jl"))
+include(joinpath(pkgpath,"test", "PowerSystems_examples", "parse_matpower.jl"))
 
 path, io = mktemp()
 @info "Serializing to $path"

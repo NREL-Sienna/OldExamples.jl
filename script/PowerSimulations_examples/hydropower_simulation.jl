@@ -34,7 +34,7 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # There is a meaningless test dataset assembled in the
 # [make_hydropower_data.jl](../../script/PowerSimulations_examples/make_hydro_data.jl) script.
 
-include(joinpath(pkgpath, "script/PowerSimulations_examples/make_hydro_data.jl"))
+include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_data.jl"))
 
 # ## Two PowerSimulations features determine hydropower representation.
 # There are two principal ways that we can customize hydropower representation in

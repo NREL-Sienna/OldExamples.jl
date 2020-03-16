@@ -14,7 +14,7 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSimulations_examples/operations_problems.jl"))
+include(joinpath(pkgpath,"test", "PowerSimulations_examples", "operations_problems.jl"))
 
 # ### 5-Minute system
 # We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.
@@ -141,12 +141,11 @@ DA_RT_sequence = SimulationSequence(step_resolution = Hour(24),
 # Now, we can build and execute a simulation using the `SimulationSequence` and `Stage`s
 # that we've defined.
 
-file_path = tempdir()
 sim = Simulation(name = "rts-test",
                 steps = 1,
                 stages = stages_definition,
                 stages_sequence = DA_RT_sequence,
-                simulation_folder = file_path)
+                simulation_folder = rts_dir)
 
 # ### Build simulation
 
@@ -160,3 +159,5 @@ sim_results = execute!(sim)
 uc_results = load_simulation_results(sim_results, "UC");
 ed_results = load_simulation_results(sim_results, "ED");
 
+# ## Plotting
+# Take a look at the examples in [the plotting folder.](../../notebook/PowerSimulations_examples/Plotting)

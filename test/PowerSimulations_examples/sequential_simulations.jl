@@ -1,6 +1,6 @@
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSimulations_examples/operations_problems.jl"))
+include(joinpath(pkgpath,"test", "PowerSimulations_examples", "operations_problems.jl"))
 
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
@@ -49,12 +49,11 @@ DA_RT_sequence = SimulationSequence(step_resolution = Hour(24),
                                     cache = cache,
                                     )
 
-file_path = tempdir()
 sim = Simulation(name = "rts-test",
                 steps = 1,
                 stages = stages_definition,
                 stages_sequence = DA_RT_sequence,
-                simulation_folder = file_path)
+                simulation_folder = rts_dir)
 
 build!(sim)
 

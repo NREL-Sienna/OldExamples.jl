@@ -29,6 +29,6 @@ base_dir = dirname(dirname(pathof(PowerSystems)));
 
 # ### Create a `System`
 
-sys = System(PSY.PowerModelsData(joinpath(base_dir,"data/psse_raw/RTS-GMLC.RAW")));
+sys = System(PSY.PowerModelsData(joinpath(base_dir,"data", "psse_raw", "RTS-GMLC.RAW")));
 
 sys

@@ -8,7 +8,7 @@ const PSI = PowerSimulations
 using Statistics
 
 # We can use some of the simple data that's been assembled for testing PowerSimulations.
-include(joinpath(pathof(PSI), "../../test/test_utils/get_test_data.jl"))
+include(joinpath(pathof(PSI), "..", "..", "test", "test_utils", "get_test_data.jl"))
 
 # Additionally, let's add two hydro generators. One of each type supported by PowerSystems.
 hydro_generators5(nodes5) = [

@@ -11,8 +11,7 @@
 # ## Dependencies and Data
 # First, let's create `System`s to represent the Day-Ahead and Real-Time market clearing
 # process with hourly, and 5-minute forecast data, respectively.
-using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+
 # ### Modeling Packages
 using InfrastructureSystems
 const IS = InfrastructureSystems

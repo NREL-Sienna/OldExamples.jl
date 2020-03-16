@@ -25,3 +25,5 @@ To try out any of the tutorials in the browser without downloading Julia, click 
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/sequential_simulations.ipynb)
   - [Hydro Modeling](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/hydropower_simulation.ipynb)
   - [Sequential DA-RT 5bus Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/5_bus_mkt_simulation.ipynb)
+  - Plotting with [PowerGraphics.jl](github.com/NREL-SIIP/PowerGraphics.jl)
+   - [Bar and Stack Plots](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/bar_stack_plots.ipynb)

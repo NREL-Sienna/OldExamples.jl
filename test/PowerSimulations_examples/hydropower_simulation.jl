@@ -16,7 +16,7 @@ using JuMP
 using Cbc # solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
-include(joinpath(pkgpath, "script/PowerSimulations_examples/make_hydro_data.jl"))
+include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_data.jl"))
 
 TypeTree(PSY.HydroGen)
 

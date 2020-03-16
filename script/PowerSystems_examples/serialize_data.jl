@@ -11,7 +11,7 @@
 # Let's use a dataset from the [tabular data parsing example](../../notebook/PowerSystems_examples/parse_matpower.ipynb)
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test/PowerSystems_examples/parse_matpower.jl"))
+include(joinpath(pkgpath,"test", "PowerSystems_examples", "parse_matpower.jl"))
 
 # ### Write data to a temporary directory
 

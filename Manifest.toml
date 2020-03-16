@@ -46,10 +46,10 @@ uuid = "ad839575-38b3-5650-b840-f874b8c74a25"
 version = "0.12.2"
 
 [[Blosc]]
-deps = ["BinaryProvider", "CMakeWrapper", "Compat", "Libdl"]
-git-tree-sha1 = "71fb23581e1f0b0ae7be8ccf0ebfb3600e23ca41"
+deps = ["BinaryProvider", "CMakeWrapper", "Libdl"]
+git-tree-sha1 = "9981f1795919b8f770dc064fe733ba09c2e7c7a9"
 uuid = "a74b3585-a348-5f62-a45c-50e91977d574"
-version = "0.5.1"
+version = "0.6.0"
 
 [[Bzip2_jll]]
 deps = ["Libdl", "Pkg"]
@@ -370,10 +370,10 @@ uuid = "82899510-4779-5014-852e-03e436cf321d"
 version = "1.0.0"
 
 [[JSExpr]]
-deps = ["JSON", "MacroTools", "Observables", "Test", "WebIO"]
-git-tree-sha1 = "013bc2143a2e84ea489365cf30db3407deb540c2"
+deps = ["JSON", "MacroTools", "Observables", "WebIO"]
+git-tree-sha1 = "ca99c457d67f7950e405f26044f4e38658a75e8a"
 uuid = "97c1335a-c9c5-57fe-bc5d-ec35cebe8660"
-version = "0.5.0"
+version = "0.5.1"
 
 [[JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
@@ -537,9 +537,10 @@ uuid = "47be7bcc-f1a6-5447-8b36-7eeeff7534fd"
 version = "0.3.1"
 
 [[Observables]]
-git-tree-sha1 = "11832878355305984235a2e90d0e3737383c634c"
+deps = ["Test"]
+git-tree-sha1 = "dc02cec22747d1d10d9f70d8a1c03432b5bfbcd0"
 uuid = "510215fc-4207-5dde-b226-833fc4488ee2"
-version = "0.3.1"
+version = "0.2.3"
 
 [[Ogg_jll]]
 deps = ["Libdl", "Pkg"]
@@ -607,9 +608,9 @@ version = "1.0.1"
 
 [[PlotUtils]]
 deps = ["Colors", "Dates", "Printf", "Random", "Reexport"]
-git-tree-sha1 = "a146cb72ec962aec81d478de49d1011db06dd754"
+git-tree-sha1 = "132e468bf7d67ee6c997c160b982a7ab2e7c3e37"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "0.6.3"
+version = "0.6.4"
 
 [[PlotlyBase]]
 deps = ["Dates", "DelimitedFiles", "DocStringExtensions", "JSON", "LaTeXStrings", "Logging", "Requires", "Statistics", "UUIDs"]
@@ -636,8 +637,8 @@ uuid = "2dfb63ee-cc39-5dd5-95bd-886bf059d720"
 version = "0.5.3"
 
 [[PowerGraphics]]
-deps = ["Colors", "DataFrames", "Dates", "GR", "InfrastructureSystems", "ORCA", "PlotlyJS", "Plots", "PowerSystems", "RecipesBase", "Weave", "WebIO"]
-git-tree-sha1 = "3b50142584bf7c8a76a40cdbc833562409d502f1"
+deps = ["Colors", "DataFrames", "Dates", "GR", "InfrastructureSystems", "PlotlyJS", "Plots", "PowerSystems", "RecipesBase", "Reexport", "Weave"]
+git-tree-sha1 = "40d91c2e62ff9a22d47db334d023c8814adc1415"
 repo-rev = "master"
 repo-url = "https://github.com/NREL-SIIP/PowerGraphics.jl.git"
 uuid = "5f7eddb3-86b1-49e8-a95a-ddc0f45eea41"
@@ -818,10 +819,10 @@ uuid = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
 version = "0.9.3"
 
 [[WebIO]]
-deps = ["AssetRegistry", "Base64", "Compat", "Distributed", "FunctionalCollections", "JSON", "Logging", "Observables", "Pkg", "Random", "Requires", "Sockets", "UUIDs", "WebSockets", "Widgets"]
-git-tree-sha1 = "ba53f245d0c4ef3ccf0f2c89546ecfcd1957797f"
+deps = ["AssetRegistry", "Base64", "Distributed", "FunctionalCollections", "JSON", "Logging", "Observables", "Pkg", "Random", "Requires", "Sockets", "UUIDs", "WebSockets", "Widgets"]
+git-tree-sha1 = "b8eb800251c06efd635bcdc4ec7f83643f0b9a61"
 uuid = "0f1e0344-ec1d-5b48-a673-e5cf874b6c29"
-version = "0.8.11"
+version = "0.8.13"
 
 [[WebSockets]]
 deps = ["Base64", "Dates", "Distributed", "HTTP", "Logging", "Random", "Sockets", "Test"]

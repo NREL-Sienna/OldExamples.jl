@@ -1,6 +1,3 @@
-using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-
 using InfrastructureSystems
 const IS = InfrastructureSystems
 using PowerSystems
