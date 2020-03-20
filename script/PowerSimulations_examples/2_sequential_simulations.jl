@@ -106,7 +106,7 @@ feedforward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from
 # exactly which results will be needed and carry them through a cache in the economic dispatch
 # problems for later use.
 
-cache = Dict("UC" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
+cache = Dict(("UC",) => TimeStatusChange(PSY.ThermalStandard, PSI.ON))
 
 # ### Sequencing
 # The stage problem length, look-ahead, and other details surrounding the temporal Sequencing

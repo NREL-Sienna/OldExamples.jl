@@ -153,25 +153,26 @@ stages_definition = Dict(
 
 # This builds the sequence and passes the the energy dispatch schedule for the `HydroEnergyReservoir`
 # generator from the "MD" stage to the "DA" stage in the form of an energy limit over the
-    # synchronized periods.
+# synchronized periods.
 
-    sequence = SimulationSequence(
-        step_resolution = Hour(48),
-        order = Dict(1 => "MD", 2 => "DA"),
-        feedforward_chronologies = Dict(("MD" => "DA") => Synchronize(periods = 2)),
-        horizons = Dict("MD" => 2, "DA" => 24),
-        intervals = Dict(
-            "MD" => (Hour(48), Consecutive()),
-            "DA" => (Hour(24), Consecutive()),
+sequence = SimulationSequence(
+    step_resolution = Hour(48),
+    order = Dict(1 => "MD", 2 => "DA"),
+    feedforward_chronologies = Dict(("MD" => "DA") => Synchronize(periods = 2)),
+    horizons = Dict("MD" => 2, "DA" => 24),
+    intervals = Dict(
+        "MD" => (Hour(48), Consecutive()),
+        "DA" => (Hour(24), Consecutive()),
+    ),
+    feedforward = Dict(
+        ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
+            variable_from_stage = PSI.ACTIVE_POWER,
+            affected_variables = [PSI.ACTIVE_POWER],
         ),
-        feedforward = Dict(
-            ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-                variable_from_stage = PSI.ACTIVE_POWER,
-                affected_variables = [PSI.ACTIVE_POWER],
-            ),
-        ),
-        ini_cond_chronology = InterStageChronology(),
-    );
+    ),
+    cache = Dict( ("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
+    ini_cond_chronology = InterStageChronology(),
+);
 
 #-
 

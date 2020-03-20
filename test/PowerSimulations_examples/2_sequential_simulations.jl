@@ -32,7 +32,7 @@ feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 feedforward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from_stage = PSI.ON,
                                                          affected_variables = [PSI.ACTIVE_POWER]))
 
-cache = Dict("UC" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
+cache = Dict(("UC",) => TimeStatusChange(PSY.ThermalStandard, PSI.ON))
 
 order = Dict(1 => "UC", 2 => "ED")
 horizons = Dict("UC" => 24, "ED" =>12)

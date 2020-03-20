@@ -133,7 +133,7 @@ op_problem = OperationsProblem(GenericOpProblem,
 #
 #nb # ### Solve an `OperationsProblem`
 #
-#nb res = solve_op_problem!(op_problem);
+#nb res = solve!(op_problem);
 #
 #nb # ## Results Inspection
 #nb # PowerSimulations collects the `OperationsProblem` results into a struct:
