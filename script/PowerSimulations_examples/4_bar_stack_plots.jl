@@ -5,7 +5,7 @@
 # backends.
 #
 # The plotting capabilities use the Julia Plots package which can generate plots using
-# several different graphics packages. We'll use GR.jl and PlotluJS.jl.
+# several different graphics packages. We'll use GR.jl and PlotlyJS.jl.
 #
 # ## Dependencies
 using SIIPExamples #for path locations

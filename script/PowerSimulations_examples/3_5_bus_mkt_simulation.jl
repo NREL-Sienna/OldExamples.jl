@@ -31,7 +31,8 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 
 # ### 5-bus Data
 # The five bus system data here includes hourly day-ahead data, 5-minute real-time market
-# data, and 6-second actual data.
+# data, and 6-second actual data. We'll only use the hourly and 5-minute data for the
+# example simulations below, but the 6-second data is included for future development.
 base_dir = PSY.download(PSY.TestData; branch = "master");
 pm_data = PSY.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
 

@@ -140,7 +140,7 @@ template_md = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
+    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
 )
 template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
@@ -204,6 +204,7 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 
 # 3-Stage Simulation:
 
+
 stages_definition = Dict(
     "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),
     "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver),
@@ -233,6 +234,7 @@ sequence = SimulationSequence(
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
+    cache = Dict( ("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = InterStageChronology(),
 );
 

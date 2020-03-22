@@ -66,7 +66,7 @@ template_md = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
+    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
 )
 template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
@@ -142,6 +142,7 @@ sequence = SimulationSequence(
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
+    cache = Dict( ("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = InterStageChronology(),
 );
 
