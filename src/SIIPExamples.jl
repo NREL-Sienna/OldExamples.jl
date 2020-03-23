@@ -117,6 +117,14 @@ function rm_if_empty(filepath::String)
     end
 end
 
+
+function postprocess_notebook(nb)
+    txt = read(nb, String)
+    open(nb, "w") do f
+        write(f, replace(txt, r"\"outputs\":\ \[\]\,\n\ \ \ \"cell_type\":\ \"markdown\"" => "\"cell_type\": \"markdown\""))
+    end
+end
+
 """
 `literate_file(folder::AbstractString, file::AbstractString)`
 
@@ -152,6 +160,7 @@ function literate_file(folder, file; force = false, kwargs...)
         if mtime(srcpath) > mtime(notebookfilepath) || mtime(notebookfilepath) == 0.0 || force
             @warn "Converting $filename to Jupyter Notebook."
             fn = Literate.notebook(srcpath, notebookpath; config = config, kwargs...)
+            postprocess_notebook(fn)
             rm_if_empty(fn)
         else
             @warn "Skipping Jupyter Notebook for $filename."
