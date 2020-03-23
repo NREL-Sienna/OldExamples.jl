@@ -643,7 +643,9 @@ version = "0.5.3"
 
 [[PowerGraphics]]
 deps = ["Colors", "DataFrames", "Dates", "GR", "InfrastructureSystems", "PlotlyJS", "Plots", "PowerSystems", "RecipesBase", "Reexport", "Weave"]
-git-tree-sha1 = "7d46f2e60ed9144e52f985e7f621bcd00c7dd004"
+git-tree-sha1 = "d836d2117c7cbdcb8a9ab0783347030476b0d75e"
+repo-rev = "master"
+repo-url = "https://github.com/NREL-SIIP/PowerGraphics.jl.git"
 uuid = "5f7eddb3-86b1-49e8-a95a-ddc0f45eea41"
 version = "0.2.0"
 
@@ -655,7 +657,9 @@ version = "0.15.3"
 
 [[PowerSimulations]]
 deps = ["CSV", "DataFrames", "Dates", "Feather", "InfrastructureSystems", "JSON", "JuMP", "LinearAlgebra", "Logging", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "SHA", "Serialization", "TimeSeries", "TimerOutputs"]
-git-tree-sha1 = "16501bb1a44095ceb8ab7ff24fdd755919301011"
+git-tree-sha1 = "12bb91dd5eb8f4d7c44f226cc4751a025dc57720"
+repo-rev = "cb/pg_bugfix"
+repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 version = "0.3.1"
 

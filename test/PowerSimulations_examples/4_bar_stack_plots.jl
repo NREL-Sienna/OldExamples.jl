@@ -16,7 +16,8 @@ plotlyjs()
 
 bar_plot(res)
 
-stack_plot(res, [:P__ThermalStandard,:P__RenewableDispatch])
+stack_plot(res, [Symbol("P__PowerSystems.ThermalStandard"),
+                Symbol("P__PowerSystems.RenewableDispatch")])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

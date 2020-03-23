@@ -39,7 +39,8 @@ bar_plot(res)
 # Similarly, we can create a stack plot for any combination of variable to see the time
 # series values.
 
-stack_plot(res, [:P__ThermalStandard,:P__RenewableDispatch])
+stack_plot(res, [Symbol("P__PowerSystems.ThermalStandard"),
+                Symbol("P__PowerSystems.RenewableDispatch")])
 
 # Or, we can create a series of stack plots for every variable in the dictionary:
 # ```julia
