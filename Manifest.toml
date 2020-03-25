@@ -94,16 +94,16 @@ uuid = "9961bab8-2fa3-5c5a-9d89-47fab24efd76"
 version = "0.6.7"
 
 [[CodecBzip2]]
-deps = ["BinaryProvider", "Libdl", "TranscodingStreams"]
-git-tree-sha1 = "5db086e510c11b4c87d05067627eadb2dc079995"
+deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
+git-tree-sha1 = "2fee975d68f9a8b22187ae86e33c0829b30cf231"
 uuid = "523fee87-0ab8-5b00-afb7-3ecf72e48cfd"
-version = "0.6.0"
+version = "0.7.1"
 
 [[CodecZlib]]
-deps = ["BinaryProvider", "Libdl", "TranscodingStreams"]
-git-tree-sha1 = "05916673a2627dd91b4969ff8ba6941bc85a960e"
+deps = ["TranscodingStreams", "Zlib_jll"]
+git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
 uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
-version = "0.6.0"
+version = "0.7.0"
 
 [[Codecs]]
 deps = ["Test"]
@@ -464,9 +464,9 @@ uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
 [[MathOptInterface]]
 deps = ["BenchmarkTools", "CodecBzip2", "CodecZlib", "JSON", "JSONSchema", "LinearAlgebra", "MutableArithmetics", "OrderedCollections", "SparseArrays", "Test", "Unicode"]
-git-tree-sha1 = "f0d60e42d8b64dd1b511e2dc13e0b72ba1dfc9cf"
+git-tree-sha1 = "27f2ef85879b8f1d144266ab44f076ba0dfbd8a1"
 uuid = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
-version = "0.9.12"
+version = "0.9.13"
 
 [[MathProgBase]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -643,11 +643,9 @@ version = "0.5.3"
 
 [[PowerGraphics]]
 deps = ["Colors", "DataFrames", "Dates", "GR", "InfrastructureSystems", "PlotlyJS", "Plots", "PowerSystems", "RecipesBase", "Reexport", "Weave"]
-git-tree-sha1 = "d836d2117c7cbdcb8a9ab0783347030476b0d75e"
-repo-rev = "master"
-repo-url = "https://github.com/NREL-SIIP/PowerGraphics.jl.git"
+git-tree-sha1 = "fdd70d5b55d5ecf9d236a6b968e8335e3c46d212"
 uuid = "5f7eddb3-86b1-49e8-a95a-ddc0f45eea41"
-version = "0.2.0"
+version = "0.3.0"
 
 [[PowerModels]]
 deps = ["InfrastructureModels", "JSON", "JuMP", "LinearAlgebra", "MathOptInterface", "Memento", "SparseArrays"]
@@ -657,11 +655,9 @@ version = "0.15.3"
 
 [[PowerSimulations]]
 deps = ["CSV", "DataFrames", "Dates", "Feather", "InfrastructureSystems", "JSON", "JuMP", "LinearAlgebra", "Logging", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "SHA", "Serialization", "TimeSeries", "TimerOutputs"]
-git-tree-sha1 = "12bb91dd5eb8f4d7c44f226cc4751a025dc57720"
-repo-rev = "cb/pg_bugfix"
-repo-url = "https://github.com/NREL/PowerSimulations.jl.git"
+git-tree-sha1 = "fd0711893a38bf4788bf27d58012f4d889b93aee"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
-version = "0.3.1"
+version = "0.3.2"
 
 [[PowerSystems]]
 deps = ["CSV", "DataFrames", "Dates", "DocStringExtensions", "InfrastructureSystems", "InteractiveUtils", "JSON", "JSON2", "LinearAlgebra", "Logging", "SparseArrays", "TimeSeries", "UUIDs", "YAML"]
