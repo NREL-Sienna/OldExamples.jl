@@ -1,6 +1,3 @@
-using Pkg
-Pkg.status()
-
 using SIIPExamples
 using PowerSystems
 using TimeSeries

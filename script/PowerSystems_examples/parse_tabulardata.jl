@@ -11,8 +11,8 @@
 # ### Environment
 # This notebook depends on the SIIPExamples.jl environment which is loaded by default
 
-using Pkg
-Pkg.status()
+#nb using Pkg
+#nb Pkg.status()
 
 # ### Dependencies
 using SIIPExamples
