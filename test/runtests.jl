@@ -7,7 +7,7 @@ using Test
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 testpath = joinpath(pkgpath,"test")
 
-exclude = ["4_bar_stack_plots.jl"]
+exclude = []
 
 logger = InfrastructureSystems.configure_logging(console_level = Logging.Error)
 
