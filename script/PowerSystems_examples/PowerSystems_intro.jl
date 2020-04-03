@@ -1,5 +1,5 @@
 
-# # Introduction to [PowerSystems.jl](https://github.com/NREL/PowerSystems.jl)
+# # Introduction to [PowerSystems.jl](https://github.com/NREL-SIIP/PowerSystems.jl)
 #
 
 # **Originally Contributed by**: Clayton Barrows and Jose Daniel Lara
@@ -27,7 +27,7 @@
 # ## Environment and packages
 #
 # PowerSystems.jl relies on a framework for data handling established in
-# [InfrastructureSystems.jl](https://github.com/NREL/InfrastructureSystems.jl).
+# [InfrastructureSystems.jl](https://github.com/NREL-SIIP/InfrastructureSystems.jl).
 # Users of PowerSystems.jl should not need to interact directly with InfrastructureSystems.jl
 #
 # The examples in this notebook depend upon Julia 1.2 and a specific set of package releases

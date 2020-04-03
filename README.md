@@ -20,7 +20,7 @@ To try out any of the tutorials in the browser without downloading Julia, click 
     - [Tabular Data Parsing](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/parse_tabulardata.ipynb)
   - [Serialize data](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/serialize_data.ipynb)
   - [Network Matrices](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/network_matrices.ipynb)
-- [PowerSimulations.jl](github.com/NREL/PowerSimulations.jl) Examples
+- [PowerSimulations.jl](github.com/NREL-SIIP/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/1_operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/2_sequential_simulations.ipynb)
   - [Hydro Modeling](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/5_hydropower_simulation.ipynb)

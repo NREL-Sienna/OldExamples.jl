@@ -6,7 +6,7 @@
 
 # An example of how to parse tabular files (CSV) files similar to the format established in
 # the [RTS-GMLC](github.com/gridmod/rts-gmlc/RTS_Data/SourceData) and create a `System` using
-# [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
+# [PowerSystems.jl](github.com/NREL-SIIP/PowerSystems.jl)
 
 # ### Environment
 # This notebook depends on the SIIPExamples.jl environment which is loaded by default

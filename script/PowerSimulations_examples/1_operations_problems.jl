@@ -1,4 +1,4 @@
-# # Operations problems with [PowerSimulations.jl](https://github.com/NREL/PowerSimulations.jl)
+# # Operations problems with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl)
 
 # **Originally Contributed by**: Clayton Barrows
 

@@ -4,7 +4,7 @@
 
 # ## Introduction
 
-# An example of how to parse add time series data to a `System` using [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
+# An example of how to parse add time series data to a `System` using [PowerSystems.jl](github.com/NREL-SIIP/PowerSystems.jl)
 #
 # For example, a `System` created by [parsing a MATPOWER file](../../notebook/PowerSystems_examples/parse_matpower.ipynb)
 # doesn't contain any time series data. So a user may want to add forecasts to the `System`

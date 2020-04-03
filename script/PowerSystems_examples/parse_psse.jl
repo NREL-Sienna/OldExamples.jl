@@ -4,7 +4,7 @@
 
 # ## Introduction
 
-# An example of how to parse PSS/e files and create a `System` using [PowerSystems.jl](github.com/NREL/PowerSystems.jl)
+# An example of how to parse PSS/e files and create a `System` using [PowerSystems.jl](github.com/NREL-SIIP/PowerSystems.jl)
 
 # ### Environment
 # This notebook depends on the SIIPExamples.jl environment which is loaded by default
