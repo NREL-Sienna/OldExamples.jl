@@ -14,39 +14,20 @@
 using SIIPExamples
 
 # ### Modeling Packages
-using InfrastructureSystems
-const IS = InfrastructureSystems
 using PowerSystems
 const PSY = PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations
-using D3TypeTrees
 
 # ### Data management packages
 using Dates
-using DataFrames
 
 # ### Optimization packages
-using JuMP
 using Cbc #solver
 
-# ### Data
-# This data depends upon the [RTS-GMLC](https://github.com/grid-mod/rts-gmlc) dataset. Let's
-# download and extract the data.
-
-rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
-rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
-rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP");
-
-
 # ### Create a `System` from RTS-GMLC data just like we did in the [parsing tabular data example.](../../notebook/PowerSystems_examples/parse_tabulardata.jl)
-rawsys = PSY.PowerSystemTableData(rts_src_dir,
-                                  100.0,
-                                  joinpath(rts_siip_dir,"user_descriptors.yaml"),
-                                  timeseries_metadata_file = joinpath(rts_siip_dir,"timeseries_pointers.json"),
-                                  generator_mapping_file = joinpath(rts_siip_dir,"generator_mapping.yaml"));
-
-sys = System(rawsys; forecast_resolution = Dates.Hour(1));
+pkgpath = dirname(dirname(pathof(SIIPExamples)))
+include(joinpath(pkgpath,"test", "PowerSystems_examples", "parse_tabulardata.jl"))
 
 # ## Change the device type of inter-regional ties from Line to MonitoredLines 
 # to enforce flow limits between regions
