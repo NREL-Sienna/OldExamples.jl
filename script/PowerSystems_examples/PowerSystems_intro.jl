@@ -64,15 +64,6 @@ print_struct(Bus)
 
 TypeTree(PowerSystemType)
 
-# ### Composite Types
-# Julia composite types provide a useful way unify the representation of technical and
-# economic capabilities of certain components. For example, the standard definition of a
-# thermal generator (`ThermalStandard`) contains `tech` and `op_cost` fields:
-
-print_struct(ThermalStandard)
-print_struct(TechThermal)
-print_struct(ThreePartCost)
-
 # ### `Forecasts`
 # Every `Component` has a `_forecasts::InfrastructureSystems.Forecasts` field (even composite types).
 # `Forecasts` are used to hold time series information that describes the temporally dependent

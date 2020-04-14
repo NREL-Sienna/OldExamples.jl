@@ -5,7 +5,7 @@ using Dates
 const PSY = PowerSystems
 const IS = PSY.InfrastructureSystems;
 
-PSY.download(PSY.TestData; branch = "master", force=true)
+PSY.download(PSY.TestData; branch = "master")
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 RTS_GMLC_DIR = joinpath(base_dir,"data", "RTS_GMLC");

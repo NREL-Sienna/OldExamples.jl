@@ -25,7 +25,7 @@ const IS = PSY.InfrastructureSystems;
 # ### Fetch Data
 # PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
-PSY.download(PSY.TestData; branch = "master", force=true)
+PSY.download(PSY.TestData; branch = "master")
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 # ### The tabular data format relies on a folder containing `*.csv` files and a `user_descriptors.yaml` file

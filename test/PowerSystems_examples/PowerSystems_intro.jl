@@ -9,10 +9,6 @@ print_struct(Bus)
 
 TypeTree(PowerSystemType)
 
-print_struct(ThermalStandard)
-print_struct(TechThermal)
-print_struct(ThreePartCost)
-
 TypeTree(Forecast)
 
 print_struct(Deterministic)
