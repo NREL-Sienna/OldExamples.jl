@@ -1,5 +1,5 @@
 
-# #Bar and stack plots with [PowerGraphics.jl](github.com/nrel-siip/PowerGraphics.jl)
+# # Bar and stack plots with [PowerGraphics.jl](github.com/nrel-siip/PowerGraphics.jl)
 # PowerGraphics also provides some basic specifications for plotting `SimulationResults`.
 # This example demonstrates some simple plotting capabilities using different Plots.julia
 # backends.
@@ -20,7 +20,7 @@ simulation_folder = joinpath(pkgpath, "RTS-GMLC-master", "rts-test")
 simulation_folder = joinpath(simulation_folder, readdir(simulation_folder)[end])
 res = load_simulation_results(simulation_folder, "UC")
 
-## Plots
+# ## Plots
 # By default, PowerGraphics uses the GR graphics package as the backend for Plots.jl to
 # generate figures. This creates static plots and should execute without any extra steps.
 # For example, we can create a stacked bar_plot:

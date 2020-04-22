@@ -25,13 +25,16 @@ const IS = PSY.InfrastructureSystems;
 # ### Fetch Data
 # PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
-PSY.download(PSY.TestData; branch = "master")
+PSY.download(PSY.TestData; branch = "master") # *note* add `force=true` to get a fresh copy
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 # ### The tabular data format relies on a folder containing `*.csv` files and a `user_descriptors.yaml` file
 # First, we'll read the tabular data
 RTS_GMLC_DIR = joinpath(base_dir,"data", "RTS_GMLC");
-rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR, "user_descriptors.yaml"))
+rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0,
+    joinpath(RTS_GMLC_DIR, "user_descriptors.yaml"),
+    timeseries_metadata_file = joinpath(RTS_GMLC_DIR,"timeseries_pointers.json"),
+    generator_mapping_file = joinpath(RTS_GMLC_DIR,"generator_mapping.yaml"))
 
 # ### Create a `System`
 # Next, we'll create a `System` from the `rawsys` data. Since a `System` is predicated on a
