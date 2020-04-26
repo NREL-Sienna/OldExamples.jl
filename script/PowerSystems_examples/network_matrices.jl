@@ -14,7 +14,7 @@
 # Let's use a dataset from the [tabular data parsing example](../../notebook/PowerSystems_examples/parse_matpower.ipynb)
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test", "PowerSystems_examples", "parse_matpower.jl"))
+include(joinpath(pkgpath, "test", "PowerSystems_examples", "parse_matpower.jl"))
 
 # ### Ybus
 ybus = Ybus(sys)
@@ -30,14 +30,14 @@ lodf = LODF(sys)
 # (::Int64) while the branch axes are indexed by branch name (::String). You can access
 # specific elements of the matrices as follows:
 
-ptdf["5",3]
+ptdf["5", 3]
 
 # Additionally, PowerSystems provides accessors to the network matrices that take `Componets`
 # as arguments so that you can pass references to the components themselves rather than the
 # name or number. For example:
-buses = collect(get_components(Bus,sys))
-ybus[buses[1],buses[2]]
+buses = collect(get_components(Bus, sys))
+ybus[buses[1], buses[2]]
 
 # If you would instead like to index by bus name, something like the following should work:
-busname2num = get_components(Bus,sys) |> (c -> Dict(zip(get_name.(c), get_number.(c))))
+busname2num = get_components(Bus, sys) |> (c -> Dict(zip(get_name.(c), get_number.(c))))
 ptdf["5", busname2num["bus3"]]

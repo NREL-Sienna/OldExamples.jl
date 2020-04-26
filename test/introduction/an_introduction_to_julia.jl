@@ -25,11 +25,11 @@ typeof(:my_id)
 
 (2 + 1im) * (1 - 2im)
 
-sin(2π/3) == √3/2
+sin(2π / 3) == √3 / 2
 
-sin(2π/3) - √3/2
+sin(2π / 3) - √3 / 2
 
-sin(2π/3) ≈ √3/2
+sin(2π / 3) ≈ √3 / 2
 
 1 + 1e-16 == 1
 
@@ -57,7 +57,7 @@ t[2]
 a, b, c = t
 b
 
-t = (word="hello", num=1.2, sym=:foo)
+t = (word = "hello", num = 1.2, sym = :foo)
 
 t.word
 
@@ -102,11 +102,11 @@ end
 
 [i for i in 1:5]
 
-[i*j for i in 1:5, j in 5:10]
+[i * j for i in 1:5, j in 5:10]
 
-[i for i in 1:10 if i%2 == 1]
+[i for i in 1:10 if i % 2 == 1]
 
-Dict("$i" => i for i in 1:10 if i%2 == 1)
+Dict("$i" => i for i in 1:10 if i % 2 == 1)
 
 function print_hello()
     println("hello")
@@ -120,18 +120,18 @@ print_it("hello")
 print_it(1.234)
 print_it(:my_id)
 
-function print_it(x; prefix="value:")
+function print_it(x; prefix = "value:")
     println("$(prefix) $x")
 end
 print_it(1.234)
-print_it(1.234, prefix="val:")
+print_it(1.234, prefix = "val:")
 
-function mult(x; y=2.0)
+function mult(x; y = 2.0)
     return x * y
 end
 mult(4.0)
 
-mult(4.0, y=5.0)
+mult(4.0, y = 5.0)
 
 [1, 5, -2, 7]
 
@@ -158,4 +158,3 @@ using Random
 [rand() for i in 1:10]
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

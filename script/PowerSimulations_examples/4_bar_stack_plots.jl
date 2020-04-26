@@ -9,13 +9,16 @@
 #
 # ## Dependencies
 using SIIPExamples #for path locations
+pkgpath = dirname(dirname(pathof(SIIPExamples)))
+using PowerSystems #to load results
 using PowerSimulations #to load results
 using PowerGraphics
 
 # ### Results file
-# If you have already run some of the other examples, you should have generated some results.
+# If you have already run some of the other examples, you should have generated some results
+# (If you haven't run some of the other simulaitons, you can run
+# `include(joinpath(pkgpath, "test", "PowerSimulations_examples", "2_sequential_simulations.jl"))`).
 # You can load the results into memory with:
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
 simulation_folder = joinpath(pkgpath, "RTS-GMLC-master", "rts-test")
 simulation_folder = joinpath(simulation_folder, readdir(simulation_folder)[end])
 res = load_simulation_results(simulation_folder, "UC")
@@ -39,10 +42,25 @@ bar_plot(res)
 # Similarly, we can create a stack plot for any combination of variable to see the time
 # series values.
 
-stack_plot(res, [Symbol("P__PowerSystems.ThermalStandard"),
-                Symbol("P__PowerSystems.RenewableDispatch")])
+stack_plot(
+    res,
+    [
+        Symbol("P__PowerSystems.ThermalStandard"),
+        Symbol("P__PowerSystems.RenewableDispatch"),
+    ],
+)
 
 # Or, we can create a series of stack plots for every variable in the dictionary:
 # ```julia
 # stack_plot(res)
 # ```
+
+# Generator fuel types are not stored in the model, or the associated results files. So,
+# to make aggregated fuel plots, we need to load the `System` as well. The simulation routine
+# automatically serializes the `System` data into the results directory, so we just need to
+# load it.
+uc_sys =
+    System(joinpath(simulation_folder, "models_json", "stage_UC_model", "UC_sys_data.json"))
+
+# Now we can make a set of aggregated plots by fuel type.
+fuel_plot(res, uc_sys)

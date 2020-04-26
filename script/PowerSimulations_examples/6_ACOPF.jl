@@ -15,7 +15,7 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test", "PowerSimulations_examples", "1_operations_problems.jl"));
+include(joinpath(pkgpath, "test", "PowerSimulations_examples", "1_operations_problems.jl"));
 
 # Since we'll be doing non-linear optimization, we need a solver that supports non-linear
 # problems. Ipopt is quite good.
@@ -37,8 +37,13 @@ ed_template = template_economic_dispatch(network = ACPPowerModel)
 delete!(ed_template.devices, :HydroROR)
 
 # Now we can build a 4-hour economic dispatch / ACOPF problem with the RTS data.
-problem = OperationsProblem(EconomicDispatchProblem,
-        ed_template, sys, horizon = 4, optimizer = solver)
+problem = OperationsProblem(
+    EconomicDispatchProblem,
+    ed_template,
+    sys,
+    horizon = 4,
+    optimizer = solver,
+)
 
 # And solve it ... (the initial conditions for the RTS in this problem are infeasible)
 #nb solve!(problem)

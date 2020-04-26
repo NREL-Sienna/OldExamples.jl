@@ -38,13 +38,14 @@ rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
 rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
 rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP");
 
-
 # ### Create a `System` from RTS-GMLC data just like we did in the [parsing tabular data example.](../../notebook/PowerSystems_examples/parse_tabulardata.jl)
-rawsys = PSY.PowerSystemTableData(rts_src_dir,
+rawsys = PSY.PowerSystemTableData(
+    rts_src_dir,
     100.0,
-    joinpath(rts_siip_dir,"user_descriptors.yaml"),
-    timeseries_metadata_file = joinpath(rts_siip_dir,"timeseries_pointers.json"),
-    generator_mapping_file = joinpath(rts_siip_dir,"generator_mapping.yaml"));
+    joinpath(rts_siip_dir, "user_descriptors.yaml"),
+    timeseries_metadata_file = joinpath(rts_siip_dir, "timeseries_pointers.json"),
+    generator_mapping_file = joinpath(rts_siip_dir, "generator_mapping.yaml"),
+);
 
 sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 
@@ -61,9 +62,11 @@ sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 # Here is an example of relatively standard branch formulations. Other formulations allow
 # for selective enforcement of transmission limits and greater control on transformer settings.
 
-branches = Dict{Symbol, DeviceModel}(:L => DeviceModel(Line, StaticLine),
-                                     :T => DeviceModel(Transformer2W, StaticTransformer),
-                                     :TT => DeviceModel(TapTransformer , StaticTransformer))
+branches = Dict{Symbol, DeviceModel}(
+    :L => DeviceModel(Line, StaticLine),
+    :T => DeviceModel(Transformer2W, StaticTransformer),
+    :TT => DeviceModel(TapTransformer, StaticTransformer),
+)
 
 # ### Injection Device Formulations
 # Here we define dictionary entries for all devices that inject or withdraw power on the
@@ -73,13 +76,14 @@ branches = Dict{Symbol, DeviceModel}(:L => DeviceModel(Line, StaticLine),
 # for `HydroFix` and `RenewableFix` devices. Additionally, we've enabled a simple load
 # shedding demand response formulation for `InterruptableLoad` devices.
 
-devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
-                                    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
-                                    :Loads =>  DeviceModel(PowerLoad, StaticPowerLoad),
-                                    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
-                                    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
-                                    :ILoads =>  DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
-                                    )
+devices = Dict(
+    :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
+    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
+    :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
+    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
+    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :ILoads => DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
+)
 
 # ### Service Formulations
 # We have two `VariableReserve` types, parameterized by their direction. So, similar to
@@ -87,11 +91,13 @@ devices = Dict(:Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCo
 # that `DeviceModel` objects define how constraints get created, while `ServiceModel` objects
 # define how constraints get modified.
 
-services = Dict(:ReserveUp => ServiceModel(VariableReserve{ReserveUp}, RangeReserve),
-                :ReserveDown => ServiceModel(VariableReserve{ReserveDown}, RangeReserve))
+services = Dict(
+    :ReserveUp => ServiceModel(VariableReserve{ReserveUp}, RangeReserve),
+    :ReserveDown => ServiceModel(VariableReserve{ReserveDown}, RangeReserve),
+)
 
 # ### Wrap it up into an `OperationsProblemTemplate`
-template_uc= OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
+template_uc = OperationsProblemTemplate(CopperPlatePowerModel, devices, branches, services);
 
 # ## `OperationsProblem`
 # Now that we have a `System` and an `OperationsProblemTemplate`, we can put the two together
@@ -108,11 +114,8 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # The construction of an `OperationsProblem` essentially applies an `OperationsProblemTemplate`
 # to `System` data to create a JuMP model.
 
-op_problem = OperationsProblem(GenericOpProblem,
-                               template_uc,
-                               sys;
-                               optimizer = solver,
-                               horizon = 12)
+op_problem =
+    OperationsProblem(GenericOpProblem, template_uc, sys; optimizer = solver, horizon = 12)
 
 #nb # The principal component of the `OperationsProblem` is the JuMP model. For small problems,
 #nb # you can inspect it by simply printing it to the screen:

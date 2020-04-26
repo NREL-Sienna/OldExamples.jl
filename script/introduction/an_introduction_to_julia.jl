@@ -60,15 +60,15 @@ typeof(:my_id)
 
 # We can also write things like the following using √ (\sqrt)
 
-sin(2π/3) == √3/2
+sin(2π / 3) == √3 / 2
 
 # Wait. What???
 
-sin(2π/3) - √3/2
+sin(2π / 3) - √3 / 2
 
 # Let's try again using ≈ (\approx).
 
-sin(2π/3) ≈ √3/2
+sin(2π / 3) ≈ √3 / 2
 
 # Note that this time we used ≈ instead of ==. That is because computers don't use 
 # real numbers. They use a discrete representation called floating point. If you aren't 
@@ -131,7 +131,7 @@ t = ("hello", 1.2, :foo)
 #+ 
 
 typeof(t)
- 
+
 # Tuples can be accessed by index, similar to arrays, 
 
 t[2]
@@ -143,7 +143,7 @@ b
 
 # The values can also be given names, which is a convenient way of making light-weight data structures. 
 
-t = (word="hello", num=1.2, sym=:foo)
+t = (word = "hello", num = 1.2, sym = :foo)
 
 # Then values can be accessed using a dot syntax, 
 
@@ -173,7 +173,7 @@ d2["B"]
 #+ 
 
 d2["D"][:foo]
- 
+
 # ### For-Each Loops 
 # Julia has native support for for-each style loops with the syntax `for <value> in <collection> end`.
 
@@ -186,7 +186,7 @@ end
 for i in [1.2, 2.3, 3.4, 4.5, 5.6]
     println(i)
 end
- 
+
 # This for-each loop also works with dictionaries. 
 
 for (key, value) in Dict("A" => 1, "B" => 2.5, "D" => 2 - 3im)
@@ -200,7 +200,7 @@ end
 
 i = 10
 for i in 0:3:15
-    if i < 5 
+    if i < 5
         println("$(i) is less than 5")
     elseif i < 10
         println("$(i) is less than 10")
@@ -222,15 +222,15 @@ end
 
 # Matrices can be built by including multiple indices, 
 
-[i*j for i in 1:5, j in 5:10]
+[i * j for i in 1:5, j in 5:10]
 
 # Conditional statements can be used to filter out some values, 
 
-[i for i in 1:10 if i%2 == 1]
+[i for i in 1:10 if i % 2 == 1]
 
 # A similar syntax can be used for building dictionaries 
 
-Dict("$i" => i for i in 1:10 if i%2 == 1)
+Dict("$i" => i for i in 1:10 if i % 2 == 1)
 
 # ### Functions 
 # A simple function is defined as follows,
@@ -251,23 +251,23 @@ print_it(:my_id)
 
 # Optional keyword arguments are also possible  
 
-function print_it(x; prefix="value:")
+function print_it(x; prefix = "value:")
     println("$(prefix) $x")
 end
 print_it(1.234)
-print_it(1.234, prefix="val:")
+print_it(1.234, prefix = "val:")
 
 # The keyword `return` is used to specify the return values of a function. 
 
-function mult(x; y=2.0)
+function mult(x; y = 2.0)
     return x * y
 end
 mult(4.0)
 
 #+ 
 
-mult(4.0, y=5.0)
- 
+mult(4.0, y = 5.0)
+
 # ### Other notes on types 
 # Usually, specifing types is not required to use Julia.  However, it can be helpful to understand the basics of Julia types for debugging.
 # For example this list has a type of `Array{Int64,1}` indicating that it is a one dimensional array of integer values.

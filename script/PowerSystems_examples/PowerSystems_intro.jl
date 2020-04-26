@@ -39,7 +39,6 @@ using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;
 
-
 # ## Types in PowerSystems
 # PowerSystems.jl provides a type hierarchy for specifying power system data. Data that
 # describes infrastructure components is held in `struct`s. For example, a `Bus` is defined
@@ -97,15 +96,16 @@ nodes_5 = nodes5() # function to create 5-bus buses
 
 # ### Create a `System`
 
-sys = System(nodes_5,
-             vcat(thermal_generators5(nodes_5), renewable_generators5(nodes_5)),
-             loads5(nodes_5),
-             branches5(nodes_5),
-             nothing,
-             100.0,
-             nothing,
-             nothing)
-
+sys = System(
+    nodes_5,
+    vcat(thermal_generators5(nodes_5), renewable_generators5(nodes_5)),
+    loads5(nodes_5),
+    branches5(nodes_5),
+    nothing,
+    100.0,
+    nothing,
+    nothing,
+)
 
 # ### Accessing `System` Data
 # PowerSystems provides functional interfaces to all data. The following examples outline
@@ -126,7 +126,7 @@ get_components(Bus, sys) |> collect
 
 # `get_components` also works on abstract types:
 
-get_components(Branch,sys) |> collect
+get_components(Branch, sys) |> collect
 
 # The fields within a component can be accessed using the `get_*` functions:
 
@@ -155,7 +155,7 @@ iterate_forecasts(sys) |> collect
 get_forecast_initial_times(sys)
 
 # Or for a specific component:
-@show initial_times = get_forecast_initial_times(Deterministic,loads[1]);
+@show initial_times = get_forecast_initial_times(Deterministic, loads[1]);
 
 # We can find the fields for which a component has a forecast:
 @show labels = collect(get_forecast_keys(loads[1]))

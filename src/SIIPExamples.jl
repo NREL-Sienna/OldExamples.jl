@@ -28,7 +28,6 @@ function read_json(filename)
     end
 end
 
-
 abstract type AbstractOS end
 abstract type Unix <: AbstractOS end
 abstract type BSD <: Unix end
@@ -54,7 +53,8 @@ Defaults to the root of the PowerSystems package.
 
 Returns the downloaded folder name.
 """
-function download(repo::AbstractString,
+function download(
+    repo::AbstractString,
     folder::AbstractString = abspath(joinpath(@__DIR__, "..")),
     branch::String = "master",
     force::Bool = false,
@@ -117,11 +117,17 @@ function rm_if_empty(filepath::String)
     end
 end
 
-
 function postprocess_notebook(nb)
     txt = read(nb, String)
     open(nb, "w") do f
-        write(f, replace(txt, r"\"outputs\":\ \[\]\,\n\ \ \ \"cell_type\":\ \"markdown\"" => "\"cell_type\": \"markdown\""))
+        write(
+            f,
+            replace(
+                txt,
+                r"\"outputs\":\ \[\]\,\n\ \ \ \"cell_type\":\ \"markdown\"" =>
+                    "\"cell_type\": \"markdown\"",
+            ),
+        )
     end
 end
 
@@ -139,7 +145,7 @@ function literate_file(folder, file; force = false, kwargs...)
     srcpath = joinpath(repo_directory, "script", folder, file)
     testpath = joinpath(repo_directory, "test", folder)
     notebookpath = joinpath(repo_directory, "notebook", folder)
-    notebookfilepath = joinpath(notebookpath, join([filename,".ipynb"]))
+    notebookfilepath = joinpath(notebookpath, join([filename, ".ipynb"]))
     configpath = joinpath(repo_directory, "script", folder, filename * "_config.json")
 
     config = get(kwargs, :config, Dict())
@@ -157,7 +163,9 @@ function literate_file(folder, file; force = false, kwargs...)
         else
             @warn "Skipping tests for $filename."
         end
-        if mtime(srcpath) > mtime(notebookfilepath) || mtime(notebookfilepath) == 0.0 || force
+        if mtime(srcpath) > mtime(notebookfilepath) ||
+           mtime(notebookfilepath) == 0.0 ||
+           force
             @warn "Converting $filename to Jupyter Notebook."
             fn = Literate.notebook(srcpath, notebookpath; config = config, kwargs...)
             postprocess_notebook(fn)
@@ -197,7 +205,7 @@ end
 
 Checks every tutorial for modifications and updates the notebook accordingly.
 """
-function literate_all(;force = false, kwargs...)
+function literate_all(; force = false, kwargs...)
     for folder in readdir(joinpath(repo_directory, "script"))
         literate_folder(folder; force = force, kwargs...)
     end
