@@ -20,9 +20,9 @@ include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_dat
 
 TypeTree(PSY.HydroGen)
 
-TypeTree(PSI.AbstractHydroFormulation, scopesep="\n", init_expand = 5)
+TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :Hyd2 => DeviceModel(HydroDispatch, HydroFixed),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
@@ -34,7 +34,7 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizo
 
 op_problem.psi_container.JuMPmodel
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -45,7 +45,7 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizo
 
 op_problem.psi_container.JuMPmodel
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -59,14 +59,16 @@ op_problem.psi_container.JuMPmodel
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
+    :HydroEnergyReservoir =>
+        DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
 )
 template_md = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
+    :HydroEnergyReservoir =>
+        DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
 )
 template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
@@ -80,17 +82,14 @@ sequence = SimulationSequence(
     order = Dict(1 => "MD", 2 => "DA"),
     feedforward_chronologies = Dict(("MD" => "DA") => Synchronize(periods = 2)),
     horizons = Dict("MD" => 2, "DA" => 24),
-    intervals = Dict(
-        "MD" => (Hour(48), Consecutive()),
-        "DA" => (Hour(24), Consecutive()),
-    ),
+    intervals = Dict("MD" => (Hour(48), Consecutive()), "DA" => (Hour(24), Consecutive())),
     feedforward = Dict(
         ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
             variable_from_stage = PSI.ACTIVE_POWER,
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
-    cache = Dict( ("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
+    cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = InterStageChronology(),
 );
 
@@ -142,7 +141,7 @@ sequence = SimulationSequence(
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
-    cache = Dict( ("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
+    cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = InterStageChronology(),
 );
 
@@ -163,4 +162,3 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 sim.stages["ED"].internal.psi_container.JuMPmodel
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

@@ -11,16 +11,17 @@
 # Let's use a dataset from the [tabular data parsing example](../../notebook/PowerSystems_examples/parse_matpower.ipynb)
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test", "PowerSystems_examples", "parse_matpower.jl"))
+include(joinpath(pkgpath, "test", "PowerSystems_examples", "parse_matpower.jl"))
 
 # ### Write data to a temporary directory
 
 path, io = mktemp()
+path = mv(path, path * ".json")
 @info "Serializing to $path"
 to_json(io, sys)
 close(io)
 
-filesize(path)/1000000 #MB
+filesize(path) / 1000000 #MB
 
 # ### Read the JSON file and create a new `System`
 sys2 = System(path)

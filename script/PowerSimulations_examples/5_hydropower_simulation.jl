@@ -54,7 +54,7 @@ TypeTree(PSY.HydroGen)
 # And in PowerSimulations, we have several available formulations that can be applied to
 # the hydropower generation devices:
 
-TypeTree(PSI.AbstractHydroFormulation, scopesep="\n", init_expand = 5)
+TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
 
 # Let's see what some of the different combinations create. First, let's apply the
 # `HydroDispatchRunOfRiver` formulation to the `HydroEnergyReservoir` generators, and the
@@ -64,7 +64,7 @@ TypeTree(PSI.AbstractHydroFormulation, scopesep="\n", init_expand = 5)
 #  - The `HydroDispatchRunOfRiver` formulation represents the the energy flowing out of
 # a reservoir. The model can choose to produce power with that energy or just let it spill by.
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :Hyd2 => DeviceModel(HydroDispatch, HydroFixed),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
@@ -88,7 +88,7 @@ op_problem.psi_container.JuMPmodel
 #-
 
 # Next, let's apply the `HydroDispatchReservoirFlow` formulation to the `HydroEnergyReservoir` generators.
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -103,7 +103,7 @@ op_problem.psi_container.JuMPmodel
 
 # Finally, let's apply the `HydroDispatchReservoirStorage` formulation to the `HydroEnergyReservoir` generators.
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -120,7 +120,6 @@ op_problem.psi_container.JuMPmodel
 # The purpose of a multi-stage simulation is to represent scheduling decisions consistently
 # with the time scales that govern different elements of power systems.
 
-
 # Multi-Day to Daily Simulation:
 
 # In the multi-day model, we'll use a really simple representation of all system devices
@@ -130,7 +129,8 @@ op_problem.psi_container.JuMPmodel
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
+    :HydroEnergyReservoir =>
+        DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
 )
 template_md = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
@@ -140,7 +140,8 @@ template_md = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroEnergyReservoir => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
+    :HydroEnergyReservoir =>
+        DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
 )
 template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
@@ -160,17 +161,14 @@ sequence = SimulationSequence(
     order = Dict(1 => "MD", 2 => "DA"),
     feedforward_chronologies = Dict(("MD" => "DA") => Synchronize(periods = 2)),
     horizons = Dict("MD" => 2, "DA" => 24),
-    intervals = Dict(
-        "MD" => (Hour(48), Consecutive()),
-        "DA" => (Hour(24), Consecutive()),
-    ),
+    intervals = Dict("MD" => (Hour(48), Consecutive()), "DA" => (Hour(24), Consecutive())),
     feedforward = Dict(
         ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
             variable_from_stage = PSI.ACTIVE_POWER,
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
-    cache = Dict( ("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
+    cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = InterStageChronology(),
 );
 
@@ -204,7 +202,6 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 
 # 3-Stage Simulation:
 
-
 stages_definition = Dict(
     "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),
     "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver),
@@ -234,7 +231,7 @@ sequence = SimulationSequence(
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
-    cache = Dict( ("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
+    cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = InterStageChronology(),
 );
 
@@ -252,7 +249,6 @@ sim = Simulation(
 
 build!(sim)
 
-
 # We can look at the "MD" Model
 
 sim.stages["MD"].internal.psi_container.JuMPmodel
@@ -264,4 +260,3 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 # And we can look at the "ED" model
 
 sim.stages["ED"].internal.psi_container.JuMPmodel
-

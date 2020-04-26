@@ -14,7 +14,7 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath,"test", "PowerSimulations_examples", "1_operations_problems.jl"))
+include(joinpath(pkgpath, "test", "PowerSimulations_examples", "1_operations_problems.jl"))
 
 # ### 5-Minute system
 # We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.
@@ -54,7 +54,7 @@ devices = Dict(
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
     :RenFx => DeviceModel(RenewableFix, RenewableFixed),
 )
-template_ed= template_economic_dispatch(devices = devices)
+template_ed = template_economic_dispatch(devices = devices)
 
 # ### Define the `Stage`s
 # Stages define models. The actual problem will change as the stage gets updated to represent
@@ -62,9 +62,10 @@ template_ed= template_economic_dispatch(devices = devices)
 # a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s
 # and the `System`s that we've already created.
 
-stages_definition = Dict("UC" => Stage(GenericOpProblem, template_uc, sys, solver),
-                         "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver))
-
+stages_definition = Dict(
+    "UC" => Stage(GenericOpProblem, template_uc, sys, solver),
+    "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver),
+)
 
 # ### `SimulationSequence`
 # Similar to an `OperationsProblemTemplate`, the `SimulationSequence` provides a template of
@@ -96,8 +97,12 @@ feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 # define a `FeedForward` that affects the semi-continuous range constraints of thermal generators
 # in the economic dispatch problems based on the value of the unit-commitment variables.
 
-feedforward = Dict(("ED", :devices, :Generators) => SemiContinuousFF(binary_from_stage = PSI.ON,
-                                                         affected_variables = [PSI.ACTIVE_POWER]))
+feedforward = Dict(
+    ("ED", :devices, :Generators) => SemiContinuousFF(
+        binary_from_stage = PSI.ON,
+        affected_variables = [PSI.ACTIVE_POWER],
+    ),
+)
 
 # The `Cache` is simply a way to preserve needed information for later use. In the case of
 # a typical day-ahead - real-time market simulation, there are many economic dispatch executions
@@ -121,31 +126,33 @@ cache = Dict(("UC",) => TimeStatusChange(PSY.ThermalStandard, PSI.ON))
 #  - Real time problems should represent 1 hour (12 5-minute periods), advancing 1 hour after each execution (no look-ahead)
 
 order = Dict(1 => "UC", 2 => "ED")
-horizons = Dict("UC" => 24, "ED" =>12)
-intervals = Dict("UC" => (Hour(24), Consecutive()),
-                 "ED" => (Hour(1), Consecutive()))
+horizons = Dict("UC" => 24, "ED" => 12)
+intervals = Dict("UC" => (Hour(24), Consecutive()), "ED" => (Hour(1), Consecutive()))
 
 # Finally, we can put it all together:
 
-DA_RT_sequence = SimulationSequence(step_resolution = Hour(24),
-                                    order = order,
-                                    horizons = horizons,
-                                    intervals = intervals,
-                                    ini_cond_chronology = InterStageChronology(),
-                                    feedforward_chronologies = feedforward_chronologies,
-                                    feedforward = feedforward,
-                                    cache = cache,
-                                    )
+DA_RT_sequence = SimulationSequence(
+    step_resolution = Hour(24),
+    order = order,
+    horizons = horizons,
+    intervals = intervals,
+    ini_cond_chronology = InterStageChronology(),
+    feedforward_chronologies = feedforward_chronologies,
+    feedforward = feedforward,
+    cache = cache,
+)
 
 # ## `Simulation`
 # Now, we can build and execute a simulation using the `SimulationSequence` and `Stage`s
 # that we've defined.
 
-sim = Simulation(name = "rts-test",
-                steps = 1,
-                stages = stages_definition,
-                stages_sequence = DA_RT_sequence,
-                simulation_folder = rts_dir)
+sim = Simulation(
+    name = "rts-test",
+    steps = 1,
+    stages = stages_definition,
+    stages_sequence = DA_RT_sequence,
+    simulation_folder = rts_dir,
+)
 
 # ### Build simulation
 
