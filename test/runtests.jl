@@ -19,11 +19,12 @@ for (root, dirs, files) in walkdir(testpath)
                     @info "skipping $file"
                 else
                     fname = joinpath(root, file)
-                    @info "Testing $file"
-                    @test try
-                        include(fname)
-                        true
-                    finally
+                    @testset "$file" begin
+                        @test try
+                            include(fname)
+                            true
+                        finally
+                        end
                     end
                 end
             end
