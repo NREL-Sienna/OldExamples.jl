@@ -15,8 +15,9 @@ include(joinpath(pkgpath, "test", "PowerSystems_examples", "parse_matpower.jl"))
 
 # ### Write data to a temporary directory
 
-path, io = mktemp()
-path = mv(path, path * ".json")
+folder = mktempdir()
+path = joinpath(folder, "system.json")
+io = open(path, "w")
 @info "Serializing to $path"
 to_json(io, sys)
 close(io)
