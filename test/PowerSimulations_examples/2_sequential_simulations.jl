@@ -11,7 +11,7 @@ devices = Dict(
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_uc = template_unit_commitment(devices = devices)
 
@@ -20,7 +20,7 @@ devices = Dict(
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_ed = template_economic_dispatch(devices = devices)
 
@@ -71,3 +71,4 @@ uc_results = load_simulation_results(sim_results, "UC");
 ed_results = load_simulation_results(sim_results, "ED");
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

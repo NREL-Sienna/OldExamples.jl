@@ -1,0 +1,3643 @@
+[
+    {
+        "struct_name": "TwoPartCost",
+        "fields": [
+            {
+                "name": "variable",
+                "data_type": "VariableCost"
+            },
+            {
+                "name": "fixed",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "ThreePartCost",
+        "fields": [
+            {
+                "name": "variable",
+                "data_type": "VariableCost"
+            },
+            {
+                "name": "fixed",
+                "data_type": "Float64"
+            },
+            {
+                "name": "startup",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "shutdn",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "Area",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "maxactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "maxreactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "LoadZone",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "maxactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "maxreactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "Bus",
+        "fields": [
+            {
+                "name": "number",
+                "data_type": "Int64"
+            },
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "bustype",
+                "data_type": "Union{Nothing, BusTypes.BusType}"
+            },
+            {
+                "name": "angle",
+                "data_type": "Union{Nothing, Float64}",
+                "valid_range": {
+                    "max": 2.356,
+                    "min": -2.356
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "voltage",
+                "data_type": "Union{Nothing, Float64}",
+                "valid_range": "voltagelimits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "voltagelimits",
+                "data_type": "Union{Nothing, Min_Max}"
+            },
+            {
+                "name": "basevoltage",
+                "data_type": "Union{Nothing, Float64}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "area",
+                "data_type": "Union{Nothing, Area}"
+            },
+            {
+                "name": "load_zone",
+                "data_type": "Union{Nothing, LoadZone}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "Arc",
+        "fields": [
+            {
+                "name": "from",
+                "data_type": "Bus"
+            },
+            {
+                "name": "to",
+                "data_type": "Bus"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "Line",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "activepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "arc",
+                "data_type": "Arc"
+            },
+            {
+                "name": "r",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "x",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "b",
+                "data_type": "NamedTuple{(:from, :to), Tuple{Float64, Float64}}",
+                "valid_range": {
+                    "max": 100,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "rate",
+                "data_type": "Float64"
+            },
+            {
+                "name": "anglelimits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}",
+                "valid_range": {
+                    "max": 1.571,
+                    "min": -1.571
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "MonitoredLine",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "activepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "arc",
+                "data_type": "Arc"
+            },
+            {
+                "name": "r",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "x",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "b",
+                "data_type": "NamedTuple{(:from, :to), Tuple{Float64, Float64}}",
+                "valid_range": {
+                    "max": 2,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "flowlimits",
+                "data_type": "NamedTuple{(:from_to, :to_from), Tuple{Float64, Float64}}"
+            },
+            {
+                "name": "rate",
+                "data_type": "Float64"
+            },
+            {
+                "name": "anglelimits",
+                "data_type": "Min_Max",
+                "valid_range": {
+                    "max": 1.571,
+                    "min": -1.571
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "PhaseShiftingTransformer",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "activepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "arc",
+                "data_type": "Arc"
+            },
+            {
+                "name": "r",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "x",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": -2
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "primaryshunt",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 2,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "tap",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 2,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "\u03b1",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 1.571,
+                    "min": -1.571
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "rate",
+                "data_type": "Union{Nothing, Float64}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "TapTransformer",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "activepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "arc",
+                "data_type": "Arc"
+            },
+            {
+                "name": "r",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 2,
+                    "min": -2
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "x",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": -2
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "primaryshunt",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 2,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "tap",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 2,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "rate",
+                "data_type": "Union{Nothing, Float64}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "Transformer2W",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "activepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "arc",
+                "data_type": "Arc"
+            },
+            {
+                "name": "r",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": -2
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "x",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 4,
+                    "min": -2
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "primaryshunt",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 2,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "rate",
+                "data_type": "Union{Nothing, Float64}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "HVDCLine",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "activepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "arc",
+                "data_type": "Arc"
+            },
+            {
+                "name": "activepowerlimits_from",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "activepowerlimits_to",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "reactivepowerlimits_from",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "reactivepowerlimits_to",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "loss",
+                "data_type": "NamedTuple{(:l0, :l1), Tuple{Float64, Float64}}"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "VSCDCLine",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "activepower_flow",
+                "data_type": "Float64"
+            },
+            {
+                "name": "arc",
+                "data_type": "Arc"
+            },
+            {
+                "name": "rectifier_taplimits",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "rectifier_xrc",
+                "data_type": "Float64"
+            },
+            {
+                "name": "rectifier_firing_angle",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "inverter_taplimits",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "inverter_xrc",
+                "data_type": "Float64"
+            },
+            {
+                "name": "inverter_firing_angle",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "InterruptibleLoad",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "model",
+                "data_type": "LoadModels.LoadModel"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "maxactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "maxreactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "op_cost",
+                "data_type": "TwoPartCost"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "FixedAdmittance",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "Y",
+                "data_type": "Complex{Float64}"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "PowerLoad",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "model",
+                "data_type": "Union{Nothing, LoadModels.LoadModel}"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "maxactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "maxreactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "HydroEnergyReservoir",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64",
+                "valid_range": "reactivepowerlimits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "rating",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "primemover",
+                "data_type": "PrimeMovers.PrimeMover"
+            },
+            {
+                "name": "activepowerlimits",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "reactivepowerlimits",
+                "data_type": "Union{Nothing, Min_Max}",
+                "validation_action": "warn"
+            },
+            {
+                "name": "ramplimits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "timelimits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "op_cost",
+                "data_type": "TwoPartCost"
+            },
+            {
+                "name": "storage_capacity",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "inflow",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "initial_storage",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "HydroDispatch",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64",
+                "valid_range": "reactivepowerlimits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "rating",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "primemover",
+                "data_type": "PrimeMovers.PrimeMover"
+            },
+            {
+                "name": "activepowerlimits",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "reactivepowerlimits",
+                "data_type": "Union{Nothing, Min_Max}",
+                "validation_action": "warn"
+            },
+            {
+                "name": "ramplimits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "timelimits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "RenewableDispatch",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "rating",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "primemover",
+                "data_type": "PrimeMovers.PrimeMover"
+            },
+            {
+                "name": "reactivepowerlimits",
+                "data_type": "Union{Nothing, Min_Max}"
+            },
+            {
+                "name": "powerfactor",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 1,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "op_cost",
+                "data_type": "TwoPartCost"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "RenewableFix",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "rating",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "primemover",
+                "data_type": "PrimeMovers.PrimeMover"
+            },
+            {
+                "name": "powerfactor",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 1,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "ThermalStandard",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "status",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64",
+                "valid_range": "activepowerlimits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64",
+                "valid_range": "reactivepowerlimits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "rating",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "primemover",
+                "data_type": "PrimeMovers.PrimeMover"
+            },
+            {
+                "name": "fuel",
+                "data_type": "ThermalFuels.ThermalFuel"
+            },
+            {
+                "name": "activepowerlimits",
+                "data_type": "Min_Max"
+            },
+            {
+                "name": "reactivepowerlimits",
+                "data_type": "Union{Nothing, Min_Max}"
+            },
+            {
+                "name": "ramplimits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "timelimits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "op_cost",
+                "data_type": "ThreePartCost"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "participation_factor",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": 1.0,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "time_at_status",
+                "data_type": "Float64"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "GenericBattery",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "primemover",
+                "data_type": "PrimeMovers.PrimeMover"
+            },
+            {
+                "name": "energy",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "capacity",
+                "data_type": "Min_Max",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "rating",
+                "data_type": "Float64"
+            },
+            {
+                "name": "activepower",
+                "data_type": "Float64"
+            },
+            {
+                "name": "inputactivepowerlimits",
+                "data_type": "Min_Max",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "outputactivepowerlimits",
+                "data_type": "Min_Max",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "efficiency",
+                "data_type": "NamedTuple{(:in, :out), Tuple{Float64, Float64}}",
+                "valid_range": {
+                    "max": 1,
+                    "min": 0
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "reactivepower",
+                "data_type": "Float64",
+                "valid_range": "reactivepowerlimits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "reactivepowerlimits",
+                "data_type": "Union{Nothing, Min_Max}"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "StaticReserve",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "timeframe",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "requirement",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "VariableReserve",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "timeframe",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "requirement",
+                "data_type": "Float64"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AGC",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "bias",
+                "data_type": "Float64"
+            },
+            {
+                "name": "K_p",
+                "data_type": "Float64"
+            },
+            {
+                "name": "K_i",
+                "data_type": "Float64"
+            },
+            {
+                "name": "K_d",
+                "data_type": "Float64"
+            },
+            {
+                "name": "delta_t",
+                "data_type": "Float64"
+            },
+            {
+                "name": "area",
+                "data_type": "Union{Nothing, Area}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "Transfer",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "requirement",
+                "data_type": "Float64"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AVRFixed",
+        "fields": [
+            {
+                "name": "Emf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AVRSimple",
+        "fields": [
+            {
+                "name": "Kv",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AVRTypeI",
+        "fields": [
+            {
+                "name": "Ka",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Ke",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Kf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Ta",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Te",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tr",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Vr_max",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Vr_min",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Ae",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Be",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AVRTypeII",
+        "fields": [
+            {
+                "name": "K0",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T1",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T2",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T3",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T4",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Te",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tr",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Vr_max",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Vr_min",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Ae",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Be",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "BaseMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "eq_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AndersonFouadMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "FullMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "R_f",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "R_1d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "R_1q",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_q",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_ad",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_aq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_f1d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_ff",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_1d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_1q",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "inv_d_fluxlink",
+                "data_type": "Array{Float64,2}"
+            },
+            {
+                "name": "inv_q_fluxlink",
+                "data_type": "Array{Float64,2}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "MarconatoMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T_AA",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "\u03b3d",
+                "data_type": "Float64"
+            },
+            {
+                "name": "\u03b3q",
+                "data_type": "Float64"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "OneDOneQMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "SimpleAFMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "SimpleFullMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "R_f",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "R_1d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "R_1q",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_q",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_ad",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_aq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_f1d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_ff",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_1d",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "L_1q",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "inv_d_fluxlink",
+                "data_type": "Array{Float64,2}"
+            },
+            {
+                "name": "inv_q_fluxlink",
+                "data_type": "Array{Float64,2}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "SimpleMarconatoMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xd_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Xq_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Td0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tq0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T_AA",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "MVABase",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "\u03b3d",
+                "data_type": "Float64"
+            },
+            {
+                "name": "\u03b3q",
+                "data_type": "Float64"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "PSSFixed",
+        "fields": [
+            {
+                "name": "V_pss",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "PSSSimple",
+        "fields": [
+            {
+                "name": "K_\u03c9",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "K_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "SingleMass",
+        "fields": [
+            {
+                "name": "H",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "FiveMassShaft",
+        "fields": [
+            {
+                "name": "H",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "H_hp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "H_ip",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "H_lp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "H_ex",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_hp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_ip",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_lp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_ex",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_12",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_23",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_34",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "D_45",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "K_hp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "K_ip",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "K_lp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "K_ex",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "TGFixed",
+        "fields": [
+            {
+                "name": "efficiency",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "TGTypeI",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Ts",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "Tc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T3",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T4",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T5",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "P_min",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "P_max",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "TGTypeII",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T1",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "T2",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "\u03c4_min",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "\u03c4_max",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AverageConverter",
+        "fields": [
+            {
+                "name": "v_rated",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "s_rated",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "FixedDCSource",
+        "fields": [
+            {
+                "name": "voltage",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "LCLFilter",
+        "fields": [
+            {
+                "name": "lf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "rf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "cf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "lg",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "rg",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "LCFilter",
+        "fields": [
+            {
+                "name": "lf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "rf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "cf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "KauraPLL",
+        "fields": [
+            {
+                "name": "\u03c9_lp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kp_pll",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ki_pll",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "VirtualInertia",
+        "fields": [
+            {
+                "name": "Ta",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "k\u03c9",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "\u03c9b",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "ReactivePowerDroop",
+        "fields": [
+            {
+                "name": "kq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "\u03c9f",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "CurrentControl",
+        "fields": [
+            {
+                "name": "kpv",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kiv",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kffv",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "rv",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "lv",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kpc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kic",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kffi",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "\u03c9ad",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "kad",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "Source",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "V_R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "V_I",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "X_th",
+                "data_type": "Float64",
+                "valid_range": {
+                    "max": null,
+                    "min": 0
+                }
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    }
+]

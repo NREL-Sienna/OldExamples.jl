@@ -1,6 +1,4 @@
 # This script is intended to be a dependency for the hydropower example.
-using InfrastructureSystems
-const IS = InfrastructureSystems
 using PowerSystems
 const PSY = PowerSystems
 using PowerSimulations

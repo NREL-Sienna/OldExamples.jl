@@ -52,6 +52,7 @@ get_forecast_initial_times(sys)
 
 @show initial_times = get_forecast_initial_times(Deterministic, loads[1]);
 
-@show labels = collect(get_forecast_keys(loads[1]))
+@show labels = get_forecast_labels(Deterministic, loads[1], initial_times[1])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

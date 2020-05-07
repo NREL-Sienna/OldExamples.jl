@@ -13,8 +13,6 @@ using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 
 # ### Modeling Packages
-using InfrastructureSystems
-const IS = InfrastructureSystems
 using PowerSystems
 const PSY = PowerSystems
 using PowerSimulations
@@ -59,14 +57,14 @@ TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
 # Let's see what some of the different combinations create. First, let's apply the
 # `HydroDispatchRunOfRiver` formulation to the `HydroEnergyReservoir` generators, and the
 # `HydroFixed` formulation to `HydroDispatch` generators.
-#  - The `HydroFixed` formulation just acts
+#  - The `FixedOutput` formulation just acts
 # like a load subtractor, forcing the system to accept it's generation.
 #  - The `HydroDispatchRunOfRiver` formulation represents the the energy flowing out of
 # a reservoir. The model can choose to produce power with that energy or just let it spill by.
 
 devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
-    :Hyd2 => DeviceModel(HydroDispatch, HydroFixed),
+    :Hyd2 => DeviceModel(HydroDispatch, FixedOutput),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 

@@ -42,7 +42,7 @@ devices = Dict(
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_uc = template_unit_commitment(devices = devices)
 
@@ -52,7 +52,7 @@ devices = Dict(
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_ed = template_economic_dispatch(devices = devices)
 

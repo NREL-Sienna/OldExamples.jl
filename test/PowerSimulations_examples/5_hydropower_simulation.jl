@@ -1,8 +1,6 @@
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 
-using InfrastructureSystems
-const IS = InfrastructureSystems
 using PowerSystems
 const PSY = PowerSystems
 using PowerSimulations
@@ -24,7 +22,7 @@ TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
 
 devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
-    :Hyd2 => DeviceModel(HydroDispatch, HydroFixed),
+    :Hyd2 => DeviceModel(HydroDispatch, FixedOutput),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
@@ -162,3 +160,4 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 sim.stages["ED"].internal.psi_container.JuMPmodel
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

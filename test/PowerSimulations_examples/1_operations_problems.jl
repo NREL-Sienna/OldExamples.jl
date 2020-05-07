@@ -1,7 +1,5 @@
 using SIIPExamples
 
-using InfrastructureSystems
-const IS = InfrastructureSystems
 using PowerSystems
 const PSY = PowerSystems
 using PowerSimulations
@@ -38,8 +36,8 @@ devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
-    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
+    :RenFx => DeviceModel(RenewableFix, FixedOutput),
     :ILoads => DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
 )
 
@@ -56,3 +54,4 @@ op_problem =
     OperationsProblem(GenericOpProblem, template_uc, sys; optimizer = solver, horizon = 12)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

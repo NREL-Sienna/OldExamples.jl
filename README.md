@@ -20,6 +20,7 @@ To try out any of the tutorials in the browser without downloading Julia, click 
     - [Tabular Data Parsing](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/parse_tabulardata.ipynb)
   - [Serialize data](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/serialize_data.ipynb)
   - [Network Matrices](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/network_matrices.ipynb)
+  - [Large-scale U.S. dataset assembly](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSystems_examples/US_system.ipynb)
 - [PowerSimulations.jl](github.com/NREL-SIIP/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/1_operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/2_sequential_simulations.ipynb)
@@ -27,5 +28,6 @@ To try out any of the tutorials in the browser without downloading Julia, click 
   - [Sequential DA-RT 5bus Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/3_5_bus_mkt_simulation.ipynb)
   - [ACOPF Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/6_ACOPF.ipynb)
   - [Selective Line Enforcement Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/7_selective_network_constraints.ipynb)
+  - [Simulations with large-scale U.S. systems](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/8_US-system-simulations.ipynb)
   - Plotting with [PowerGraphics.jl](github.com/NREL-SIIP/PowerGraphics.jl)
     - [Bar and Stack Plots](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/4_bar_stack_plots.ipynb)

@@ -1,9 +1,8 @@
-using InfrastructureSystems
-const IS = InfrastructureSystems
 using PowerSystems
 const PSY = PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations
+IS = PSY.InfrastructureSystems
 
 using Dates
 using DataFrames
@@ -32,10 +31,10 @@ tsp_agc = IS.read_time_series_metadata(joinpath(
 
 sys_DA = System(pm_data)
 reserves = [
-    VariableReserve{ReserveUp}("REG1", 5.0, 0.1),
-    VariableReserve{ReserveUp}("REG2", 5.0, 0.06),
-    VariableReserve{ReserveUp}("REG3", 5.0, 0.03),
-    VariableReserve{ReserveUp}("REG4", 5.0, 0.02),
+    VariableReserve{ReserveUp}("REG1", true, 5.0, 0.1),
+    VariableReserve{ReserveUp}("REG2", true, 5.0, 0.06),
+    VariableReserve{ReserveUp}("REG3", true, 5.0, 0.03),
+    VariableReserve{ReserveUp}("REG4", true, 5.0, 0.02),
 ]
 contributing_devices = get_components(Generator, sys_DA)
 for r in reserves
@@ -56,7 +55,7 @@ devices = Dict(
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_ed = template_economic_dispatch(devices = devices)
 
@@ -107,3 +106,4 @@ sim_results = execute!(sim)
 ed_results = load_simulation_results(sim_results, "ED");
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

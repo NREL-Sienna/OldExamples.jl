@@ -14,8 +14,6 @@
 using SIIPExamples
 
 # ### Modeling Packages
-using InfrastructureSystems
-const IS = InfrastructureSystems
 using PowerSystems
 const PSY = PowerSystems
 using PowerSimulations
@@ -80,8 +78,8 @@ devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroROR => DeviceModel(HydroDispatch, HydroFixed),
-    :RenFx => DeviceModel(RenewableFix, RenewableFixed),
+    :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
+    :RenFx => DeviceModel(RenewableFix, FixedOutput),
     :ILoads => DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
 )
 
