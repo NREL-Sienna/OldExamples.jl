@@ -10,11 +10,12 @@ using D3TypeTrees
 using Dates
 using DataFrames
 
-using JuMP
 using Cbc # solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
 include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_data.jl"))
+
+PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 
 TypeTree(PSY.HydroGen)
 
@@ -106,9 +107,6 @@ build!(sim)
 sim.stages["MD"].internal.psi_container.JuMPmodel
 
 sim.stages["DA"].internal.psi_container.JuMPmodel
-
-#sim_results = execute!(sim)
-#```
 
 stages_definition = Dict(
     "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),

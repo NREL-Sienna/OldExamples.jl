@@ -24,7 +24,6 @@ using Dates
 using DataFrames
 
 # ### Optimization packages
-using JuMP
 using Cbc # solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
@@ -33,6 +32,9 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # [make_hydropower_data.jl](../../script/PowerSimulations_examples/make_hydro_data.jl) script.
 
 include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_data.jl"))
+
+# This line just overloads JuMP printing to remove double underscores added by PowerSimulations.jl
+PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 
 # ## Two PowerSimulations features determine hydropower representation.
 # There are two principal ways that we can customize hydropower representation in
@@ -56,7 +58,7 @@ TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
 
 # Let's see what some of the different combinations create. First, let's apply the
 # `HydroDispatchRunOfRiver` formulation to the `HydroEnergyReservoir` generators, and the
-# `HydroFixed` formulation to `HydroDispatch` generators.
+# `FixedOutput` formulation to `HydroDispatch` generators.
 #  - The `FixedOutput` formulation just acts
 # like a load subtractor, forcing the system to accept it's generation.
 #  - The `HydroDispatchRunOfRiver` formulation represents the the energy flowing out of
@@ -118,8 +120,7 @@ op_problem.psi_container.JuMPmodel
 # The purpose of a multi-stage simulation is to represent scheduling decisions consistently
 # with the time scales that govern different elements of power systems.
 
-# Multi-Day to Daily Simulation:
-
+# #### Multi-Day to Daily Simulation:
 # In the multi-day model, we'll use a really simple representation of all system devices
 # so that we can maintain computational tractability while getting an estimate of system
 # requirements/capabilities.
@@ -194,11 +195,11 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 
 # And we can execute the simulation by running the following command
 # ```julia
-#sim_results = execute!(sim)
-#```
+# sim_results = execute!(sim)
+# ```
 #-
 
-# 3-Stage Simulation:
+# #### 3-Stage Simulation:
 
 stages_definition = Dict(
     "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),
@@ -258,3 +259,9 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 # And we can look at the "ED" model
 
 sim.stages["ED"].internal.psi_container.JuMPmodel
+
+# And we can execute the simulation by running the following command
+# ```julia
+# sim_results = execute!(sim)
+# ```
+#-

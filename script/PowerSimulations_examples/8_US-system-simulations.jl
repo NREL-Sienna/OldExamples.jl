@@ -20,16 +20,15 @@ PSI = PowerSimulations
 plotlyjs()
 
 # ### Optimization packages
-# For this simple example, we can use the Cbc solver with a relatively relaxed tolerance.
-using Cbc #solver
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.1)
-
+# You can use the cbc solver as in one of the other PowerSimulations.jl examples, but on
+# large problems it's useful to have a solver with better performance. I'll use the Xpress
+# solver, since I have a license, but others such as Gurobi or CPLEX work well too.
 using Xpress
 solver = optimizer_with_attributes(Xpress.Optimizer, "MIPRELSTOP" => 0.1, "OUTPUTLOG" => 1)
 
-# ### Create a `System` from US data.
+# ### Load the US `System`.
 # If you have run the
-# [US-System example.](../../notebook/PowerSystems_examples/US-System.ipynb), the data will
+# [US-System example](../../notebook/PowerSystems_examples/US-System.ipynb), the data will
 # be serialized in the json and H5 format, so we can efficiently deserialize it:
 
 sys = System(joinpath(pkgpath,"US-System", "SIIP", "sys.json"))
@@ -50,6 +49,9 @@ for line in get_components(Line, sys)
     end
 end
 
+# ### Create a `template`
+# Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
+# flow limited formulation to `MonitoredLine`s.
 branches = Dict{Symbol, DeviceModel}(
     :L => DeviceModel(Line, StaticLineUnbounded),
     :T => DeviceModel(Transformer2W, StaticTransformer),
@@ -97,6 +99,7 @@ DA_sequence = SimulationSequence(
     ini_cond_chronology = InterStageChronology(),
     cache = cache, #needed for ThermalStandardUC not for Basic
 )
+
 # ### Define and build a simulation
 sim = Simulation(
     name = "Texas-test",
