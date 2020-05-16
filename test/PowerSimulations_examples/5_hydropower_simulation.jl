@@ -11,7 +11,7 @@ using Dates
 using DataFrames
 
 using Cbc # solver
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.05)
 
 include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_data.jl"))
 
@@ -89,7 +89,7 @@ sequence = SimulationSequence(
         ),
     ),
     cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
-    ini_cond_chronology = InterStageChronology(),
+    ini_cond_chronology = IntraStageChronology(),
 );
 
 file_path = tempdir()
@@ -138,7 +138,7 @@ sequence = SimulationSequence(
         ),
     ),
     cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
-    ini_cond_chronology = InterStageChronology(),
+    ini_cond_chronology = IntraStageChronology(),
 );
 
 sim = Simulation(

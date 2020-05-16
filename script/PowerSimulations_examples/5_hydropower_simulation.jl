@@ -25,7 +25,7 @@ using DataFrames
 
 # ### Optimization packages
 using Cbc # solver
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.05)
 
 # ### Data
 # There is a meaningless test dataset assembled in the
@@ -168,7 +168,7 @@ sequence = SimulationSequence(
         ),
     ),
     cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
-    ini_cond_chronology = InterStageChronology(),
+    ini_cond_chronology = IntraStageChronology(),
 );
 
 #-
@@ -231,7 +231,7 @@ sequence = SimulationSequence(
         ),
     ),
     cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
-    ini_cond_chronology = InterStageChronology(),
+    ini_cond_chronology = IntraStageChronology(),
 );
 
 #-

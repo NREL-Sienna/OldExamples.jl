@@ -85,7 +85,7 @@ stages_definition = Dict(
 # are constrained by the ramping limits from setpoints in the final period of the previous problem.
 #
 
-# Let's define an inter-stage chronolgy that synchronizes information from 24 periods of
+# Let's define an inter-stage chronology that synchronizes information from 24 periods of
 # the first stage with a set of executions of the second stage:
 
 feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))

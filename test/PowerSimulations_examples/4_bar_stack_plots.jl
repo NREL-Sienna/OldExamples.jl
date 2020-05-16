@@ -5,7 +5,7 @@ using PowerSimulations #to load results
 using PowerGraphics
 
 simulation_folder = joinpath(pkgpath, "RTS-GMLC-master", "rts-test")
-simulation_folder = joinpath(simulation_folder, readdir(simulation_folder)[end])
+simulation_folder = joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
 res = load_simulation_results(simulation_folder, "UC")
 
 gr() # loads the GR backend
@@ -18,15 +18,16 @@ bar_plot(res)
 stack_plot(
     res,
     [
-        Symbol("P__PowerSystems.ThermalStandard"),
-        Symbol("P__PowerSystems.RenewableDispatch"),
+        Symbol("P__ThermalStandard"),
+        Symbol("P__RenewableDispatch"),
     ],
+    load = true
 )
 
 uc_sys =
-    System(joinpath(simulation_folder, "models_json", "stage_UC_model", "UC_sys_data.json"))
+    System(joinpath(simulation_folder, "models_json", "stage_UC_model", "Stage1_sys_data.json"))
 
-fuel_plot(res, uc_sys)
+fuel_plot(res, uc_sys, load = true)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
