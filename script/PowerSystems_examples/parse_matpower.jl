@@ -16,14 +16,12 @@ Pkg.status()
 using SIIPExamples
 using PowerSystems
 using TimeSeries
-const PSY = PowerSystems
-const IS = PSY.InfrastructureSystems;
 
 # ### Fetch Data
 # PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
-base_dir = PSY.download(PSY.TestData; branch = "master");
+base_dir = PowerSystems.download(PowerSystems.TestData; branch = "master");
 
 # ### Create a `System`
-sys = System(PSY.PowerModelsData(joinpath(base_dir, "matpower", "case5_re.m")))
+sys = System(PowerModelsData(joinpath(base_dir, "matpower", "case5_re.m")))
 sys

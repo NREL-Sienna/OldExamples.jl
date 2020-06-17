@@ -1,8 +1,7 @@
 using PowerSystems
-const PSY = PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations
-IS = PSY.InfrastructureSystems
+IS = PowerSystems.IS
 
 using Dates
 using DataFrames
@@ -11,8 +10,8 @@ using JuMP
 using Cbc #solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
-base_dir = PSY.download(PSY.TestData; branch = "master");
-pm_data = PSY.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
+base_dir = PowerSystems.download(PowerSystems.TestData; branch = "master");
+pm_data = PowerSystems.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
 
 FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts", "7day")
 
@@ -68,12 +67,12 @@ feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 
 feedforward = Dict(
     ("ED", :devices, :Generators) => SemiContinuousFF(
-        binary_from_stage = PSI.ON,
+        binary_source_stage = PSI.ON,
         affected_variables = [PSI.ACTIVE_POWER],
     ),
 )
 
-cache = Dict("UC" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
+cache = Dict("UC" => [TimeStatusChange(ThermalStandard, PSI.ON)])
 
 order = Dict(1 => "UC", 2 => "ED")
 horizons = Dict("UC" => 24, "ED" => 12)

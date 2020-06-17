@@ -20,8 +20,6 @@ using SIIPExamples
 using PowerSystems
 using TimeSeries
 using Dates
-const PSY = PowerSystems
-const IS = PSY.InfrastructureSystems;
 using DataFrames
 using CSV
 
@@ -101,7 +99,7 @@ bus = DataFrame(CSV.read(joinpath(datadir, "bus.csv")))
 !isnothing(interconnect) && filter!(row -> row[:interconnect] == interconnect, bus)
 zone = CSV.read(joinpath(datadir, "zone.csv"))
 bus = join(bus, zone, on = :zone_id, kind = :left)
-int2bustype(b) = replace(split(string(PSY.BusTypes.BusType(b)), ".")[end], "]" => "")
+int2bustype(b) = replace(split(string(PowerSystems.BusTypes.BusType(b)), ".")[end], "]" => "")
 bus.bustype = int2bustype.(bus.type)
 bus.name = "bus" .* string.(bus.bus_id)
 CSV.write(joinpath(siip_data, "bus.csv"), bus)
@@ -170,7 +168,7 @@ end
 
 timeseries_pointers = joinpath(siip_data, "timeseries_pointers.json")
 open(timeseries_pointers, "w") do io
-    PowerSystems.IS.JSON2.write(io, timeseries)
+    PowerSystems.InfrastructureSystems.JSON2.write(io, timeseries)
 end
 
 # ### The tabular data format relies on a folder containing `*.csv` files and `.yaml` files
@@ -178,7 +176,7 @@ end
 # data type that should be created for each generator type. The respective "us_decriptors.yaml"
 # and "US_generator_mapping.yaml" files have already been tailored to this dataset.
 @info "parsing csv files..."
-rawsys = PSY.PowerSystemTableData(
+rawsys = PowerSystems.PowerSystemTableData(
     siip_data,
     100.0,
     joinpath(config_dir, "us_descriptors.yaml"),

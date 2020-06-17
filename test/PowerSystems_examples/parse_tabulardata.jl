@@ -2,14 +2,12 @@ using SIIPExamples
 using PowerSystems
 using TimeSeries
 using Dates
-const PSY = PowerSystems
-const IS = PSY.InfrastructureSystems;
 
-PSY.download(PSY.TestData; branch = "master") # *note* add `force=true` to get a fresh copy
+PowerSystems.download(PowerSystems.TestData; branch = "master") # *note* add `force=true` to get a fresh copy
 base_dir = dirname(dirname(pathof(PowerSystems)));
 
 RTS_GMLC_DIR = joinpath(base_dir, "data", "RTS_GMLC");
-rawsys = PSY.PowerSystemTableData(
+rawsys = PowerSystems.PowerSystemTableData(
     RTS_GMLC_DIR,
     100.0,
     joinpath(RTS_GMLC_DIR, "user_descriptors.yaml"),

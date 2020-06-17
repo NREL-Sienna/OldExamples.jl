@@ -99,7 +99,7 @@ feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 
 feedforward = Dict(
     ("ED", :devices, :Generators) => SemiContinuousFF(
-        binary_from_stage = PSI.ON,
+        binary_source_stage = PSI.ON,
         affected_variables = [PSI.ACTIVE_POWER],
     ),
 )
@@ -111,7 +111,7 @@ feedforward = Dict(
 # exactly which results will be needed and carry them through a cache in the economic dispatch
 # problems for later use.
 
-cache = Dict(("UC",) => TimeStatusChange(PSY.ThermalStandard, PSI.ON))
+cache = Dict(("UC",) => TimeStatusChange(ThermalStandard, PSI.ON))
 
 # ### Sequencing
 # The stage problem length, look-ahead, and other details surrounding the temporal Sequencing

@@ -14,10 +14,9 @@
 
 # ### Modeling Packages
 using PowerSystems
-const PSY = PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations
-IS = PSY.InfrastructureSystems
+IS = PowerSystems.IS
 
 # ### Data management packages
 using Dates
@@ -32,8 +31,8 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # The five bus system data here includes hourly day-ahead data, 5-minute real-time market
 # data, and 6-second actual data. We'll only use the hourly and 5-minute data for the
 # example simulations below, but the 6-second data is included for future development.
-base_dir = PSY.download(PSY.TestData; branch = "master");
-pm_data = PSY.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
+base_dir = PowerSystems.download(PowerSystems.TestData; branch = "master");
+pm_data = PowerSystems.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
 
 FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts", "7day")
 
@@ -92,12 +91,12 @@ feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 
 feedforward = Dict(
     ("ED", :devices, :Generators) => SemiContinuousFF(
-        binary_from_stage = PSI.ON,
+        binary_source_stage = PSI.ON,
         affected_variables = [PSI.ACTIVE_POWER],
     ),
 )
 
-cache = Dict("UC" => [TimeStatusChange(PSY.ThermalStandard, PSI.ON)])
+cache = Dict("UC" => [TimeStatusChange(ThermalStandard, PSI.ON)])
 
 order = Dict(1 => "UC", 2 => "ED")
 horizons = Dict("UC" => 24, "ED" => 12)

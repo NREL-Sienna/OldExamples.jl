@@ -2,7 +2,6 @@ using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 
 using PowerSystems
-const PSY = PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations
 using D3TypeTrees
@@ -17,7 +16,7 @@ include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_dat
 
 PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 
-TypeTree(PSY.HydroGen)
+TypeTree(PowerSystems.HydroGen)
 
 TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
 
@@ -29,7 +28,7 @@ devices = Dict{Symbol, DeviceModel}(
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizon = 2)
+op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 2)
 
 op_problem.psi_container.JuMPmodel
 
@@ -40,7 +39,7 @@ devices = Dict{Symbol, DeviceModel}(
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizon = 2)
+op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 2)
 
 op_problem.psi_container.JuMPmodel
 
@@ -51,7 +50,7 @@ devices = Dict{Symbol, DeviceModel}(
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy, horizon = 2)
+op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 2)
 
 op_problem.psi_container.JuMPmodel
 
@@ -84,11 +83,11 @@ sequence = SimulationSequence(
     intervals = Dict("MD" => (Hour(48), Consecutive()), "DA" => (Hour(24), Consecutive())),
     feedforward = Dict(
         ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_from_stage = PSI.ACTIVE_POWER,
+            variable_source_stage = PSI.ACTIVE_POWER,
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
-    cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
+    cache = Dict(("MD", "DA") => StoredEnergy(HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = IntraStageChronology(),
 );
 
@@ -129,15 +128,15 @@ sequence = SimulationSequence(
     horizons = Dict("MD" => 2, "DA" => 24, "ED" => 12),
     feedforward = Dict(
         ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_from_stage = PSI.ACTIVE_POWER,
+            variable_source_stage = PSI.ACTIVE_POWER,
             affected_variables = [PSI.ACTIVE_POWER],
         ),
         ("ED", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_from_stage = PSI.ACTIVE_POWER,
+            variable_source_stage = PSI.ACTIVE_POWER,
             affected_variables = [PSI.ACTIVE_POWER],
         ),
     ),
-    cache = Dict(("MD", "DA") => StoredEnergy(PSY.HydroEnergyReservoir, PSI.ENERGY)),
+    cache = Dict(("MD", "DA") => StoredEnergy(HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = IntraStageChronology(),
 );
 

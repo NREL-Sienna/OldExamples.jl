@@ -1,7 +1,6 @@
 using SIIPExamples
 
 using PowerSystems
-const PSY = PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations
 using D3TypeTrees
@@ -16,7 +15,7 @@ rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
 rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
 rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP");
 
-rawsys = PSY.PowerSystemTableData(
+rawsys = PowerSystems.PowerSystemTableData(
     rts_src_dir,
     100.0,
     joinpath(rts_siip_dir, "user_descriptors.yaml"),

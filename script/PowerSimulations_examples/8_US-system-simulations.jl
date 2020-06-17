@@ -15,7 +15,6 @@ using PowerSimulations
 using PowerGraphics
 using Logging
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-PSY = PowerSystems
 PSI = PowerSimulations
 plotlyjs()
 
@@ -90,7 +89,7 @@ stages_definition = Dict(
 order = Dict(1 => "UC")
 horizons = Dict("UC" => 24)
 intervals = Dict("UC" => (Hour(24), Consecutive()))
-cache = Dict(("UC",) => TimeStatusChange(PSY.ThermalStandard, PSI.ON))
+cache = Dict(("UC",) => TimeStatusChange(ThermalStandard, PSI.ON))
 DA_sequence = SimulationSequence(
     step_resolution = Hour(24),
     order = order,
