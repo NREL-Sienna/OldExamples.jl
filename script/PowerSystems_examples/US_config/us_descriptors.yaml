@@ -32,7 +32,7 @@ generator:
 - {custom_name: bus_id, name: bus_id}
 - {custom_name: type, name: fuel}
 - {custom_name: unit_type, name: unit_type}
-- {custom_name: GenFuelCost, name: fuel_price}
+- {custom_name: fuel_price, name: fuel_price}
 - {custom_name: Pg, name: active_power, system_per_unit: false}
 - {custom_name: Qg, name: reactive_power, system_per_unit: false}
 - {custom_name: Pmax, name: active_power_limits_max, system_per_unit: false}

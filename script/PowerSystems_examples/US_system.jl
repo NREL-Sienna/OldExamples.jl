@@ -32,7 +32,7 @@ siip_data = joinpath(datadir, "SIIP")
 if !isdir(datadir)
     mkdir(datadir)
     mkdir(siip_data)
-    tempfilename = download("https://zenodo.org/record/3735409/files/USATestSystem.zip?download=1")
+    tempfilename = download("https://zenodo.org/record/3753177/files/USATestSystem.zip?download=1")
     SIIPExamples.unzip(SIIPExamples.os, tempfilename, datadir)
 end
 
@@ -68,7 +68,8 @@ function make_pwl(gen::DataFrame, traunches = 2)
     for row in eachrow(gen)
         traunch_len = (1.0 - row.Pmin / row.Pmax) / traunches
         pct = [row.Pmin / row.Pmax + i * traunch_len for i in 0:traunches]
-        c(pct) = pct * row.Pmax * (row.GenIOB + row.GenIOC^2 + row.GenIOD^3)
+        #c(pct) = pct * row.Pmax * (row.GenIOB + row.GenIOC^2 + row.GenIOD^3)
+        c(pct) = pct * row.Pmax * (row.c1 + row.c2^2) + row.c0 #this formats the "c" columns to hack the heat rate parser in PSY
         hr = [c(pct[1])]
         [push!(hr, c(pct[i + 1]) - hr[i]) for i in 1:traunches]
         push!(pwl, vcat(pct, hr))
@@ -76,20 +77,23 @@ function make_pwl(gen::DataFrame, traunches = 2)
     return hcat(gen, pwl)
 end
 
-gen = make_pwl(gen)
+gen = make_pwl(gen);
+
+gen[!,"fuel_price"] .= 1000.0;  #this formats the "c" columns to hack the heat rate parser in PSY
 
 # There are some incomplete aspects of this dataset. Here, I've assigned some approximate
-# minimum up/down times, ramp rates, and some minor adjustments to categories. There are better
+# minimum up/down times, and some minor adjustments to categories. There are better
 # and more efficient ways to do this, but this works for this script...
 gen[:, :unit_type] .= "OT"
 gen[:, :min_up_time] .= 0.0
 gen[:, :min_down_time] .= 0.0
+gen[:, :ramp_30] .= gen[:, :ramp_30] ./ 30.0 # we need ramp rates in MW/min
 [gen[gen.type .== "wind", col] .= ["Wind", 0.0, 0.0][ix] for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])]
 [gen[gen.type .== "solar", col] .= ["PV", 0.0, 0.0][ix] for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])]
 [gen[gen.type .== "hydro", col] .= ["HY", 0.0, 0.0][ix] for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])]
-[gen[gen.type .== "ng", col] .= [4.5, 8, 5][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time, :ramp_30])]
-[gen[gen.type .== "coal", col] .= [24, 48, 4][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time, :ramp_30])]
-[gen[gen.type .== "nuclear", col] .= [72, 72, 2][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time, :ramp_30])]
+[gen[gen.type .== "ng", col] .= [4.5, 8][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time])]
+[gen[gen.type .== "coal", col] .= [24, 48][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time])]
+[gen[gen.type .== "nuclear", col] .= [72, 72][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time])]
 
 gen[:, :name] = "gen" .* string.(gen.plant_id)
 CSV.write(joinpath(siip_data, "gen.csv"), gen)
@@ -142,13 +146,13 @@ for f in ts_csv
     for id in names(csv)
         colname = id
         if f == "demand"
-            if id in Symbol.(zone.zone_id)
-                colname = Symbol(zone[Symbol.(zone.zone_id) .== id, :zone_name][1])
+            if Symbol(id) in Symbol.(zone.zone_id)
+                colname = Symbol(zone[Symbol.(zone.zone_id) .== Symbol(id), :zone_name][1])
                 DataFrames.rename!(csv, (id => colname))
             end
         else
-            if id in plant_ids
-                colname = Symbol(gen[Symbol.(gen.plant_id) .== id, :name][1])
+            if Symbol(id) in plant_ids
+                colname = Symbol(gen[Symbol.(gen.plant_id) .== Symbol(id), :name][1])
                 DataFrames.rename!(csv, (id => colname))
             end
         end
@@ -190,12 +194,9 @@ rawsys = PowerSystems.PowerSystemTableData(
 # The `forecast_resolution` kwarg filters to only include forecasts with a matching resolution.
 
 @info "creating System"
-sys = System(rawsys; configpath = joinpath(config_dir, "us_system_validation.json"));
+sys = System(rawsys; config_path = joinpath(config_dir, "us_system_validation.json"));
 sys
 
 # This all took reasonably long, so we can save our `System` using the serialization
 # capability included with PowerSystems.jl:
-@info "serializing System"
-io = open(joinpath(siip_data, "sys.json"), "w")
-to_json(io, sys)
-close(io)
+to_json(sys, joinpath(siip_data, "sys.json"))
