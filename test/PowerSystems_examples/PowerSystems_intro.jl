@@ -39,7 +39,7 @@ get_components(Branch, sys) |> collect
 
 bus1 = get_component(Bus, sys, "nodeA")
 @show get_name(bus1);
-@show get_voltage(bus1);
+@show get_magnitude(bus1);
 
 loads = collect(get_components(PowerLoad, sys))
 for (l, ts) in zip(loads, load_timeseries_DA[2])

@@ -28,7 +28,7 @@ open(fname, "r") do f
 end
 
 # ### Read the pointers
-ts_pointers = IS.read_time_series_metadata(fname)
+ts_pointers = PowerSystems.IS.read_time_series_metadata(fname)
 
 # ### Read and assign forecasts to `System` using the `ts_pointers` struct
 add_forecasts!(sys, ts_pointers)

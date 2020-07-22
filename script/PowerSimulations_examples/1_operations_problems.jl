@@ -78,6 +78,7 @@ devices = Dict(
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
+    :Hydro => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :RenFx => DeviceModel(RenewableFix, FixedOutput),
     :ILoads => DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
 )

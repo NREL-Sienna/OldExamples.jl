@@ -14,6 +14,8 @@ using PowerSystems
 using PowerSimulations
 using PowerGraphics
 using Logging
+using Dates
+
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 PSI = PowerSimulations
 plotlyjs()
@@ -72,7 +74,14 @@ template = OperationsProblemTemplate(DCPPowerModel, devices, branches, Dict());
 
 # ### Build and execute single step problem
 op_problem =
-    OperationsProblem(GenericOpProblem, template, sys; optimizer = solver, horizon = 24, slack_variables = false, use_parameters = true)
+    OperationsProblem(
+        GenericOpProblem,
+        template,
+        sys;
+        optimizer = solver,
+        horizon = 24,
+        slack_variables = false,
+        use_parameters = true)
 
 res =solve!(op_problem)
 
@@ -84,30 +93,35 @@ fuel_plot(res, sys, load = true)
 # definitions for how information flows between problems.
 sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"), )
 stages_definition = Dict(
-    "UC" => Stage(GenericOpProblem, template, sys, solver; slack_variables = true)
+    "UC" => Stage(
+        GenericOpProblem,
+        template,
+        sys,
+        solver;
+        slack_variables = true,
+    )
 )
 order = Dict(1 => "UC")
 horizons = Dict("UC" => 24)
 intervals = Dict("UC" => (Hour(24), Consecutive()))
-cache = Dict(("UC",) => TimeStatusChange(ThermalStandard, PSI.ON))
 DA_sequence = SimulationSequence(
     step_resolution = Hour(24),
     order = order,
     horizons = horizons,
     intervals = intervals,
-    ini_cond_chronology = InterStageChronology(),
-    cache = cache, #needed for ThermalStandardUC not for Basic
+    ini_cond_chronology = IntraStageChronology(),
 )
 
 # ### Define and build a simulation
 sim = Simulation(
     name = "Texas-test",
-    steps = 10,
+    steps = 3,
     stages = stages_definition,
     stages_sequence = DA_sequence,
-    simulation_folder = "Texas-sim"
+    simulation_folder = "Texas-sim",
 )
-build!(sim, console_level = Logging.Info, file_level = Logging.Debug)
+
+build!(sim, console_level = Logging.Info, file_level = Logging.Debug,  recorders = [:simulation])
 
 # ### Execute the simulation
 sim_results = execute!(sim)

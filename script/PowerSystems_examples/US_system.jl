@@ -20,6 +20,7 @@ using SIIPExamples
 using PowerSystems
 using TimeSeries
 using Dates
+using TimeZones
 using DataFrames
 using CSV
 
@@ -47,6 +48,8 @@ config_dir = joinpath(
 # This is a big dataset. Typically one would only want to include one of the interconnects
 # available. Lets use Texas to start. You can set `interconnect = nothing` if you want everything.
 interconnect = "Texas"
+timezone = FixedTimeZone("UTC-6")
+initial_time = ZonedDateTime(DateTime("2016-01-01T00:00:00"),timezone)
 
 # There are a few minor incompatibilities between the data and the supported tabular data
 # format. We can resolve those here.
@@ -95,7 +98,12 @@ gen[:, :ramp_30] .= gen[:, :ramp_30] ./ 30.0 # we need ramp rates in MW/min
 [gen[gen.type .== "coal", col] .= [24, 48][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time])]
 [gen[gen.type .== "nuclear", col] .= [72, 72][ix] for (ix, col) in enumerate([:min_up_time, :min_down_time])]
 
+# At the moment, PowerSimulations can't do unit commitment with generators that have Pmin = 0.0
+idx_zero_pmin = [g.type in ["ng", "coal",  "hydro",  "nuclear"] && g.Pmin <= 0  for g in eachrow(gen[:,[:type,:Pmin]])]
+gen[idx_zero_pmin, :Pmin] = gen[idx_zero_pmin, :Pmax] .* 0.05
+
 gen[:, :name] = "gen" .* string.(gen.plant_id)
+gen[:, :basemva] .= 100.0 # the csv parser doesn't handle machine basebower calculations properly yet
 CSV.write(joinpath(siip_data, "gen.csv"), gen)
 
 # Let's also merge the zone.csv with the bus.csv and identify bus types
@@ -140,7 +148,10 @@ for f in ts_csv
             csv,
             (names(csv)[occursin.("UTC", String.(names(csv)))][1] => :DateTime),
         )
-        csv.DateTime = replace.(csv.DateTime, " " => "T")
+        #The timeseries data is in UTC, this converts it to a fixed UTC offset
+        csv.DateTime = ZonedDateTime.(DateTime.(csv.DateTime, "yyyy-mm-dd HH:MM:SS"), timezone, from_utc = true)
+        delete!(csv, csv.DateTime .< initial_time)
+        csv.DateTime = Dates.format.(csv.DateTime,"yyyy-mm-ddTHH:MM:SS")
     end
     device_names = f == "demand" ? unique(bus.zone_name) : gen.name
     for id in names(csv)
@@ -150,14 +161,15 @@ for f in ts_csv
                 colname = Symbol(zone[Symbol.(zone.zone_id) .== Symbol(id), :zone_name][1])
                 DataFrames.rename!(csv, (id => colname))
             end
+            sf = sum(bus[string.(bus.zone_id) .== id, :Pd])
         else
             if Symbol(id) in plant_ids
                 colname = Symbol(gen[Symbol.(gen.plant_id) .== Symbol(id), :name][1])
                 DataFrames.rename!(csv, (id => colname))
             end
+            sf = maximum(csv[:, colname]) == 0.0 ? 1.0 : "Max"
         end
         if String(colname) in device_names
-            sf = maximum(csv[:, colname]) == 0.0 ? 1.0 : "Max"
             push!(timeseries, Dict(
                 "simulation" => "DA",
                 "category" => category,

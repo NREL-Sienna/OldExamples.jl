@@ -15,7 +15,10 @@ problem = OperationsProblem(
     sys,
     horizon = 4,
     optimizer = solver,
+    balance_slack_variables = true
 )
+
+solve!(problem)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

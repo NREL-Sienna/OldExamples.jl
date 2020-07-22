@@ -46,7 +46,7 @@ generator:
 - {custom_name: output_percent_0, name: output_percent_0}
 - {custom_name: output_percent_1, name: output_percent_1}
 - {custom_name: output_percent_2, name: output_percent_2}
-- {custom_name: mBase, name: base_mva}
+- {custom_name: mBase, name: base_mva, system_per_unit: false}
 - {custom_name: shutdown, name: shutdown_cost}
 - {custom_name: startup, name: startup_cost}
 - {custom_name: min_down_time, name: min_down_time}

@@ -43,7 +43,8 @@ problem = OperationsProblem(
     sys,
     horizon = 4,
     optimizer = solver,
+    balance_slack_variables = true
 )
 
-# And solve it ... (the initial conditions for the RTS in this problem are infeasible)
-#nb solve!(problem)
+# And solve it ...
+solve!(problem)

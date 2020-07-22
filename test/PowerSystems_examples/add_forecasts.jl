@@ -10,7 +10,7 @@ open(fname, "r") do f
     end
 end
 
-ts_pointers = IS.read_time_series_metadata(fname)
+ts_pointers = PowerSystems.IS.read_time_series_metadata(fname)
 
 add_forecasts!(sys, ts_pointers)
 sys

@@ -10,8 +10,8 @@ pkgpath = dirname(dirname(pathof(SIIPExamples)))
 include(joinpath(pkgpath, "test", "PowerSystems_examples", "parse_tabulardata.jl"))
 
 for line in get_components(Line, sys)
-    if (get_basevoltage(get_from(get_arc(line))) >= 230.0) &&
-       (get_basevoltage(get_to(get_arc(line))) >= 230.0)
+    if (get_base_voltage(get_from(get_arc(line))) >= 230.0) &&
+       (get_base_voltage(get_to(get_arc(line))) >= 230.0)
         #if get_area(get_from(get_arc(line))) != get_area(get_to(get_arc(line)))
         @info "Changing $(get_name(line)) to MonitoredLine"
         convert_component!(MonitoredLine, line, sys)
@@ -19,9 +19,7 @@ for line in get_components(Line, sys)
 end
 
 uc_prob =
-    UnitCommitmentProblem(sys, optimizer = solver, horizon = 24, slack_variables = true)
-
-set_transmission_model!(uc_prob, DCPPowerModel) #TODO: rm this and add network = DCPPowerModel to above when PSIMA-138 is tagged
+    UnitCommitmentProblem(sys, optimizer = solver, horizon = 24, network = DCPPowerModel)
 
 set_branch_model!(uc_prob, :L, DeviceModel(Line, StaticLineUnbounded))
 

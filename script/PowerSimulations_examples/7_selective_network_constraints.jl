@@ -35,8 +35,8 @@ include(joinpath(pkgpath, "test", "PowerSystems_examples", "parse_tabulardata.jl
 # above a voltage threshold.
 
 for line in get_components(Line, sys)
-    if (get_basevoltage(get_from(get_arc(line))) >= 230.0) &&
-       (get_basevoltage(get_to(get_arc(line))) >= 230.0)
+    if (get_base_voltage(get_from(get_arc(line))) >= 230.0) &&
+       (get_base_voltage(get_to(get_arc(line))) >= 230.0)
         #if get_area(get_from(get_arc(line))) != get_area(get_to(get_arc(line)))
         @info "Changing $(get_name(line)) to MonitoredLine"
         convert_component!(MonitoredLine, line, sys)
@@ -45,11 +45,7 @@ end
 
 # ## Build an `OperationsProblem`
 uc_prob =
-    UnitCommitmentProblem(sys, optimizer = solver, horizon = 24, slack_variables = true)
-
-# The above function defaults to a basic `CopperPlatePowerModel`, ror now, let's just
-# choose a standard DCOPF (B-theta) formulation.
-set_transmission_model!(uc_prob, DCPPowerModel) #TODO: rm this and add network = DCPPowerModel to above when PSIMA-138 is tagged
+    UnitCommitmentProblem(sys, optimizer = solver, horizon = 24, network = DCPPowerModel)
 
 # Let's change the formulation of the `Line` components to an unbounded flow formulation.
 # This formulation still enforces Kirchoff's laws, but does not apply flow constraints.

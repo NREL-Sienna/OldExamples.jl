@@ -27,8 +27,9 @@ using Cbc # solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.05)
 
 # ### Data
-# There is a meaningless test dataset assembled in the
-# [make_hydropower_data.jl](../../script/PowerSimulations_examples/make_hydro_data.jl) script.
+# PowerSystems.jl links to some meaningless test data that is suitable for this example.
+# The [make_hydro_data.jl](../../script/PowerSimulations_examples/make_hydro_data.jl) script
+# loads three systems suitable for the examples here.
 
 include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_data.jl"))
 
@@ -48,12 +49,12 @@ PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 # instances. For hydro power representations, we have two available generator types in
 # PowerSystems:
 
-TypeTree(PowerSystems.HydroGen)
+#nb TypeTree(PowerSystems.HydroGen)
 
 # And in PowerSimulations, we have several available formulations that can be applied to
 # the hydropower generation devices:
 
-TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
+#nb TypeTree(PSI.AbstractHydroFormulation, scopesep = "\n", init_expand = 5)
 
 # Let's see what some of the different combinations create. First, let's apply the
 # `HydroDispatchRunOfRiver` formulation to the `HydroEnergyReservoir` generators, and the
@@ -125,7 +126,7 @@ op_problem.psi_container.JuMPmodel
 # requirements/capabilities.
 
 devices = Dict(
-    :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
+    :Generators => DeviceModel(ThermalStandard, ThermalDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroEnergyReservoir =>
         DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
@@ -136,7 +137,7 @@ template_md = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 # problems.
 
 devices = Dict(
-    :Generators => DeviceModel(ThermalStandard, ThermalDispatchNoMin),
+    :Generators => DeviceModel(ThermalStandard, ThermalDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroEnergyReservoir =>
         DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
@@ -146,8 +147,8 @@ template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 #-
 
 stages_definition = Dict(
-    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),
-    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver),
+    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver, system_to_file = false),
+    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver, system_to_file = false),
 )
 
 # This builds the sequence and passes the the energy dispatch schedule for the `HydroEnergyReservoir`
@@ -201,9 +202,9 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 # #### 3-Stage Simulation:
 
 stages_definition = Dict(
-    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver),
-    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver),
-    "ED" => Stage(GenericOpProblem, template_da, c_sys5_hy_ed, solver),
+    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver, system_to_file = false),
+    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver, system_to_file = false),
+    "ED" => Stage(GenericOpProblem, template_da, c_sys5_hy_ed, solver, system_to_file = false),
 )
 
 sequence = SimulationSequence(
