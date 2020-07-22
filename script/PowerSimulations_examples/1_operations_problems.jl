@@ -59,7 +59,7 @@ sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 # Here is an example of relatively standard branch formulations. Other formulations allow
 # for selective enforcement of transmission limits and greater control on transformer settings.
 
-branches = Dict{Symbol, DeviceModel}(
+branches = Dict{Symbol,DeviceModel}(
     :L => DeviceModel(Line, StaticLine),
     :T => DeviceModel(Transformer2W, StaticTransformer),
     :TT => DeviceModel(TapTransformer, StaticTransformer),

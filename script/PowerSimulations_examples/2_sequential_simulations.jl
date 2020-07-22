@@ -61,7 +61,13 @@ template_ed = template_economic_dispatch(devices = devices)
 
 stages_definition = Dict(
     "UC" => Stage(GenericOpProblem, template_uc, sys, solver),
-    "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver, balance_slack_variables = true),
+    "ED" => Stage(
+        GenericOpProblem,
+        template_ed,
+        sys_RT,
+        solver,
+        balance_slack_variables = true,
+    ),
 )
 # Note that the "ED" stage has a `balance_slack_variables = true` argument. This adds slack
 # variables with a default penalty of 1e6 to the nodal energy balance constraint and helps
@@ -130,7 +136,7 @@ DA_RT_sequence = SimulationSequence(
     ini_cond_chronology = InterStageChronology(),
     feedforward_chronologies = feedforward_chronologies,
     feedforward = feedforward,
-    )
+)
 
 # ## `Simulation`
 # Now, we can build and execute a simulation using the `SimulationSequence` and `Stage`s

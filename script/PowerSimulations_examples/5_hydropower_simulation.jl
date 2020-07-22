@@ -64,7 +64,7 @@ PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 #  - The `HydroDispatchRunOfRiver` formulation represents the the energy flowing out of
 # a reservoir. The model can choose to produce power with that energy or just let it spill by.
 
-devices = Dict{Symbol, DeviceModel}(
+devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :Hyd2 => DeviceModel(HydroDispatch, FixedOutput),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
@@ -88,7 +88,7 @@ op_problem.psi_container.JuMPmodel
 #-
 
 # Next, let's apply the `HydroDispatchReservoirFlow` formulation to the `HydroEnergyReservoir` generators.
-devices = Dict{Symbol, DeviceModel}(
+devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -103,7 +103,7 @@ op_problem.psi_container.JuMPmodel
 
 # Finally, let's apply the `HydroDispatchReservoirStorage` formulation to the `HydroEnergyReservoir` generators.
 
-devices = Dict{Symbol, DeviceModel}(
+devices = Dict{Symbol,DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -147,8 +147,20 @@ template_da = OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), 
 #-
 
 stages_definition = Dict(
-    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver, system_to_file = false),
-    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver, system_to_file = false),
+    "MD" => Stage(
+        GenericOpProblem,
+        template_md,
+        c_sys5_hy_wk,
+        solver,
+        system_to_file = false,
+    ),
+    "DA" => Stage(
+        GenericOpProblem,
+        template_da,
+        c_sys5_hy_uc,
+        solver,
+        system_to_file = false,
+    ),
 )
 
 # This builds the sequence and passes the the energy dispatch schedule for the `HydroEnergyReservoir`
@@ -202,9 +214,27 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 # #### 3-Stage Simulation:
 
 stages_definition = Dict(
-    "MD" => Stage(GenericOpProblem, template_md, c_sys5_hy_wk, solver, system_to_file = false),
-    "DA" => Stage(GenericOpProblem, template_da, c_sys5_hy_uc, solver, system_to_file = false),
-    "ED" => Stage(GenericOpProblem, template_da, c_sys5_hy_ed, solver, system_to_file = false),
+    "MD" => Stage(
+        GenericOpProblem,
+        template_md,
+        c_sys5_hy_wk,
+        solver,
+        system_to_file = false,
+    ),
+    "DA" => Stage(
+        GenericOpProblem,
+        template_da,
+        c_sys5_hy_uc,
+        solver,
+        system_to_file = false,
+    ),
+    "ED" => Stage(
+        GenericOpProblem,
+        template_da,
+        c_sys5_hy_ed,
+        solver,
+        system_to_file = false,
+    ),
 )
 
 sequence = SimulationSequence(

@@ -32,7 +32,7 @@ solver = optimizer_with_attributes(Xpress.Optimizer, "MIPRELSTOP" => 0.1, "OUTPU
 # [US-System example](../../notebook/PowerSystems_examples/US-System.ipynb), the data will
 # be serialized in the json and H5 format, so we can efficiently deserialize it:
 
-sys = System(joinpath(pkgpath,"US-System", "SIIP", "sys.json"))
+sys = System(joinpath(pkgpath, "US-System", "SIIP", "sys.json"))
 
 # ### Selecting flow limited lines
 # Since PowerSimulations will apply constraints by component type (e.g. Line), we need to
@@ -53,7 +53,7 @@ end
 # ### Create a `template`
 # Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
 # flow limited formulation to `MonitoredLine`s.
-branches = Dict{Symbol, DeviceModel}(
+branches = Dict{Symbol,DeviceModel}(
     :L => DeviceModel(Line, StaticLineUnbounded),
     :T => DeviceModel(Transformer2W, StaticTransformer),
     :TT => DeviceModel(TapTransformer, StaticTransformer),
@@ -73,17 +73,17 @@ devices = Dict(
 template = OperationsProblemTemplate(DCPPowerModel, devices, branches, Dict());
 
 # ### Build and execute single step problem
-op_problem =
-    OperationsProblem(
-        GenericOpProblem,
-        template,
-        sys;
-        optimizer = solver,
-        horizon = 24,
-        slack_variables = false,
-        use_parameters = true)
+op_problem = OperationsProblem(
+    GenericOpProblem,
+    template,
+    sys;
+    optimizer = solver,
+    horizon = 24,
+    slack_variables = false,
+    use_parameters = true,
+)
 
-res =solve!(op_problem)
+res = solve!(op_problem)
 
 # ### Analyze results
 fuel_plot(res, sys, load = true)
@@ -91,16 +91,9 @@ fuel_plot(res, sys, load = true)
 # ## Sequential Simulation
 # In addition to defining the formulation template, sequential simulations require
 # definitions for how information flows between problems.
-sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"), )
-stages_definition = Dict(
-    "UC" => Stage(
-        GenericOpProblem,
-        template,
-        sys,
-        solver;
-        slack_variables = true,
-    )
-)
+sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"),)
+stages_definition =
+    Dict("UC" => Stage(GenericOpProblem, template, sys, solver; slack_variables = true))
 order = Dict(1 => "UC")
 horizons = Dict("UC" => 24)
 intervals = Dict("UC" => (Hour(24), Consecutive()))
@@ -121,7 +114,12 @@ sim = Simulation(
     simulation_folder = "Texas-sim",
 )
 
-build!(sim, console_level = Logging.Info, file_level = Logging.Debug,  recorders = [:simulation])
+build!(
+    sim,
+    console_level = Logging.Info,
+    file_level = Logging.Debug,
+    recorders = [:simulation],
+)
 
 # ### Execute the simulation
 sim_results = execute!(sim)

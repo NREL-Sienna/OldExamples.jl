@@ -507,7 +507,7 @@
                 "name": "tap",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 2,
+                    "max": null,
                     "min": 0
                 },
                 "validation_action": "error"
