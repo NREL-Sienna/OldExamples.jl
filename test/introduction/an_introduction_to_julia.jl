@@ -73,7 +73,7 @@ d2["B"]
 
 d2["D"][:foo]
 
-for i in 1:5
+for i = 1:5
     println(i)
 end
 
@@ -86,7 +86,7 @@ for (key, value) in Dict("A" => 1, "B" => 2.5, "D" => 2 - 3im)
 end
 
 i = 10
-for i in 0:3:15
+for i = 0:3:15
     if i < 5
         println("$(i) is less than 5")
     elseif i < 10
@@ -100,9 +100,9 @@ for i in 0:3:15
     end
 end
 
-[i for i in 1:5]
+[i for i = 1:5]
 
-[i * j for i in 1:5, j in 5:10]
+[i * j for i = 1:5, j = 5:10]
 
 [i for i in 1:10 if i % 2 == 1]
 
@@ -155,7 +155,7 @@ println("immutable_type: $(immutable_type)")
 @show isimmutable(1);
 
 using Random
-[rand() for i in 1:10]
+[rand() for i = 1:10]
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
