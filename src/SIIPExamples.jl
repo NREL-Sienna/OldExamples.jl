@@ -155,15 +155,19 @@ function literate_file(folder, file; force = false, kwargs...)
     end
 
     literate = get(config, "literate", true)
+
     if literate
-        if mtime(srcpath) > mtime(testpath) || mtime(testpath) == 0.0 || force
+        make_test = get(config, "test", true)
+        make_notebook = get(config, "notebook", true)
+
+        if make_test && mtime(srcpath) > mtime(testpath) || mtime(testpath) == 0.0 || force
             @warn "Updating tests for $filename."
             fn = Literate.script(srcpath, testpath; config = config, kwargs...)
             rm_if_empty(fn)
         else
             @warn "Skipping tests for $filename."
         end
-        if mtime(srcpath) > mtime(notebookfilepath) ||
+        if make_notebook && mtime(srcpath) > mtime(notebookfilepath) ||
            mtime(notebookfilepath) == 0.0 ||
            force
             @warn "Converting $filename to Jupyter Notebook."
