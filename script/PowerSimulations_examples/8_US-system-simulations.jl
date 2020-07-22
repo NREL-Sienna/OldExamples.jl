@@ -23,7 +23,7 @@ plotlyjs()
 # ### Optimization packages
 # You can use the cbc solver as in one of the other PowerSimulations.jl examples, but on
 # large problems it's useful to have a solver with better performance. I'll use the Xpress
-# solver, since I have a license, but others such as Gurobi or CPLEX work well too.
+# solver since I have a license, but others such as Gurobi or CPLEX work well too.
 using Xpress
 solver = optimizer_with_attributes(Xpress.Optimizer, "MIPRELSTOP" => 0.1, "OUTPUTLOG" => 1)
 
@@ -42,8 +42,8 @@ sys = System(joinpath(pkgpath, "US-System", "SIIP", "sys.json"))
 # above a voltage threshold.
 
 for line in get_components(Line, sys)
-    if (get_basevoltage(get_from(get_arc(line))) >= 230.0) &&
-       (get_basevoltage(get_to(get_arc(line))) >= 230.0)
+    if (get_base_voltage(get_from(get_arc(line))) >= 230.0) &&
+       (get_base_voltage(get_to(get_arc(line))) >= 230.0)
         #if get_area(get_from(get_arc(line))) != get_area(get_to(get_arc(line)))
         @info "Changing $(get_name(line)) to MonitoredLine"
         convert_component!(MonitoredLine, line, sys)
@@ -79,7 +79,7 @@ op_problem = OperationsProblem(
     sys;
     optimizer = solver,
     horizon = 24,
-    slack_variables = false,
+    balance_slack_variables = false,
     use_parameters = true,
 )
 
@@ -92,8 +92,10 @@ fuel_plot(res, sys, load = true)
 # In addition to defining the formulation template, sequential simulations require
 # definitions for how information flows between problems.
 sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"),)
-stages_definition =
-    Dict("UC" => Stage(GenericOpProblem, template, sys, solver; slack_variables = true))
+stages_definition = Dict(
+    "UC" =>
+        Stage(GenericOpProblem, template, sys, solver; balance_slack_variables = true),
+)
 order = Dict(1 => "UC")
 horizons = Dict("UC" => 24)
 intervals = Dict("UC" => (Hour(24), Consecutive()))

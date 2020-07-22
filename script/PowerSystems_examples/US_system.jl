@@ -62,7 +62,7 @@ initial_time = ZonedDateTime(DateTime("2016-01-01T00:00:00"), timezone)
 gen = DataFrame(CSV.File(joinpath(datadir, "plant.csv")))
 filter!(row -> row[:interconnect] == interconnect, gen)
 gencost = DataFrame(CSV.File(joinpath(datadir, "gencost.csv")))
-gen = innerjoin(gen, gencost, on = :plant_id, makeunique = true, validate=(false, false))
+gen = innerjoin(gen, gencost, on = :plant_id, makeunique = true, validate = (false, false))
 
 function make_pwl(gen::DataFrame, traunches = 2)
     output_pct_cols = ["output_percent_" * string(i) for i = 0:traunches]
@@ -141,8 +141,18 @@ CSV.write(joinpath(siip_data, "bus.csv"), bus)
 
 # We need branch names as strings
 branch = DataFrame(CSV.File(joinpath(datadir, "branch.csv")))
-branch = join(branch, DataFrames.rename!(bus[:,[:bus_id,:baseKV]],[:from_bus_id, :from_baseKV]), on = :from_bus_id, kind = :left)
-branch = join(branch, DataFrames.rename!(bus[:,[:bus_id,:baseKV]],[:to_bus_id, :to_baseKV]), on = :to_bus_id, kind = :left)
+branch = join(
+    branch,
+    DataFrames.rename!(bus[:, [:bus_id, :baseKV]], [:from_bus_id, :from_baseKV]),
+    on = :from_bus_id,
+    kind = :left,
+)
+branch = join(
+    branch,
+    DataFrames.rename!(bus[:, [:bus_id, :baseKV]], [:to_bus_id, :to_baseKV]),
+    on = :to_bus_id,
+    kind = :left,
+)
 !isnothing(interconnect) && filter!(row -> row[:interconnect] == interconnect, branch)
 branch.name = "branch" .* string.(branch.branch_id)
 branch.tr_ratio = branch.from_baseKV ./ branch.to_baseKV
@@ -165,8 +175,8 @@ for f in ts_csv
     @info "formatting $f.csv ..."
     csvpath = joinpath(siip_data, f * ".csv")
     csv = DataFrame(CSV.File(joinpath(datadir, f * ".csv")))
-    (category, name_prefix, label) = f == "demand" ? ("Area", "", "get_maxactivepower") :
-        ("Generator", "gen", "get_rating")
+    (category, name_prefix, label) = f == "demand" ? ("Area", "", "get_max_active_power") :
+        ("Generator", "gen", "get_max_active_power")
     if !(:DateTime in names(csv))
         DataFrames.rename!(
             csv,
@@ -239,7 +249,7 @@ rawsys = PowerSystems.PowerSystemTableData(
 # The `forecast_resolution` kwarg filters to only include forecasts with a matching resolution.
 
 @info "creating System"
-sys = System(rawsys; config_path = joinpath(config_dir, "new_us_system_validation.json"));
+sys = System(rawsys; config_path = joinpath(config_dir, "us_system_validation.json"));
 sys
 
 # This all took reasonably long, so we can save our `System` using the serialization

@@ -15,7 +15,7 @@ problem = OperationsProblem(
     sys,
     horizon = 4,
     optimizer = solver,
-    balance_slack_variables = true
+    balance_slack_variables = true,
 )
 
 solve!(problem)

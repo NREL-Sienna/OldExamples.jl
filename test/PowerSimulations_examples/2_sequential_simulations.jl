@@ -26,7 +26,13 @@ template_ed = template_economic_dispatch(devices = devices)
 
 stages_definition = Dict(
     "UC" => Stage(GenericOpProblem, template_uc, sys, solver),
-    "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver, balance_slack_variables = true),
+    "ED" => Stage(
+        GenericOpProblem,
+        template_ed,
+        sys_RT,
+        solver,
+        balance_slack_variables = true,
+    ),
 )
 
 feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
@@ -50,7 +56,7 @@ DA_RT_sequence = SimulationSequence(
     ini_cond_chronology = InterStageChronology(),
     feedforward_chronologies = feedforward_chronologies,
     feedforward = feedforward,
-    )
+)
 
 sim = Simulation(
     name = "rts-test",

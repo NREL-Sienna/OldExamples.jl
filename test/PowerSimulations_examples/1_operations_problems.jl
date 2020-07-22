@@ -25,7 +25,7 @@ rawsys = PowerSystems.PowerSystemTableData(
 
 sys = System(rawsys; forecast_resolution = Dates.Hour(1));
 
-branches = Dict{Symbol, DeviceModel}(
+branches = Dict{Symbol,DeviceModel}(
     :L => DeviceModel(Line, StaticLine),
     :T => DeviceModel(Transformer2W, StaticTransformer),
     :TT => DeviceModel(TapTransformer, StaticTransformer),

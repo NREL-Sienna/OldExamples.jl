@@ -72,6 +72,7 @@ feedforward = Dict(
     ),
 )
 
+cache = Dict("UC" => [TimeStatusChange(ThermalStandard, PSI.ON)])
 
 order = Dict(1 => "UC", 2 => "ED")
 horizons = Dict("UC" => 24, "ED" => 12)
@@ -85,6 +86,7 @@ DA_RT_sequence = SimulationSequence(
     ini_cond_chronology = InterStageChronology(),
     feedforward_chronologies = feedforward_chronologies,
     feedforward = feedforward,
+    #cache = cache,
 )
 
 file_path = tempdir()
