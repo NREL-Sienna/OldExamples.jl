@@ -10,8 +10,8 @@
                 "name": "fixed",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "warn"
             },
@@ -40,8 +40,8 @@
                 "name": "startup",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "warn"
             },
@@ -49,8 +49,46 @@
                 "name": "shutdn",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "MultiStartCost",
+        "fields": [
+            {
+                "name": "variable",
+                "data_type": "VariableCost"
+            },
+            {
+                "name": "no_load",
+                "data_type": "Float64"
+            },
+            {
+                "name": "fixed",
+                "data_type": "Float64"
+            },
+            {
+                "name": "startup",
+                "data_type": "NamedTuple{(:hot, :warm, :cold), NTuple{3, Float64}}"
+            },
+            {
+                "name": "shutdn",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "warn"
             },
@@ -72,11 +110,15 @@
                 "data_type": "String"
             },
             {
-                "name": "maxactivepower",
+                "name": "peak_active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "maxreactivepower",
+                "name": "peak_reactive_power",
+                "data_type": "Float64"
+            },
+            {
+                "name": "load_response",
                 "data_type": "Float64"
             },
             {
@@ -97,11 +139,11 @@
                 "data_type": "String"
             },
             {
-                "name": "maxactivepower",
+                "name": "peak_active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "maxreactivepower",
+                "name": "peak_reactive_power",
                 "data_type": "Float64"
             },
             {
@@ -133,27 +175,27 @@
                 "name": "angle",
                 "data_type": "Union{Nothing, Float64}",
                 "valid_range": {
-                    "max": 2.356,
-                    "min": -2.356
+                    "min": -1.571,
+                    "max": 1.571
                 },
                 "validation_action": "error"
             },
             {
-                "name": "voltage",
+                "name": "magnitude",
                 "data_type": "Union{Nothing, Float64}",
-                "valid_range": "voltagelimits",
+                "valid_range": "voltage_limits",
                 "validation_action": "warn"
             },
             {
-                "name": "voltagelimits",
+                "name": "voltage_limits",
                 "data_type": "Union{Nothing, Min_Max}"
             },
             {
-                "name": "basevoltage",
+                "name": "base_voltage",
                 "data_type": "Union{Nothing, Float64}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -204,11 +246,11 @@
                 "data_type": "Bool"
             },
             {
-                "name": "activepower_flow",
+                "name": "active_power_flow",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower_flow",
+                "name": "reactive_power_flow",
                 "data_type": "Float64"
             },
             {
@@ -219,8 +261,8 @@
                 "name": "r",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": 0
+                    "min": 0,
+                    "max": 4
                 },
                 "validation_action": "error"
             },
@@ -228,8 +270,8 @@
                 "name": "x",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": 0
+                    "min": 0,
+                    "max": 4
                 },
                 "validation_action": "error"
             },
@@ -237,8 +279,8 @@
                 "name": "b",
                 "data_type": "NamedTuple{(:from, :to), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": 100,
-                    "min": 0
+                    "min": 0,
+                    "max": 100
                 },
                 "validation_action": "error"
             },
@@ -247,11 +289,11 @@
                 "data_type": "Float64"
             },
             {
-                "name": "anglelimits",
+                "name": "angle_limits",
                 "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": 1.571,
-                    "min": -1.571
+                    "min": -1.571,
+                    "max": 1.571
                 },
                 "validation_action": "error"
             },
@@ -285,11 +327,11 @@
                 "data_type": "Bool"
             },
             {
-                "name": "activepower_flow",
+                "name": "active_power_flow",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower_flow",
+                "name": "reactive_power_flow",
                 "data_type": "Float64"
             },
             {
@@ -300,8 +342,8 @@
                 "name": "r",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": 0
+                    "min": 0,
+                    "max": 4
                 },
                 "validation_action": "error"
             },
@@ -309,8 +351,8 @@
                 "name": "x",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": 0
+                    "min": 0,
+                    "max": 4
                 },
                 "validation_action": "error"
             },
@@ -318,13 +360,13 @@
                 "name": "b",
                 "data_type": "NamedTuple{(:from, :to), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": 2,
-                    "min": 0
+                    "min": 0,
+                    "max": 2
                 },
                 "validation_action": "error"
             },
             {
-                "name": "flowlimits",
+                "name": "flow_limits",
                 "data_type": "NamedTuple{(:from_to, :to_from), Tuple{Float64, Float64}}"
             },
             {
@@ -332,11 +374,11 @@
                 "data_type": "Float64"
             },
             {
-                "name": "anglelimits",
-                "data_type": "Min_Max",
+                "name": "angle_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": 1.571,
-                    "min": -1.571
+                    "min": -1.571,
+                    "max": 1.571
                 },
                 "validation_action": "error"
             },
@@ -370,11 +412,11 @@
                 "data_type": "Bool"
             },
             {
-                "name": "activepower_flow",
+                "name": "active_power_flow",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower_flow",
+                "name": "reactive_power_flow",
                 "data_type": "Float64"
             },
             {
@@ -385,8 +427,8 @@
                 "name": "r",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": 0
+                    "min": 0,
+                    "max": 4
                 },
                 "validation_action": "error"
             },
@@ -394,17 +436,17 @@
                 "name": "x",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": -2
+                    "min": -2,
+                    "max": 4
                 },
                 "validation_action": "error"
             },
             {
-                "name": "primaryshunt",
+                "name": "primary_shunt",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 2,
-                    "min": 0
+                    "min": 0,
+                    "max": 2
                 },
                 "validation_action": "error"
             },
@@ -412,8 +454,8 @@
                 "name": "tap",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 2,
-                    "min": 0
+                    "min": 0,
+                    "max": 2
                 },
                 "validation_action": "error"
             },
@@ -421,8 +463,8 @@
                 "name": "\u03b1",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 1.571,
-                    "min": -1.571
+                    "min": -1.571,
+                    "max": 1.571
                 },
                 "validation_action": "warn"
             },
@@ -430,8 +472,8 @@
                 "name": "rate",
                 "data_type": "Union{Nothing, Float64}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -465,11 +507,11 @@
                 "data_type": "Bool"
             },
             {
-                "name": "activepower_flow",
+                "name": "active_power_flow",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower_flow",
+                "name": "reactive_power_flow",
                 "data_type": "Float64"
             },
             {
@@ -480,8 +522,8 @@
                 "name": "r",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 2,
-                    "min": -2
+                    "min": -2,
+                    "max": 2
                 },
                 "validation_action": "error"
             },
@@ -489,17 +531,17 @@
                 "name": "x",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": -2
+                    "min": -2,
+                    "max": 4
                 },
-                "validation_action": "warn"
+                "validation_action": "error"
             },
             {
-                "name": "primaryshunt",
+                "name": "primary_shunt",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 2,
-                    "min": 0
+                    "min": 0,
+                    "max": 2
                 },
                 "validation_action": "error"
             },
@@ -507,8 +549,8 @@
                 "name": "tap",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -516,8 +558,8 @@
                 "name": "rate",
                 "data_type": "Union{Nothing, Float64}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -551,11 +593,11 @@
                 "data_type": "Bool"
             },
             {
-                "name": "activepower_flow",
+                "name": "active_power_flow",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower_flow",
+                "name": "reactive_power_flow",
                 "data_type": "Float64"
             },
             {
@@ -566,8 +608,8 @@
                 "name": "r",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": -2
+                    "min": -2,
+                    "max": 4
                 },
                 "validation_action": "error"
             },
@@ -575,17 +617,17 @@
                 "name": "x",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 4,
-                    "min": -2
+                    "min": -2,
+                    "max": 4
                 },
-                "validation_action": "warn"
+                "validation_action": "error"
             },
             {
-                "name": "primaryshunt",
+                "name": "primary_shunt",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 2,
-                    "min": 0
+                    "min": 0,
+                    "max": 2
                 },
                 "validation_action": "error"
             },
@@ -593,8 +635,8 @@
                 "name": "rate",
                 "data_type": "Union{Nothing, Float64}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -628,7 +670,7 @@
                 "data_type": "Bool"
             },
             {
-                "name": "activepower_flow",
+                "name": "active_power_flow",
                 "data_type": "Float64"
             },
             {
@@ -636,20 +678,20 @@
                 "data_type": "Arc"
             },
             {
-                "name": "activepowerlimits_from",
-                "data_type": "Min_Max"
+                "name": "active_power_limits_from",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
-                "name": "activepowerlimits_to",
-                "data_type": "Min_Max"
+                "name": "active_power_limits_to",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
-                "name": "reactivepowerlimits_from",
-                "data_type": "Min_Max"
+                "name": "reactive_power_limits_from",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
-                "name": "reactivepowerlimits_to",
-                "data_type": "Min_Max"
+                "name": "reactive_power_limits_to",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
                 "name": "loss",
@@ -685,7 +727,7 @@
                 "data_type": "Bool"
             },
             {
-                "name": "activepower_flow",
+                "name": "active_power_flow",
                 "data_type": "Float64"
             },
             {
@@ -693,8 +735,8 @@
                 "data_type": "Arc"
             },
             {
-                "name": "rectifier_taplimits",
-                "data_type": "Min_Max"
+                "name": "rectifier_tap_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
                 "name": "rectifier_xrc",
@@ -702,11 +744,11 @@
             },
             {
                 "name": "rectifier_firing_angle",
-                "data_type": "Min_Max"
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
-                "name": "inverter_taplimits",
-                "data_type": "Min_Max"
+                "name": "inverter_tap_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
                 "name": "inverter_xrc",
@@ -714,7 +756,7 @@
             },
             {
                 "name": "inverter_firing_angle",
-                "data_type": "Min_Max"
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
                 "name": "services",
@@ -754,28 +796,41 @@
                 "data_type": "LoadModels.LoadModel"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64"
             },
             {
-                "name": "maxactivepower",
+                "name": "max_active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "maxreactivepower",
+                "name": "max_reactive_power",
                 "data_type": "Float64"
             },
             {
-                "name": "op_cost",
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "operation_cost",
                 "data_type": "TwoPartCost"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -848,24 +903,37 @@
                 "data_type": "Union{Nothing, LoadModels.LoadModel}"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64"
             },
             {
-                "name": "maxactivepower",
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "max_active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "maxreactivepower",
+                "name": "max_reactive_power",
                 "data_type": "Float64"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -897,65 +965,74 @@
                 "data_type": "Bus"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64",
-                "valid_range": "reactivepowerlimits",
+                "valid_range": "reactive_power_limits",
                 "validation_action": "warn"
             },
             {
                 "name": "rating",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "primemover",
+                "name": "prime_mover",
                 "data_type": "PrimeMovers.PrimeMover"
             },
             {
-                "name": "activepowerlimits",
-                "data_type": "Min_Max"
+                "name": "active_power_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
-                "name": "reactivepowerlimits",
+                "name": "reactive_power_limits",
                 "data_type": "Union{Nothing, Min_Max}",
                 "validation_action": "warn"
             },
             {
-                "name": "ramplimits",
+                "name": "ramp_limits",
                 "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "timelimits",
+                "name": "time_limits",
                 "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "op_cost",
+                "name": "operation_cost",
                 "data_type": "TwoPartCost"
+            },
+            {
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
             },
             {
                 "name": "storage_capacity",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -963,8 +1040,8 @@
                 "name": "inflow",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -972,14 +1049,18 @@
                 "name": "initial_storage",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -1011,58 +1092,71 @@
                 "data_type": "Bus"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64",
-                "valid_range": "reactivepowerlimits",
+                "valid_range": "reactive_power_limits",
                 "validation_action": "warn"
             },
             {
                 "name": "rating",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "primemover",
+                "name": "prime_mover",
                 "data_type": "PrimeMovers.PrimeMover"
             },
             {
-                "name": "activepowerlimits",
-                "data_type": "Min_Max"
+                "name": "active_power_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
-                "name": "reactivepowerlimits",
-                "data_type": "Union{Nothing, Min_Max}",
+                "name": "reactive_power_limits",
+                "data_type": "Union{Nothing, NamedTuple{(:min, :max), Tuple{Float64, Float64}}}",
                 "validation_action": "warn"
             },
             {
-                "name": "ramplimits",
+                "name": "ramp_limits",
                 "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "timelimits",
+                "name": "time_limits",
                 "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
+            },
+            {
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -1094,46 +1188,59 @@
                 "data_type": "Bus"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64"
             },
             {
                 "name": "rating",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "primemover",
+                "name": "prime_mover",
                 "data_type": "PrimeMovers.PrimeMover"
             },
             {
-                "name": "reactivepowerlimits",
+                "name": "reactive_power_limits",
                 "data_type": "Union{Nothing, Min_Max}"
             },
             {
-                "name": "powerfactor",
+                "name": "power_factor",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 1,
-                    "min": 0
+                    "min": 0,
+                    "max": 1
                 },
                 "validation_action": "error"
             },
             {
-                "name": "op_cost",
+                "name": "operation_cost",
                 "data_type": "TwoPartCost"
+            },
+            {
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -1165,38 +1272,51 @@
                 "data_type": "Bus"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64"
             },
             {
                 "name": "rating",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "primemover",
+                "name": "prime_mover",
                 "data_type": "PrimeMovers.PrimeMover"
             },
             {
-                "name": "powerfactor",
+                "name": "power_factor",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 1,
-                    "min": 0
+                    "min": 0,
+                    "max": 1
                 },
                 "validation_action": "error"
+            },
+            {
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -1232,28 +1352,28 @@
                 "data_type": "Bus"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64",
-                "valid_range": "activepowerlimits",
+                "valid_range": "active_power_limits",
                 "validation_action": "warn"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64",
-                "valid_range": "reactivepowerlimits",
+                "valid_range": "reactive_power_limits",
                 "validation_action": "warn"
             },
             {
                 "name": "rating",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "primemover",
+                "name": "prime_mover",
                 "data_type": "PrimeMovers.PrimeMover"
             },
             {
@@ -1261,51 +1381,194 @@
                 "data_type": "ThermalFuels.ThermalFuel"
             },
             {
-                "name": "activepowerlimits",
-                "data_type": "Min_Max"
+                "name": "active_power_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
             },
             {
-                "name": "reactivepowerlimits",
+                "name": "reactive_power_limits",
                 "data_type": "Union{Nothing, Min_Max}"
             },
             {
-                "name": "ramplimits",
+                "name": "ramp_limits",
                 "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "timelimits",
+                "name": "time_limits",
                 "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "op_cost",
+                "name": "operation_cost",
                 "data_type": "ThreePartCost"
+            },
+            {
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
             },
             {
-                "name": "participation_factor",
+                "name": "time_at_status",
+                "data_type": "Float64"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "ThermalMultiStart",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "status",
+                "data_type": "Bool"
+            },
+            {
+                "name": "bus",
+                "data_type": "Bus"
+            },
+            {
+                "name": "active_power",
+                "data_type": "Float64",
+                "valid_range": "active_power_limits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "reactive_power",
+                "data_type": "Float64",
+                "valid_range": "reactive_power_limits",
+                "validation_action": "warn"
+            },
+            {
+                "name": "rating",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": 1.0,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
+                "name": "prime_mover",
+                "data_type": "PrimeMovers.PrimeMover"
+            },
+            {
+                "name": "fuel",
+                "data_type": "ThermalFuels.ThermalFuel"
+            },
+            {
+                "name": "active_power_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}"
+            },
+            {
+                "name": "reactive_power_limits",
+                "data_type": "Union{Nothing, Min_Max}"
+            },
+            {
+                "name": "ramp_limits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "power_trajectory",
+                "data_type": "Union{Nothing, NamedTuple{(:startup, :shutdown), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "time_limits",
+                "data_type": "Union{Nothing, NamedTuple{(:up, :down), Tuple{Float64, Float64}}}",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "start_time_limits",
+                "data_type": "Union{Nothing, NamedTuple{(:hot, :warm, :cold), Tuple{Float64, Float64, Float64}}}"
+            },
+            {
+                "name": "start_types",
+                "data_type": "Int",
+                "valid_range": {
+                    "min": 1,
+                    "max": 3
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "operation_cost",
+                "data_type": "MultiStartCost"
+            },
+            {
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
+            },
+            {
+                "name": "services",
+                "data_type": "Vector{Service}"
+            },
+            {
                 "name": "time_at_status",
                 "data_type": "Float64"
+            },
+            {
+                "name": "must_run",
+                "data_type": "Bool"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -1337,24 +1600,24 @@
                 "data_type": "Bus"
             },
             {
-                "name": "primemover",
+                "name": "prime_mover",
                 "data_type": "PrimeMovers.PrimeMover"
             },
             {
-                "name": "energy",
+                "name": "initial_energy",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "capacity",
-                "data_type": "Min_Max",
+                "name": "state_of_charge_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -1363,24 +1626,24 @@
                 "data_type": "Float64"
             },
             {
-                "name": "activepower",
+                "name": "active_power",
                 "data_type": "Float64"
             },
             {
-                "name": "inputactivepowerlimits",
-                "data_type": "Min_Max",
+                "name": "input_active_power_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
-                "name": "outputactivepowerlimits",
-                "data_type": "Min_Max",
+                "name": "output_active_power_limits",
+                "data_type": "NamedTuple{(:min, :max), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -1388,24 +1651,37 @@
                 "name": "efficiency",
                 "data_type": "NamedTuple{(:in, :out), Tuple{Float64, Float64}}",
                 "valid_range": {
-                    "max": 1,
-                    "min": 0
+                    "min": 0,
+                    "max": 1
                 },
                 "validation_action": "warn"
             },
             {
-                "name": "reactivepower",
+                "name": "reactive_power",
                 "data_type": "Float64",
-                "valid_range": "reactivepowerlimits",
+                "valid_range": "reactive_power_limits",
                 "validation_action": "warn"
             },
             {
-                "name": "reactivepowerlimits",
+                "name": "reactive_power_limits",
                 "data_type": "Union{Nothing, Min_Max}"
+            },
+            {
+                "name": "base_power",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "warn"
             },
             {
                 "name": "services",
                 "data_type": "Vector{Service}"
+            },
+            {
+                "name": "dynamic_injector",
+                "data_type": "Union{Nothing, DynamicInjection}"
             },
             {
                 "name": "ext",
@@ -1429,11 +1705,15 @@
                 "data_type": "String"
             },
             {
-                "name": "timeframe",
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "time_frame",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -1441,14 +1721,52 @@
                 "name": "requirement",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
             {
                 "name": "ext",
                 "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "ReserveDemandCurve",
+        "fields": [
+            {
+                "name": "name",
+                "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "time_frame",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                },
+                "validation_action": "error"
+            },
+            {
+                "name": "operation_cost",
+                "data_type": "TwoPartCost"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "forecasts",
+                "data_type": "InfrastructureSystems.Forecasts"
             },
             {
                 "name": "internal",
@@ -1464,11 +1782,15 @@
                 "data_type": "String"
             },
             {
-                "name": "timeframe",
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
+                "name": "time_frame",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 },
                 "validation_action": "error"
             },
@@ -1498,6 +1820,10 @@
                 "data_type": "String"
             },
             {
+                "name": "available",
+                "data_type": "Bool"
+            },
+            {
                 "name": "bias",
                 "data_type": "Float64"
             },
@@ -1522,6 +1848,10 @@
                 "data_type": "Union{Nothing, Area}"
             },
             {
+                "name": "initial_ace",
+                "data_type": "Float64"
+            },
+            {
                 "name": "ext",
                 "data_type": "Dict{String, Any}"
             },
@@ -1537,6 +1867,10 @@
             {
                 "name": "name",
                 "data_type": "String"
+            },
+            {
+                "name": "available",
+                "data_type": "Bool"
             },
             {
                 "name": "requirement",
@@ -1560,11 +1894,19 @@
         "struct_name": "AVRFixed",
         "fields": [
             {
-                "name": "Emf",
+                "name": "Vf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -1578,6 +1920,10 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
+            },
+            {
+                "name": "states_types",
+                "data_type": "Vector{StateTypes.StateType}"
             },
             {
                 "name": "internal",
@@ -1592,8 +1938,16 @@
                 "name": "Kv",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -1607,6 +1961,10 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
+            },
+            {
+                "name": "states_types",
+                "data_type": "Vector{StateTypes.StateType}"
             },
             {
                 "name": "internal",
@@ -1621,88 +1979,96 @@
                 "name": "Ka",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Ke",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Kf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Ta",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Te",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tr",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Vr_max",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Vr_min",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Ae",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Be",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -1716,6 +2082,10 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
+            },
+            {
+                "name": "states_types",
+                "data_type": "Vector{StateTypes.StateType}"
             },
             {
                 "name": "internal",
@@ -1730,88 +2100,580 @@
                 "name": "K0",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T1",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T2",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T3",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T4",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Te",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tr",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Vr_max",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Vr_min",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Ae",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Be",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "states_types",
+                "data_type": "Vector{StateTypes.StateType}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "AC1A",
+        "fields": [
+            {
+                "name": "Tr",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tb",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ka",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ta",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Va_lim",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Te",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "Kf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "Kc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Kd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ke",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "E_sat",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Se",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Vr_lim",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "saturation_coeffs",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "states_types",
+                "data_type": "Vector{StateTypes.StateType}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "ModifiedAC1A",
+        "fields": [
+            {
+                "name": "Tr",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tb",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ka",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ta",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Vr_lim",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Te",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "Kf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "Kc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Kd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ke",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "E_sat",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Se",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "saturation_coeffs",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "states_types",
+                "data_type": "Vector{StateTypes.StateType}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "ST1A",
+        "fields": [
+            {
+                "name": "UEL_flags",
+                "data_type": "Int64",
+                "valid_range": {
+                    "min": 1,
+                    "max": 3
+                }
+            },
+            {
+                "name": "PSS_flags",
+                "data_type": "Int64",
+                "valid_range": {
+                    "min": 1,
+                    "max": 2
+                }
+            },
+            {
+                "name": "Tr",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Vi_lim",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Tc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tb",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tc1",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tb1",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ka",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Ta",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Va_lim",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Vr_lim",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "Kc",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Kf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tf",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "K_lr",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "I_lr",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "states_types",
+                "data_type": "Vector{StateTypes.StateType}"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "BaseMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "eq_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -1833,39 +2695,196 @@
         ]
     },
     {
-        "struct_name": "BaseMachine",
+        "struct_name": "RoundRotorMachine",
         "fields": [
             {
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Td0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Td0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tq0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tq0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
-                "name": "eq_p",
+                "name": "Xq_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
-                "name": "MVABase",
+                "name": "Xd_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
+            },
+            {
+                "name": "Xl",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Se",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "SalientPoleMachine",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Td0_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Td0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Tq0_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xd",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xq",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xd_p",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xd_pp",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Xl",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Se",
+                "data_type": "Tuple{Float64, Float64}"
             },
             {
                 "name": "ext",
@@ -1892,96 +2911,88 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
-            },
-            {
-                "name": "MVABase",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2009,104 +3020,96 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "R_f",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "R_1d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "R_1q",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_q",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_ad",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_aq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_f1d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_ff",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_1d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_1q",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
-            },
-            {
-                "name": "MVABase",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2142,104 +3145,96 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T_AA",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
-            },
-            {
-                "name": "MVABase",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2275,64 +3270,56 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
-            },
-            {
-                "name": "MVABase",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2360,96 +3347,88 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
-            },
-            {
-                "name": "MVABase",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2477,104 +3456,96 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "R_f",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "R_1d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "R_1q",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_q",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_ad",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_aq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_f1d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_ff",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_1d",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "L_1q",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
-            },
-            {
-                "name": "MVABase",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2610,104 +3581,96 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xd_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Xq_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Td0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tq0_pp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T_AA",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
-            },
-            {
-                "name": "MVABase",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2743,8 +3706,8 @@
                 "name": "V_pss",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2772,16 +3735,16 @@
                 "name": "K_\u03c9",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "K_p",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2809,16 +3772,16 @@
                 "name": "H",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -2846,144 +3809,144 @@
                 "name": "H",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "H_hp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "H_ip",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "H_lp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "H_ex",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_hp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_ip",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_lp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_ex",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_12",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_23",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_34",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "D_45",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "K_hp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "K_ip",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "K_lp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "K_ex",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3011,8 +3974,105 @@
                 "name": "efficiency",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "P_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "ext",
+                "data_type": "Dict{String, Any}"
+            },
+            {
+                "name": "states",
+                "data_type": "Vector{Symbol}"
+            },
+            {
+                "name": "n_states",
+                "data_type": "Int64"
+            },
+            {
+                "name": "internal",
+                "data_type": "InfrastructureSystemsInternal"
+            }
+        ]
+    },
+    {
+        "struct_name": "GasTG",
+        "fields": [
+            {
+                "name": "R",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "T1",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "T2",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "T3",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": "eps()",
+                    "max": null
+                }
+            },
+            {
+                "name": "AT",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Kt",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "V_lim",
+                "data_type": "Tuple{Float64, Float64}"
+            },
+            {
+                "name": "D_turb",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "Load_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3040,64 +4100,72 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Ts",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "Tc",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T3",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T4",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T5",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "P_min",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "P_max",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "P_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3125,40 +4193,48 @@
                 "name": "R",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T1",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "T2",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "\u03c4_min",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "\u03c4_max",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "P_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3183,19 +4259,19 @@
         "struct_name": "AverageConverter",
         "fields": [
             {
-                "name": "v_rated",
+                "name": "rated_voltage",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
-                "name": "s_rated",
+                "name": "rated_current",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3209,10 +4285,6 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
-            },
-            {
-                "name": "internal",
-                "data_type": "InfrastructureSystemsInternal"
             }
         ]
     },
@@ -3223,8 +4295,8 @@
                 "name": "voltage",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3252,40 +4324,40 @@
                 "name": "lf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "rf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "cf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "lg",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "rg",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3299,10 +4371,6 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
-            },
-            {
-                "name": "internal",
-                "data_type": "InfrastructureSystemsInternal"
             }
         ]
     },
@@ -3313,24 +4381,24 @@
                 "name": "lf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "rf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "cf",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3344,10 +4412,6 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
-            },
-            {
-                "name": "internal",
-                "data_type": "InfrastructureSystemsInternal"
             }
         ]
     },
@@ -3358,24 +4422,24 @@
                 "name": "\u03c9_lp",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kp_pll",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "ki_pll",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3389,10 +4453,6 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
-            },
-            {
-                "name": "internal",
-                "data_type": "InfrastructureSystemsInternal"
             }
         ]
     },
@@ -3403,32 +4463,32 @@
                 "name": "Ta",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kd",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "k\u03c9",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
-                "name": "\u03c9b",
+                "name": "P_ref",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3442,10 +4502,6 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
-            },
-            {
-                "name": "internal",
-                "data_type": "InfrastructureSystemsInternal"
             }
         ]
     },
@@ -3456,16 +4512,24 @@
                 "name": "kq",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "\u03c9f",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "V_ref",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3479,10 +4543,6 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
-            },
-            {
-                "name": "internal",
-                "data_type": "InfrastructureSystemsInternal"
             }
         ]
     },
@@ -3493,80 +4553,80 @@
                 "name": "kpv",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kiv",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kffv",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "rv",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "lv",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kpc",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kic",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kffi",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "\u03c9ad",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "kad",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
@@ -3580,10 +4640,6 @@
             {
                 "name": "n_states",
                 "data_type": "Int64"
-            },
-            {
-                "name": "internal",
-                "data_type": "InfrastructureSystemsInternal"
             }
         ]
     },
@@ -3603,28 +4659,40 @@
                 "data_type": "Bus"
             },
             {
-                "name": "V_R",
-                "data_type": "Float64",
-                "valid_range": {
-                    "max": null,
-                    "min": 0
-                }
+                "name": "active_power",
+                "data_type": "Float64"
             },
             {
-                "name": "V_I",
+                "name": "reactive_power",
+                "data_type": "Float64"
+            },
+            {
+                "name": "R_th",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
             },
             {
                 "name": "X_th",
                 "data_type": "Float64",
                 "valid_range": {
-                    "max": null,
-                    "min": 0
+                    "min": 0,
+                    "max": null
                 }
+            },
+            {
+                "name": "internal_voltage",
+                "data_type": "Float64",
+                "valid_range": {
+                    "min": 0,
+                    "max": null
+                }
+            },
+            {
+                "name": "internal_angle",
+                "data_type": "Float64"
             },
             {
                 "name": "services",
