@@ -44,9 +44,9 @@ generator:
 - {custom_name: heat_rate_avg_0, name: heat_rate_avg_0}
 - {custom_name: heat_rate_incr_1, name: heat_rate_incr_1}
 - {custom_name: heat_rate_incr_2, name: heat_rate_incr_2}
-- {custom_name: output_pct_0, name: output_point_0, unit_system: device_base}
-- {custom_name: output_pct_1, name: output_point_1, unit_system: device_base}
-- {custom_name: output_pct_2, name: output_point_2, unit_system: device_base}
+- {custom_name: output_point_0, name: output_point_0, unit_system: device_base}
+- {custom_name: output_point_1, name: output_point_1, unit_system: device_base}
+- {custom_name: output_point_2, name: output_point_2, unit_system: device_base}
 - {custom_name: mBase, name: base_mva}
 - {custom_name: shutdown, name: shutdown_cost}
 - {custom_name: startup, name: startup_cost}

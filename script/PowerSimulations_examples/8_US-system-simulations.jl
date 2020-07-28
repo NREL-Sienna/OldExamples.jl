@@ -55,10 +55,8 @@ end
 # flow limited formulation to `MonitoredLine`s.
 branches = Dict{Symbol,DeviceModel}(
     :L => DeviceModel(Line, StaticLineUnbounded),
-    :T => DeviceModel(Transformer2W, StaticTransformer),
     :TT => DeviceModel(TapTransformer, StaticTransformer),
     :ML => DeviceModel(MonitoredLine, StaticLine),
-    :DC => DeviceModel(HVDCLine, HVDCDispatch),
 )
 
 devices = Dict(
@@ -66,8 +64,6 @@ devices = Dict(
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
     :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
-    :RenFx => DeviceModel(RenewableFix, FixedOutput),
-    :ILoads => DeviceModel(InterruptibleLoad, InterruptiblePowerLoad),
 )
 
 template = OperationsProblemTemplate(DCPPowerModel, devices, branches, Dict());
@@ -129,4 +125,4 @@ sim_results = execute!(sim)
 # ### Load and analyze results
 uc_results = load_simulation_results(sim_results, "UC");
 
-fuel_plot(uc_results, sys, load = true)
+fuel_plot(uc_results, sys, load = true, curtailment = true)

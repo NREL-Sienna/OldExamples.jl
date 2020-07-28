@@ -65,7 +65,7 @@ gencost = DataFrame(CSV.File(joinpath(datadir, "gencost.csv")))
 gen = innerjoin(gen, gencost, on = :plant_id, makeunique = true, validate = (false, false))
 
 function make_pwl(gen::DataFrame, traunches = 2)
-    output_pct_cols = ["output_percent_" * string(i) for i = 0:traunches]
+    output_pct_cols = ["output_point_" * string(i) for i = 0:traunches]
     hr_cols = ["heat_rate_incr_" * string(i) for i = 1:traunches]
     pushfirst!(hr_cols, "heat_rate_avg_0")
     pwl = DataFrame(repeat([Float64], 6), Symbol.(vcat(output_pct_cols, hr_cols)))
