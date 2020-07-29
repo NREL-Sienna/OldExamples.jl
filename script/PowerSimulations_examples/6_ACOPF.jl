@@ -34,7 +34,7 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 ed_template = template_economic_dispatch(network = ACPPowerModel)
 
 # for some reason the HydroROR is currently incompatible with ACOPF. Bug report has been filed.
-delete!(ed_template.devices, :HydroROR)
+ed_template.devices[:HydroROR]= DeviceModel(HydroDispatch, HydroDispatchRunOfRiver)
 
 # Now we can build a 4-hour economic dispatch / ACOPF problem with the RTS data.
 problem = OperationsProblem(

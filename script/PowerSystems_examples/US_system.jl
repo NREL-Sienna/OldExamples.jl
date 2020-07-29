@@ -125,7 +125,6 @@ idx_zero_pmin = [
 gen[idx_zero_pmin, :Pmin] = gen[idx_zero_pmin, :Pmax] .* 0.05
 
 gen[:, :name] = "gen" .* string.(gen.plant_id)
-gen[:, :basemva] .= 100.0 # the csv parser doesn't handle machine basebower calculations properly yet
 CSV.write(joinpath(siip_data, "gen.csv"), gen)
 
 # Let's also merge the zone.csv with the bus.csv and identify bus types

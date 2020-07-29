@@ -7,7 +7,7 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 
 ed_template = template_economic_dispatch(network = ACPPowerModel)
 
-delete!(ed_template.devices, :HydroROR)
+ed_template.devices[:HydroROR]= DeviceModel(HydroDispatch, HydroDispatchRunOfRiver)
 
 problem = OperationsProblem(
     EconomicDispatchProblem,
