@@ -28,7 +28,7 @@ using JuMP
 using Cbc #solver
 
 # ### Data
-# This data depends upon the [RTS-GMLC](https://github.com/grid-mod/rts-gmlc) dataset. Let's
+# This data depends upon the [RTS-GMLC](https://github.com/gridmod/rts-gmlc) dataset. Let's
 # download and extract the data.
 
 rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
