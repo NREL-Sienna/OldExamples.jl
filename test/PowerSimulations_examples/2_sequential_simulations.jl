@@ -4,13 +4,12 @@ include(joinpath(pkgpath, "test", "PowerSimulations_examples", "1_operations_pro
 
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
-get_component(VariableReserve{ReserveUp}, sys, "Flex_Up").requirement = 5.0
-
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
+    :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
+    :Hydro => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_uc = template_unit_commitment(devices = devices)
@@ -19,14 +18,21 @@ devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatch),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
+    :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
+    :Hydro => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_ed = template_economic_dispatch(devices = devices)
 
 stages_definition = Dict(
     "UC" => Stage(GenericOpProblem, template_uc, sys, solver),
-    "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver),
+    "ED" => Stage(
+        GenericOpProblem,
+        template_ed,
+        sys_RT,
+        solver,
+        balance_slack_variables = true,
+    ),
 )
 
 feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
@@ -37,8 +43,6 @@ feedforward = Dict(
         affected_variables = [PSI.ACTIVE_POWER],
     ),
 )
-
-cache = Dict(("UC",) => TimeStatusChange(ThermalStandard, PSI.ON))
 
 order = Dict(1 => "UC", 2 => "ED")
 horizons = Dict("UC" => 24, "ED" => 12)
@@ -52,7 +56,6 @@ DA_RT_sequence = SimulationSequence(
     ini_cond_chronology = InterStageChronology(),
     feedforward_chronologies = feedforward_chronologies,
     feedforward = feedforward,
-    cache = cache,
 )
 
 sim = Simulation(

@@ -20,7 +20,8 @@ using PowerGraphics
 # `include(joinpath(pkgpath, "test", "PowerSimulations_examples", "2_sequential_simulations.jl"))`).
 # You can load the results into memory with:
 simulation_folder = joinpath(pkgpath, "RTS-GMLC-master", "rts-test")
-simulation_folder = joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
+simulation_folder =
+    joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
 res = load_simulation_results(simulation_folder, "UC")
 
 # ## Plots
@@ -42,14 +43,7 @@ bar_plot(res)
 # Similarly, we can create a stack plot for any combination of variable to see the time
 # series values. *Note: the `load = true` kwarg populates a line for the total system load.*
 
-stack_plot(
-    res,
-    [
-        Symbol("P__ThermalStandard"),
-        Symbol("P__RenewableDispatch"),
-    ],
-    load = true
-)
+stack_plot(res, [Symbol("P__ThermalStandard"), Symbol("P__RenewableDispatch")], load = true)
 
 # Or, we can create a series of stack plots for every variable in the dictionary:
 # ```julia
@@ -60,8 +54,12 @@ stack_plot(
 # to make aggregated fuel plots, we need to load the `System` as well. The simulation routine
 # automatically serializes the `System` data into the results directory, so we just need to
 # load it.
-uc_sys =
-    System(joinpath(simulation_folder, "models_json", "stage_UC_model", "Stage1_sys_data.json"))
+uc_sys = System(joinpath(
+    simulation_folder,
+    "models_json",
+    "stage_UC_model",
+    "Stage1_sys_data.json",
+))
 
 # Now we can make a set of aggregated plots by fuel type.
 fuel_plot(res, uc_sys, load = true)

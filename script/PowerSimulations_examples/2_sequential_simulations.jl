@@ -23,11 +23,6 @@ include(joinpath(pkgpath, "test", "PowerSimulations_examples", "1_operations_pro
 
 sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
 
-# The RTS dataset has some large RE and load forecast errors that create infeasible
-# simulations. Until we enable formulations with slack variables, we need to increase the
-# amount of reserve held to handle the forecast error.
-get_component(VariableReserve{ReserveUp}, sys, "Flex_Up").requirement = 5.0
-
 # ## `OperationsProblemTemplate`s define `Stage`s
 # Sequential simulations in PowerSimulations are created by defining `OperationsProblems`
 # that represent `Stages`, and how information flows between executions of a `Stage` and
@@ -41,7 +36,8 @@ devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
+    :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
+    :Hydro => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_uc = template_unit_commitment(devices = devices)
@@ -51,7 +47,8 @@ devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalDispatch),
     :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
     :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
+    :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
+    :Hydro => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :RenFx => DeviceModel(RenewableFix, FixedOutput),
 )
 template_ed = template_economic_dispatch(devices = devices)
@@ -64,8 +61,17 @@ template_ed = template_economic_dispatch(devices = devices)
 
 stages_definition = Dict(
     "UC" => Stage(GenericOpProblem, template_uc, sys, solver),
-    "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver),
+    "ED" => Stage(
+        GenericOpProblem,
+        template_ed,
+        sys_RT,
+        solver,
+        balance_slack_variables = true,
+    ),
 )
+# Note that the "ED" stage has a `balance_slack_variables = true` argument. This adds slack
+# variables with a default penalty of 1e6 to the nodal energy balance constraint and helps
+# ensure feasibility with some performance impacts.
 
 # ### `SimulationSequence`
 # Similar to an `OperationsProblemTemplate`, the `SimulationSequence` provides a template of
@@ -104,15 +110,6 @@ feedforward = Dict(
     ),
 )
 
-# The `Cache` is simply a way to preserve needed information for later use. In the case of
-# a typical day-ahead - real-time market simulation, there are many economic dispatch executions
-# in between each unit-commitment execution. Rather than keeping the full set of results from
-# previous unit-commitment simulations in memory to be used in later executions, we can define
-# exactly which results will be needed and carry them through a cache in the economic dispatch
-# problems for later use.
-
-cache = Dict(("UC",) => TimeStatusChange(ThermalStandard, PSI.ON))
-
 # ### Sequencing
 # The stage problem length, look-ahead, and other details surrounding the temporal Sequencing
 # of stages are controlled using the `order`, `horizons`, and `intervals` arguments.
@@ -139,7 +136,6 @@ DA_RT_sequence = SimulationSequence(
     ini_cond_chronology = InterStageChronology(),
     feedforward_chronologies = feedforward_chronologies,
     feedforward = feedforward,
-    cache = cache,
 )
 
 # ## `Simulation`
