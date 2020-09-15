@@ -29,5 +29,6 @@ To try out any of the tutorials in the browser without downloading Julia, click 
   - [ACOPF Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/6_ACOPF.ipynb)
   - [Selective Line Enforcement Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/7_selective_network_constraints.ipynb)
   - [Simulations with large-scale U.S. systems](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/8_US-system-simulations.ipynb)
+  - [Simulations with TAMU test systems](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/9_TAMU_simulations.ipynb)
   - Plotting with [PowerGraphics.jl](github.com/NREL-SIIP/PowerGraphics.jl)
     - [Bar and Stack Plots](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/PowerSimulations_examples/4_bar_stack_plots.ipynb)
