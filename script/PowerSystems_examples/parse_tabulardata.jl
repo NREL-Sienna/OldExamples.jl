@@ -43,5 +43,7 @@ rawsys = PowerSystems.PowerSystemTableData(
 # forecasts, we also need to specify which forecasts we want to include in the `System`.
 # The `forecast_resolution` kwarg filters to only include forecasts with a matching resolution.
 
-sys = System(rawsys; forecast_resolution = Dates.Hour(1));
+sys = System(rawsys; time_series_resolution = Dates.Hour(1));
+horizon = 24 ;  interval = Dates.Hour(24)
+transform_single_time_series!(sys, horizon, interval);
 sys

@@ -13,7 +13,7 @@ base_dir = dirname(dirname(pathof(PowerSystems)));
 
 TAMU_DIR = joinpath(base_dir, "data", "ACTIVSg2000");
 sys = TamuSystem(TAMU_DIR)
-
+transform_single_time_series!(sys, horizon, interval);
 sim_folder = mkpath(joinpath(pkgpath, "TAMU-sim"))
 stages_definition = Dict(
     "UC" =>

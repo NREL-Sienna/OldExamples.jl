@@ -33,6 +33,8 @@ solver = optimizer_with_attributes(Xpress.Optimizer, "MIPRELSTOP" => 0.1, "OUTPU
 # be serialized in the json and H5 format, so we can efficiently deserialize it:
 
 sys = System(joinpath(pkgpath, "US-System", "SIIP", "sys.json"))
+horizon = 24;  interval = Dates.Hour(24);
+transform_single_time_series!(sys, horizon, interval);
 
 # ### Selecting flow limited lines
 # Since PowerSimulations will apply constraints by component type (e.g. Line), we need to
@@ -120,9 +122,9 @@ build!(
 )
 
 # ### Execute the simulation
-sim_results = execute!(sim)
+# sim_results = execute!(sim)
 
-# ### Load and analyze results
-uc_results = load_simulation_results(sim_results, "UC");
+# # ### Load and analyze results
+# uc_results = load_simulation_results(sim_results, "UC");
 
-fuel_plot(uc_results, sys, load = true, curtailment = true)
+# fuel_plot(uc_results, sys, load = true, curtailment = true)

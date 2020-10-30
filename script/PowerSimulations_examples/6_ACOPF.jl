@@ -33,8 +33,8 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 # For now, let's just choose a standard ACOPF formulation.
 ed_template = template_economic_dispatch(network = ACPPowerModel)
 
-# for some reason the HydroROR is currently incompatible with ACOPF. Bug report has been filed.
-ed_template.devices[:HydroROR]= DeviceModel(HydroDispatch, HydroDispatchRunOfRiver)
+# Currently  energy budget data isn't stored in the RTS-GMLC dataset. 
+ed_template.devices[:Hydro]= DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
 
 # Now we can build a 4-hour economic dispatch / ACOPF problem with the RTS data.
 problem = OperationsProblem(

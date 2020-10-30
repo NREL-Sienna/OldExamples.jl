@@ -2,7 +2,8 @@ using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 include(joinpath(pkgpath, "test", "PowerSimulations_examples", "1_operations_problems.jl"))
 
-sys_RT = System(rawsys; forecast_resolution = Dates.Minute(5))
+sys_RT = System(rawsys; time_series_resolution = Dates.Minute(5))
+transform_single_time_series!(sys_RT, 12, Hour(1))
 
 devices = Dict(
     :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),

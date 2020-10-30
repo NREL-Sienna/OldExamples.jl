@@ -61,7 +61,7 @@ print_struct(Bus)
 # *The following trees are made with [D3TypeTrees](https://github.com/claytonpbarrows/D3TypeTrees.jl),
 # nodes that represent Structs will show the Fields in the hoverover tooltip.*
 
-TypeTree(PowerSystemType)
+# TypeTree(PowerSystemType)
 
 # ### `Forecasts`
 # Every `Component` has a `_forecasts::InfrastructureSystems.Forecasts` field (even composite types).
@@ -97,14 +97,11 @@ nodes_5 = nodes5() # function to create 5-bus buses
 # ### Create a `System`
 
 sys = System(
+    100.0,
     nodes_5,
     vcat(thermal_generators5(nodes_5), renewable_generators5(nodes_5)),
     loads5(nodes_5),
     branches5(nodes_5),
-    nothing,
-    100.0,
-    nothing,
-    nothing,
 )
 
 # ### Accessing `System` Data
@@ -139,11 +136,8 @@ bus1 = get_component(Bus, sys, "nodeA")
 # First we need to add some forecasts to the `System`
 loads = collect(get_components(PowerLoad, sys))
 for (l, ts) in zip(loads, load_timeseries_DA[2])
-    add_forecast!(sys, l, Deterministic("activepower", ts))
+    add_time_series!(sys, l, Deterministic("activepower", Dict(TimeSeries.timestamp(load_timeseries_DA[2][1])[1] => ts)))
 end
-
-# Now that the system has some forecasts, we can see all of them:
-iterate_forecasts(sys) |> collect
 
 # If we want to access a specific forecast for a specific component, we need to specify:
 #  - Forecast type
@@ -154,8 +148,8 @@ iterate_forecasts(sys) |> collect
 # We can find the unique set of initial times of all the forecasts in the system:
 get_forecast_initial_times(sys)
 
-# Or for a specific component:
-@show initial_times = get_forecast_initial_times(Deterministic, loads[1]);
-
 # We can find the fields for which a component has a forecast:
-@show labels = get_forecast_labels(Deterministic, loads[1], initial_times[1])
+@show labels = IS.get_time_series_names(Deterministic, loads[1])
+
+# Or for a specific component:
+@show initial_times = IS.get_initial_timestamp(get_time_series(Deterministic, loads[1], labels[1]));

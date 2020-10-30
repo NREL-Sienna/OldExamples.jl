@@ -15,7 +15,9 @@ rawsys = PowerSystems.PowerSystemTableData(
     generator_mapping_file = joinpath(RTS_GMLC_DIR, "generator_mapping.yaml"),
 )
 
-sys = System(rawsys; forecast_resolution = Dates.Hour(1));
+sys = System(rawsys; time_series_resolution = Dates.Hour(1));
+horizon = 24 ;  interval = Dates.Hour(24)
+transform_single_time_series!(sys, horizon, interval);
 sys
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

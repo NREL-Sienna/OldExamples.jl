@@ -15,15 +15,15 @@ pm_data = PowerSystems.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_
 
 FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts", "7day")
 
-tsp_da = IS.read_time_series_metadata(joinpath(
+tsp_da = IS.read_time_series_file_metadata(joinpath(
     FORECASTS_DIR,
     "timeseries_pointers_da_7day.json",
 ))
-tsp_rt = IS.read_time_series_metadata(joinpath(
+tsp_rt = IS.read_time_series_file_metadata(joinpath(
     FORECASTS_DIR,
     "timeseries_pointers_rt_7day.json",
 ))
-tsp_agc = IS.read_time_series_metadata(joinpath(
+tsp_agc = IS.read_time_series_file_metadata(joinpath(
     FORECASTS_DIR,
     "timeseries_pointers_agc_7day.json",
 ))
@@ -40,13 +40,15 @@ for r in reserves
     add_service!(sys_DA, r, contributing_devices)
 end
 
-add_forecasts!(sys_DA, tsp_da)
+add_time_series!(sys_DA, tsp_da)
+transform_single_time_series!(sys_DA, 24, Hour(24))
 
 sys_RT = System(pm_data)
-add_forecasts!(sys_RT, tsp_rt)
+add_time_series!(sys_RT, tsp_rt)
+transform_single_time_series!(sys_RT, 12, Hour(1))
 
 sys_AGC = System(pm_data)
-add_forecasts!(sys_AGC, tsp_agc)
+add_time_series!(sys_AGC, tsp_agc)
 
 template_uc = template_unit_commitment()
 devices = Dict(

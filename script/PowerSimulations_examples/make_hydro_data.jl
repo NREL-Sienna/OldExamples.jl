@@ -25,6 +25,8 @@ c_sys5_hy_uc = System(
     ),
     time_series_in_memory = true,
 )
+transform_single_time_series!(c_sys5_hy_uc, 24, Hour(24))
+
 c_sys5_hy_ed = System(
     rawsys,
     timeseries_metadata_file = joinpath(
@@ -36,6 +38,8 @@ c_sys5_hy_ed = System(
     ),
     time_series_in_memory = true,
 )
+transform_single_time_series!(c_sys5_hy_ed, 12, Hour(1))
+
 c_sys5_hy_wk = System(rawsys, time_series_in_memory = true)
 
 
@@ -50,61 +54,66 @@ MultiDay = collect(
 
 
 for load in get_components(PowerLoad, c_sys5_hy_uc)
-    fc = get_forecast_values(
-        Deterministic,
-        load,
-        get_forecast_initial_times(c_sys5_hy_uc)[1],
-        "get_max_active_power",
-    )
-    fc_values = [mean(values(fc[Date.(timestamp(fc)).==t])) for t in MultiDay]
-
+    fc_values =Vector{Float64}()
+    for t in MultiDay
+        fc = get_time_series_array(
+            Deterministic,
+            load,
+            "max_active_power";
+            start_time = t,
+        )
+        push!(fc_values, mean(values(fc)))
+    end
     wk_fc = TimeArray(MultiDay, fc_values)
 
-    add_forecast!(
+    add_time_series!(
         c_sys5_hy_wk,
         get_component(PowerLoad, c_sys5_hy_wk, get_name(load)),
-        Deterministic("get_max_active_power", wk_fc),
+        SingleTimeSeries("max_active_power", wk_fc),
     )
 end
 
 for gen in get_components(HydroGen, c_sys5_hy_uc)
-    fc = get_forecast_values(
-        Deterministic,
-        gen,
-        get_forecast_initial_times(c_sys5_hy_uc)[1],
-        "get_max_active_power",
-    )
-    fc_values = []
-    for (ix, t) in enumerate(MultiDay)
-        push!(fc_values, mean(values(fc[Date.(timestamp(fc)).==t])))
+    fc_values =Vector{Float64}()
+    for t in MultiDay
+        fc = get_time_series_array(
+            Deterministic,
+            gen,
+            "max_active_power";
+            start_time = t,
+        )
+        push!(fc_values, mean(values(fc)))
     end
+
     wk_fc = TimeArray(MultiDay, fc_values)
 
-    add_forecast!(
+    add_time_series!(
         c_sys5_hy_wk,
         get_component(HydroGen, c_sys5_hy_wk, get_name(gen)),
-        Deterministic("get_max_active_power", wk_fc),
+        SingleTimeSeries("max_active_power", wk_fc),
     )
 end
 
 for gen in get_components(HydroEnergyReservoir, c_sys5_hy_uc)
-    for label in ["get_storage_capacity", "get_inflow"]
-        fc = get_forecast_values(
-            Deterministic,
-            gen,
-            get_forecast_initial_times(c_sys5_hy_uc)[1],
-            label,
-        )
-        fc_values = []
-        for (ix, t) in enumerate(MultiDay)
-            push!(fc_values, mean(values(fc[Date.(timestamp(fc)).==t])))
+    for label in ["storage_capacity", "inflow", "storage_target"]
+        fc_values = Vector{Float64}()
+        for t in MultiDay
+            fc = get_time_series_array(
+                Deterministic,
+                gen,
+                label;
+                start_time = get_forecast_initial_times(c_sys5_hy_uc)[1],
+            )
+            push!(fc_values, mean(values(fc)))
         end
+
         wk_fc = TimeArray(MultiDay, fc_values)
 
-        add_forecast!(
+        add_time_series!(
             c_sys5_hy_wk,
             get_component(HydroGen, c_sys5_hy_wk, get_name(gen)),
-            Deterministic(label, wk_fc),
+            SingleTimeSeries(label, wk_fc),
         )
     end
 end
+transform_single_time_series!(c_sys5_hy_wk, 2, Hour(48))

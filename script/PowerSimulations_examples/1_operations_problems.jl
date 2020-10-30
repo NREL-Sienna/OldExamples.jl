@@ -43,8 +43,7 @@ rawsys = PowerSystems.PowerSystemTableData(
     timeseries_metadata_file = joinpath(rts_siip_dir, "timeseries_pointers.json"),
     generator_mapping_file = joinpath(rts_siip_dir, "generator_mapping.yaml"),
 );
-
-sys = System(rawsys; forecast_resolution = Dates.Hour(1));
+sys = System(rawsys; time_series_resolution = Dates.Hour(1));
 
 # ## Define a problem specification with an `OpModelTemplate`
 # The `DeviceModel` constructor is to create an assignment between PowerSystems device types
@@ -111,9 +110,11 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # ### Build an `OperationsProblem`
 # The construction of an `OperationsProblem` essentially applies an `OperationsProblemTemplate`
 # to `System` data to create a JuMP model.
+horizon = 24 ;  interval = Dates.Hour(24)
+transform_single_time_series!(sys, horizon, interval)
 
 op_problem =
-    OperationsProblem(GenericOpProblem, template_uc, sys; optimizer = solver, horizon = 12)
+    OperationsProblem(GenericOpProblem, template_uc, sys; optimizer = solver, horizon = horizon)
 
 #nb # The principal component of the `OperationsProblem` is the JuMP model. For small problems,
 #nb # you can inspect it by simply printing it to the screen:

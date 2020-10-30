@@ -174,8 +174,8 @@ for f in ts_csv
     @info "formatting $f.csv ..."
     csvpath = joinpath(siip_data, f * ".csv")
     csv = DataFrame(CSV.File(joinpath(datadir, f * ".csv")))
-    (category, name_prefix, label) = f == "demand" ? ("Area", "", "get_max_active_power") :
-        ("Generator", "gen", "get_max_active_power")
+    (category, name_prefix, label) = f == "demand" ? ("Area", "", "max_active_power") :
+        ("Generator", "gen", "max_active_power")
     if !(:DateTime in names(csv))
         DataFrames.rename!(
             csv,
@@ -213,9 +213,14 @@ for f in ts_csv
                 Dict(
                     "simulation" => "DA",
                     "category" => category,
+                    "module"=> "InfrastructureSystems",
+                    "type"=> "SingleTimeSeries",
                     "component_name" => String(colname),
-                    "label" => label,
-                    "scaling_factor" => sf,
+                    "name" => label,
+                    "resolution" => 300,
+                    "scaling_factor_multiplier" =>  "get_max_active_power",
+                    "scaling_factor_multiplier_module" => "PowerSystems",
+                    "normalization_factor" => sf,
                     "data_file" => csvpath,
                 ),
             )
@@ -226,7 +231,7 @@ end
 
 timeseries_pointers = joinpath(siip_data, "timeseries_pointers.json")
 open(timeseries_pointers, "w") do io
-    PowerSystems.InfrastructureSystems.JSON2.write(io, timeseries)
+    PowerSystems.InfrastructureSystems.JSON3.write(io, timeseries)
 end
 
 # ### The tabular data format relies on a folder containing `*.csv` files and `.yaml` files

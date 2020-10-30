@@ -72,7 +72,7 @@ devices = Dict{Symbol,DeviceModel}(
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 2)
+op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 24)
 
 # Now we can see the resulting JuMP model:
 
@@ -87,15 +87,15 @@ op_problem.psi_container.JuMPmodel
 
 #-
 
-# Next, let's apply the `HydroDispatchReservoirFlow` formulation to the `HydroEnergyReservoir` generators.
+# Next, let's apply the `HydroDispatchReservoirBudget` formulation to the `HydroEnergyReservoir` generators.
 devices = Dict{Symbol,DeviceModel}(
-    :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirFlow),
+    :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirBudget),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 2)
+op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 24)
 
 # And, the resulting JuMP model:
 
@@ -110,7 +110,7 @@ devices = Dict{Symbol,DeviceModel}(
 
 template = PSI.OperationsProblemTemplate(CopperPlatePowerModel, devices, Dict(), Dict());
 
-op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 2)
+op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, horizon = 24)
 
 #-
 

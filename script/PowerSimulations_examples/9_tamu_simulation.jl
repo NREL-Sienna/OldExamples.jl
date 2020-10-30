@@ -33,6 +33,8 @@ base_dir = dirname(dirname(pathof(PowerSystems)));
 
 TAMU_DIR = joinpath(base_dir, "data", "ACTIVSg2000");
 sys = TamuSystem(TAMU_DIR)
+horizon = 24;  interval = Dates.Hour(24);
+transform_single_time_series!(sys, horizon, interval);
 
 # ## Run a PCM
 # note that the TAMU data doesn't contain startup and shutdown costs, or minimum up/down
