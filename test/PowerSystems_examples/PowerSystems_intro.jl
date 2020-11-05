@@ -7,8 +7,6 @@ using D3TypeTrees;
 
 print_struct(Bus)
 
-TypeTree(PowerSystemType)
-
 TypeTree(Forecast)
 
 print_struct(Deterministic)
@@ -20,14 +18,11 @@ include(joinpath(BASE_DIR, "test", "data_5bus_pu.jl")) #.jl file containing 5-bu
 nodes_5 = nodes5() # function to create 5-bus buses
 
 sys = System(
+    100.0,
     nodes_5,
     vcat(thermal_generators5(nodes_5), renewable_generators5(nodes_5)),
     loads5(nodes_5),
     branches5(nodes_5),
-    nothing,
-    100.0,
-    nothing,
-    nothing,
 )
 
 @show get_component(Bus, sys, "nodeA")
@@ -43,16 +38,14 @@ bus1 = get_component(Bus, sys, "nodeA")
 
 loads = collect(get_components(PowerLoad, sys))
 for (l, ts) in zip(loads, load_timeseries_DA[2])
-    add_forecast!(sys, l, Deterministic("activepower", ts))
+    add_time_series!(sys, l, Deterministic("activepower", Dict(TimeSeries.timestamp(load_timeseries_DA[2][1])[1] => ts)))
 end
-
-iterate_forecasts(sys) |> collect
 
 get_forecast_initial_times(sys)
 
-@show initial_times = get_forecast_initial_times(Deterministic, loads[1]);
+@show labels = IS.get_time_series_names(Deterministic, loads[1])
 
-@show labels = get_forecast_labels(Deterministic, loads[1], initial_times[1])
+@show initial_times = IS.get_initial_timestamp(get_time_series(Deterministic, loads[1], labels[1]));
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
