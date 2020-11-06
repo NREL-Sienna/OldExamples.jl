@@ -110,6 +110,7 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # ### Build an `OperationsProblem`
 # The construction of an `OperationsProblem` essentially applies an `OperationsProblemTemplate`
 # to `System` data to create a JuMP model.
+
 horizon = 24 ;  interval = Dates.Hour(24)
 transform_single_time_series!(sys, horizon, interval)
 
@@ -161,8 +162,6 @@ op_problem =
 #nb #
 #nb # The time stamps for each value in the time series used in the `OperationsProblem` is
 #nb # included separately from the variable value results.
-#
-#nb get_time_stamp(res)
 #
 # ## Plotting
 # Take a look at the examples in [the plotting folder.](../../notebook/PowerSimulations_examples/Plotting)
