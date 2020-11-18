@@ -1,5 +1,13 @@
+.github
+.vscode
+extra
 .ipynb*
 .DS_Store
 *.h5
 *.txt
 *.log
+RTS-GMLC-master
+TAMU-sim
+US-System
+texas_test
+Texas-sim
