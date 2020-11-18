@@ -75,4 +75,3 @@ uc_results = load_simulation_results(sim_results, "UC");
 ed_results = load_simulation_results(sim_results, "ED");
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

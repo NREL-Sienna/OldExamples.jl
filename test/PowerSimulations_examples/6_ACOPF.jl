@@ -7,7 +7,7 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 
 ed_template = template_economic_dispatch(network = ACPPowerModel)
 
-ed_template.devices[:Hydro]= DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
+ed_template.devices[:Hydro] = DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
 
 problem = OperationsProblem(
     EconomicDispatchProblem,
@@ -21,4 +21,3 @@ problem = OperationsProblem(
 solve!(problem)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

@@ -13,4 +13,3 @@ sys = System(PowerModelsData(joinpath(base_dir, "data", "psse_raw", "RTS-GMLC.RA
 sys
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

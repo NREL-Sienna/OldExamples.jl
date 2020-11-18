@@ -64,7 +64,7 @@ PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 #  - The `HydroDispatchRunOfRiver` formulation represents the the energy flowing out of
 # a reservoir. The model can choose to produce power with that energy or just let it spill by.
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :Hyd2 => DeviceModel(HydroDispatch, FixedOutput),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
@@ -88,7 +88,7 @@ op_problem.psi_container.JuMPmodel
 #-
 
 # Next, let's apply the `HydroDispatchReservoirBudget` formulation to the `HydroEnergyReservoir` generators.
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirBudget),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -103,7 +103,7 @@ op_problem.psi_container.JuMPmodel
 
 # Finally, let's apply the `HydroDispatchReservoirStorage` formulation to the `HydroEnergyReservoir` generators.
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );

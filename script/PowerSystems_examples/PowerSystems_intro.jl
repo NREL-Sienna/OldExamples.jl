@@ -136,7 +136,14 @@ bus1 = get_component(Bus, sys, "nodeA")
 # First we need to add some forecasts to the `System`
 loads = collect(get_components(PowerLoad, sys))
 for (l, ts) in zip(loads, load_timeseries_DA[2])
-    add_time_series!(sys, l, Deterministic("activepower", Dict(TimeSeries.timestamp(load_timeseries_DA[2][1])[1] => ts)))
+    add_time_series!(
+        sys,
+        l,
+        Deterministic(
+            "activepower",
+            Dict(TimeSeries.timestamp(load_timeseries_DA[2][1])[1] => ts),
+        ),
+    )
 end
 
 # If we want to access a specific forecast for a specific component, we need to specify:
@@ -152,4 +159,5 @@ get_forecast_initial_times(sys)
 @show labels = IS.get_time_series_names(Deterministic, loads[1])
 
 # Or for a specific component:
-@show initial_times = IS.get_initial_timestamp(get_time_series(Deterministic, loads[1], labels[1]));
+@show initial_times =
+    IS.get_initial_timestamp(get_time_series(Deterministic, loads[1], labels[1]));

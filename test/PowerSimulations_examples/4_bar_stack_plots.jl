@@ -28,4 +28,3 @@ uc_sys = System(joinpath(
 fuel_plot(res, uc_sys, load = true)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

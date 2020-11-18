@@ -24,7 +24,7 @@ rawsys = PowerSystems.PowerSystemTableData(
 );
 sys = System(rawsys; time_series_resolution = Dates.Hour(1));
 
-branches = Dict{Symbol,DeviceModel}(
+branches = Dict{Symbol, DeviceModel}(
     :L => DeviceModel(Line, StaticLine),
     :T => DeviceModel(Transformer2W, StaticTransformer),
     :TT => DeviceModel(TapTransformer, StaticTransformer),
@@ -49,11 +49,16 @@ template_uc = OperationsProblemTemplate(CopperPlatePowerModel, devices, branches
 
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
-horizon = 24 ;  interval = Dates.Hour(24)
+horizon = 24;
+interval = Dates.Hour(24);
 transform_single_time_series!(sys, horizon, interval)
 
-op_problem =
-    OperationsProblem(GenericOpProblem, template_uc, sys; optimizer = solver, horizon = horizon)
+op_problem = OperationsProblem(
+    GenericOpProblem,
+    template_uc,
+    sys;
+    optimizer = solver,
+    horizon = horizon,
+)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

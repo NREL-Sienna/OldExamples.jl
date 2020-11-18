@@ -42,26 +42,19 @@ transform_single_time_series!(c_sys5_hy_ed, 12, Hour(1))
 
 c_sys5_hy_wk = System(rawsys, time_series_in_memory = true)
 
-
 n = 3# number of days
 
 # And an hourly system with longer time scales
 MultiDay = collect(
     get_forecast_initial_times(c_sys5_hy_uc)[1]:Hour(24):(get_forecast_initial_times(
         c_sys5_hy_uc,
-    )[1]+Day(n)),
+    )[1] + Day(n)),
 );
 
-
 for load in get_components(PowerLoad, c_sys5_hy_uc)
-    fc_values =Vector{Float64}()
+    fc_values = Vector{Float64}()
     for t in MultiDay
-        fc = get_time_series_array(
-            Deterministic,
-            load,
-            "max_active_power";
-            start_time = t,
-        )
+        fc = get_time_series_array(Deterministic, load, "max_active_power"; start_time = t)
         push!(fc_values, mean(values(fc)))
     end
     wk_fc = TimeArray(MultiDay, fc_values)
@@ -73,14 +66,9 @@ for load in get_components(PowerLoad, c_sys5_hy_uc)
 end
 
 for gen in get_components(HydroGen, c_sys5_hy_uc)
-    fc_values =Vector{Float64}()
+    fc_values = Vector{Float64}()
     for t in MultiDay
-        fc = get_time_series_array(
-            Deterministic,
-            gen,
-            "max_active_power";
-            start_time = t,
-        )
+        fc = get_time_series_array(Deterministic, gen, "max_active_power"; start_time = t)
         push!(fc_values, mean(values(fc)))
     end
 

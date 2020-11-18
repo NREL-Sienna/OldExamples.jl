@@ -65,17 +65,17 @@ gencost = DataFrame(CSV.File(joinpath(datadir, "gencost.csv")))
 gen = innerjoin(gen, gencost, on = :plant_id, makeunique = true, validate = (false, false))
 
 function make_pwl(gen::DataFrame, traunches = 2)
-    output_pct_cols = ["output_point_" * string(i) for i = 0:traunches]
-    hr_cols = ["heat_rate_incr_" * string(i) for i = 1:traunches]
+    output_pct_cols = ["output_point_" * string(i) for i in 0:traunches]
+    hr_cols = ["heat_rate_incr_" * string(i) for i in 1:traunches]
     pushfirst!(hr_cols, "heat_rate_avg_0")
     pwl = DataFrame(repeat([Float64], 6), Symbol.(vcat(output_pct_cols, hr_cols)))
     for row in eachrow(gen)
         traunch_len = (1.0 - row.Pmin / row.Pmax) / traunches
-        pct = [row.Pmin / row.Pmax + i * traunch_len for i = 0:traunches]
+        pct = [row.Pmin / row.Pmax + i * traunch_len for i in 0:traunches]
         #c(pct) = pct * row.Pmax * (row.GenIOB + row.GenIOC^2 + row.GenIOD^3)
         c(pct) = pct * row.Pmax * (row.c1 + row.c2^2) + row.c0 #this formats the "c" columns to hack the heat rate parser in PSY
         hr = [c(pct[1])]
-        [push!(hr, c(pct[i+1]) - hr[i]) for i = 1:traunches]
+        [push!(hr, c(pct[i + 1]) - hr[i]) for i in 1:traunches]
         push!(pwl, vcat(pct, hr))
     end
     return hcat(gen, pwl)
@@ -93,27 +93,27 @@ gen[:, :min_up_time] .= 0.0
 gen[:, :min_down_time] .= 0.0
 gen[:, :ramp_30] .= gen[:, :ramp_30] ./ 30.0 # we need ramp rates in MW/min
 [
-    gen[gen.type.=="wind", col] .= ["Wind", 0.0, 0.0][ix]
+    gen[gen.type .== "wind", col] .= ["Wind", 0.0, 0.0][ix]
     for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type.=="solar", col] .= ["PV", 0.0, 0.0][ix]
+    gen[gen.type .== "solar", col] .= ["PV", 0.0, 0.0][ix]
     for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type.=="hydro", col] .= ["HY", 0.0, 0.0][ix]
+    gen[gen.type .== "hydro", col] .= ["HY", 0.0, 0.0][ix]
     for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type.=="ng", col] .= [4.5, 8][ix]
+    gen[gen.type .== "ng", col] .= [4.5, 8][ix]
     for (ix, col) in enumerate([:min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type.=="coal", col] .= [24, 48][ix]
+    gen[gen.type .== "coal", col] .= [24, 48][ix]
     for (ix, col) in enumerate([:min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type.=="nuclear", col] .= [72, 72][ix]
+    gen[gen.type .== "nuclear", col] .= [72, 72][ix]
     for (ix, col) in enumerate([:min_up_time, :min_down_time])
 ]
 
@@ -174,7 +174,8 @@ for f in ts_csv
     @info "formatting $f.csv ..."
     csvpath = joinpath(siip_data, f * ".csv")
     csv = DataFrame(CSV.File(joinpath(datadir, f * ".csv")))
-    (category, name_prefix, label) = f == "demand" ? ("Area", "", "max_active_power") :
+    (category, name_prefix, label) =
+        f == "demand" ? ("Area", "", "max_active_power") :
         ("Generator", "gen", "max_active_power")
     if !(:DateTime in names(csv))
         DataFrames.rename!(
@@ -196,13 +197,13 @@ for f in ts_csv
         colname = id
         if f == "demand"
             if Symbol(id) in Symbol.(zone.zone_id)
-                colname = Symbol(zone[Symbol.(zone.zone_id).==Symbol(id), :zone_name][1])
+                colname = Symbol(zone[Symbol.(zone.zone_id) .== Symbol(id), :zone_name][1])
                 DataFrames.rename!(csv, (id => colname))
             end
-            sf = sum(bus[string.(bus.zone_id).==id, :Pd])
+            sf = sum(bus[string.(bus.zone_id) .== id, :Pd])
         else
             if Symbol(id) in plant_ids
-                colname = Symbol(gen[Symbol.(gen.plant_id).==Symbol(id), :name][1])
+                colname = Symbol(gen[Symbol.(gen.plant_id) .== Symbol(id), :name][1])
                 DataFrames.rename!(csv, (id => colname))
             end
             sf = maximum(csv[:, colname]) == 0.0 ? 1.0 : "Max"
@@ -213,12 +214,12 @@ for f in ts_csv
                 Dict(
                     "simulation" => "DA",
                     "category" => category,
-                    "module"=> "InfrastructureSystems",
-                    "type"=> "SingleTimeSeries",
+                    "module" => "InfrastructureSystems",
+                    "type" => "SingleTimeSeries",
                     "component_name" => String(colname),
                     "name" => label,
                     "resolution" => 300,
-                    "scaling_factor_multiplier" =>  "get_max_active_power",
+                    "scaling_factor_multiplier" => "get_max_active_power",
                     "scaling_factor_multiplier_module" => "PowerSystems",
                     "normalization_factor" => sf,
                     "data_file" => csvpath,

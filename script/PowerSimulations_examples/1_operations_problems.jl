@@ -58,7 +58,7 @@ sys = System(rawsys; time_series_resolution = Dates.Hour(1));
 # Here is an example of relatively standard branch formulations. Other formulations allow
 # for selective enforcement of transmission limits and greater control on transformer settings.
 
-branches = Dict{Symbol,DeviceModel}(
+branches = Dict{Symbol, DeviceModel}(
     :L => DeviceModel(Line, StaticLine),
     :T => DeviceModel(Transformer2W, StaticTransformer),
     :TT => DeviceModel(TapTransformer, StaticTransformer),
@@ -111,11 +111,17 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # The construction of an `OperationsProblem` essentially applies an `OperationsProblemTemplate`
 # to `System` data to create a JuMP model.
 
-horizon = 24 ;  interval = Dates.Hour(24)
+horizon = 24;
+interval = Dates.Hour(24);
 transform_single_time_series!(sys, horizon, interval)
 
-op_problem =
-    OperationsProblem(GenericOpProblem, template_uc, sys; optimizer = solver, horizon = horizon)
+op_problem = OperationsProblem(
+    GenericOpProblem,
+    template_uc,
+    sys;
+    optimizer = solver,
+    horizon = horizon,
+)
 
 #nb # The principal component of the `OperationsProblem` is the JuMP model. For small problems,
 #nb # you can inspect it by simply printing it to the screen:

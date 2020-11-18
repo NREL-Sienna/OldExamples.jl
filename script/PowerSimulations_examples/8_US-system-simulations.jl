@@ -33,7 +33,8 @@ solver = optimizer_with_attributes(Xpress.Optimizer, "MIPRELSTOP" => 0.1, "OUTPU
 # be serialized in the json and H5 format, so we can efficiently deserialize it:
 
 sys = System(joinpath(pkgpath, "US-System", "SIIP", "sys.json"))
-horizon = 24;  interval = Dates.Hour(24);
+horizon = 24;
+interval = Dates.Hour(24);
 transform_single_time_series!(sys, horizon, interval);
 
 # ### Selecting flow limited lines
@@ -55,7 +56,7 @@ end
 # ### Create a `template`
 # Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
 # flow limited formulation to `MonitoredLine`s.
-branches = Dict{Symbol,DeviceModel}(
+branches = Dict{Symbol, DeviceModel}(
     :L => DeviceModel(Line, StaticLineUnbounded),
     :TT => DeviceModel(TapTransformer, StaticTransformer),
     :ML => DeviceModel(MonitoredLine, StaticLine),

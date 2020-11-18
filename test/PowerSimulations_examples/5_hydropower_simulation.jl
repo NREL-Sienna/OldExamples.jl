@@ -16,7 +16,7 @@ include(joinpath(pkgpath, "script", "PowerSimulations_examples", "make_hydro_dat
 
 PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver),
     :Hyd2 => DeviceModel(HydroDispatch, FixedOutput),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
@@ -28,7 +28,7 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, hor
 
 op_problem.psi_container.JuMPmodel
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirBudget),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -39,7 +39,7 @@ op_problem = PSI.OperationsProblem(GenericOpProblem, template, c_sys5_hy_uc, hor
 
 op_problem.psi_container.JuMPmodel
 
-devices = Dict{Symbol,DeviceModel}(
+devices = Dict{Symbol, DeviceModel}(
     :Hyd1 => DeviceModel(HydroEnergyReservoir, HydroDispatchReservoirStorage),
     :Load => DeviceModel(PowerLoad, StaticPowerLoad),
 );
@@ -183,4 +183,3 @@ sim.stages["DA"].internal.psi_container.JuMPmodel
 sim.stages["ED"].internal.psi_container.JuMPmodel
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

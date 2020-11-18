@@ -13,7 +13,8 @@ using Xpress
 solver = optimizer_with_attributes(Xpress.Optimizer, "MIPRELSTOP" => 0.1, "OUTPUTLOG" => 1)
 
 sys = System(joinpath(pkgpath, "US-System", "SIIP", "sys.json"))
-horizon = 24;  interval = Dates.Hour(24);
+horizon = 24;
+interval = Dates.Hour(24);
 transform_single_time_series!(sys, horizon, interval);
 
 for line in get_components(Line, sys)
@@ -25,7 +26,7 @@ for line in get_components(Line, sys)
     end
 end
 
-branches = Dict{Symbol,DeviceModel}(
+branches = Dict{Symbol, DeviceModel}(
     :L => DeviceModel(Line, StaticLineUnbounded),
     :TT => DeviceModel(TapTransformer, StaticTransformer),
     :ML => DeviceModel(MonitoredLine, StaticLine),
@@ -86,4 +87,3 @@ build!(
 )
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

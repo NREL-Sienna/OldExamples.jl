@@ -34,7 +34,7 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 ed_template = template_economic_dispatch(network = ACPPowerModel)
 
 # Currently  energy budget data isn't stored in the RTS-GMLC dataset. 
-ed_template.devices[:Hydro]= DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
+ed_template.devices[:Hydro] = DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
 
 # Now we can build a 4-hour economic dispatch / ACOPF problem with the RTS data.
 problem = OperationsProblem(

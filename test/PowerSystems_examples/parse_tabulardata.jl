@@ -16,9 +16,9 @@ rawsys = PowerSystems.PowerSystemTableData(
 )
 
 sys = System(rawsys; time_series_resolution = Dates.Hour(1));
-horizon = 24 ;  interval = Dates.Hour(24)
+horizon = 24;
+interval = Dates.Hour(24);
 transform_single_time_series!(sys, horizon, interval);
 sys
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

@@ -59,7 +59,6 @@ function download(
     branch::String = "master",
     force::Bool = false,
 )
-
     if Sys.iswindows()
         DATA_URL = "$repo/archive/$branch.zip"
     else
@@ -140,7 +139,6 @@ Checks if the file has been modified since the last Weave and updates the notebo
 * `force` = foce weave irrespective of file changes
 """
 function literate_file(folder, file; force = false, kwargs...)
-
     filename = splitext(file)[1]
     srcpath = joinpath(repo_directory, "script", folder, file)
     testpath = joinpath(repo_directory, "test", folder)

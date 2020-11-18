@@ -7,7 +7,7 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 
 ed_template = template_economic_dispatch(network = StandardPTDFModel)
 
-ed_template.devices[:Hydro]= DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
+ed_template.devices[:Hydro] = DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
 
 PTDF_matrix = PTDF(sys)
 
@@ -19,8 +19,7 @@ problem = OperationsProblem(
     optimizer = solver,
     balance_slack_variables = true,
     constraint_duals = [:CopperPlateBalance, :network_flow],
-    PTDF = PTDF_matrix
-
+    PTDF = PTDF_matrix,
 )
 
 res = solve!(problem)
@@ -38,4 +37,3 @@ congestion_lmp = DataFrame(congestion_lmp)
 LMP = λ .- congestion_lmp
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

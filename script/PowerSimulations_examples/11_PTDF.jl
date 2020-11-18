@@ -33,7 +33,7 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 ed_template = template_economic_dispatch(network = StandardPTDFModel)
 
 # Currently  energy budget data isn't stored in the RTS-GMLC dataset. 
-ed_template.devices[:Hydro]= DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
+ed_template.devices[:Hydro] = DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
 
 # Calculate the PTDF matrix.
 PTDF_matrix = PTDF(sys)
@@ -49,8 +49,7 @@ problem = OperationsProblem(
     optimizer = solver,
     balance_slack_variables = true,
     constraint_duals = [:CopperPlateBalance, :network_flow],
-    PTDF = PTDF_matrix
-
+    PTDF = PTDF_matrix,
 )
 
 # And solve the problem and collect the results
@@ -74,4 +73,3 @@ congestion_lmp = DataFrame(congestion_lmp)
 
 # Finally here we get the LMP for each node in a lossless DC-OPF using the PTDF formulation.
 LMP = λ .- congestion_lmp
-
