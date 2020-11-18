@@ -38,7 +38,7 @@ Pkg.status()
 using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;
-
+IS = PowerSystems.IS
 # ## Types in PowerSystems
 # PowerSystems.jl provides a type hierarchy for specifying power system data. Data that
 # describes infrastructure components is held in `struct`s. For example, a `Bus` is defined

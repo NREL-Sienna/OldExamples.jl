@@ -65,7 +65,6 @@ for load in get_components(PowerLoad, c_sys5_hy_uc)
         push!(fc_values, mean(values(fc)))
     end
     wk_fc = TimeArray(MultiDay, fc_values)
-
     add_time_series!(
         c_sys5_hy_wk,
         get_component(PowerLoad, c_sys5_hy_wk, get_name(load)),

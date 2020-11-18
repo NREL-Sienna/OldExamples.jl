@@ -250,7 +250,7 @@ rawsys = PowerSystems.PowerSystemTableData(
 # Next, we'll create a `System` from the `rawsys` data. Since a `System` is predicated on a
 # forecast resolution and the `rawsys` data includes both 5-minute and 1-hour resolution
 # forecasts, we also need to specify which forecasts we want to include in the `System`.
-# The `forecast_resolution` kwarg filters to only include forecasts with a matching resolution.
+# The `time_series_resolution` kwarg filters to only include forecasts with a matching resolution.
 
 @info "creating System"
 sys = System(rawsys; config_path = joinpath(config_dir, "us_system_validation.json"));

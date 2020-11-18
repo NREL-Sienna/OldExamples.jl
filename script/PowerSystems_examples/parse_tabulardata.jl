@@ -41,7 +41,7 @@ rawsys = PowerSystems.PowerSystemTableData(
 # Next, we'll create a `System` from the `rawsys` data. Since a `System` is predicated on a
 # forecast resolution and the `rawsys` data includes both 5-minute and 1-hour resolution
 # forecasts, we also need to specify which forecasts we want to include in the `System`.
-# The `forecast_resolution` kwarg filters to only include forecasts with a matching resolution.
+# The `time_series_resolution` kwarg filters to only include forecasts with a matching resolution.
 
 sys = System(rawsys; time_series_resolution = Dates.Hour(1));
 horizon = 24 ;  interval = Dates.Hour(24)

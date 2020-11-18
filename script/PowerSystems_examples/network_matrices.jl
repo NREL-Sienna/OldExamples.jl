@@ -30,7 +30,7 @@ lodf = LODF(sys)
 # (::Int64) while the branch axes are indexed by branch name (::String). You can access
 # specific elements of the matrices as follows:
 
-ptdf["5", 3]
+ptdf["bus3-bus4-i_6", 3]
 
 # Additionally, PowerSystems provides accessors to the network matrices that take `Componets`
 # as arguments so that you can pass references to the components themselves rather than the
@@ -40,4 +40,4 @@ ybus[buses[1], buses[2]]
 
 # If you would instead like to index by bus name, something like the following should work:
 busname2num = get_components(Bus, sys) |> (c -> Dict(zip(get_name.(c), get_number.(c))))
-ptdf["5", busname2num["bus3"]]
+ptdf["bus3-bus4-i_6", busname2num["bus3"]]

@@ -1,14 +1,14 @@
 # # Operations problems with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl)
 
-# **Originally Contributed by**: Clayton Barrows
+# **Originally Contributed by**: Sourabh Dalvi
 
 # ## Introduction
 
-# PowerSimulations.jl supports the construction and solution of optimal power system
-# scheduling problems (Operations Problems). Operations problems form the fundamental
-# building blocks for [sequential simulations](../../notebook/PowerSimulations_examples/sequential_simulations.ipynb).
-# This example shows how to specify and customize a the mathematics that will be applied to the data with
-# an `OperationsProblemTemplate`, build and execute an `OperationsProblem`, and access the results.
+# PowerSimulations.jl supports the construction of Operations problems in power system
+# with three part cost bids for each time step. MarketBidCost allows the user to pass a 
+# time-series of variable cost for energy and ancillary services jointly.
+# This example shows how to build a Operations problem with MarketBidCost and how to add 
+# the time-series data to the devices. 
 
 # ## Dependencies
 using SIIPExamples

@@ -16,6 +16,6 @@ include_string(
     m,
     """rawsys = PSY.PowerSystemTableData(RTS_GMLC_DIR,100.0, joinpath(RTS_GMLC_DIR,"user_descriptors.yaml"))""",
 )
-include_string(m, "sys = System(rawsys; forecast_resolution = Dates.Hour(1))")
+include_string(m, "sys = System(rawsys; time_series_resolution = Dates.Hour(1))")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

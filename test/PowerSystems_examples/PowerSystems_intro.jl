@@ -4,6 +4,7 @@ Pkg.status()
 using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;
+IS = PowerSystems.IS
 
 print_struct(Bus)
 
