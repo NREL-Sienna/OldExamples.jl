@@ -158,7 +158,7 @@ function literate_file(folder, file; force = false, kwargs...)
         make_test = get(config, "test", true)
         make_notebook = get(config, "notebook", true)
 
-        if make_test && mtime(srcpath) > mtime(testpath) || mtime(testpath) == 0.0 || force
+        if make_test && (mtime(srcpath) > mtime(testpath) || mtime(testpath) == 0.0 || force)
             @warn "Updating tests for $filename."
             fn = Literate.script(srcpath, testpath; config = config, kwargs...)
             rm_if_empty(fn)
