@@ -14,6 +14,9 @@
 # bus 1 and bus 3. This case also consider a dynamic line model for connection between buses
 # 2 and 3. We will compare it against a system without dynamic lines.
 
+# In addition, note that `PowerSimulationsDynamics` will convert ConstantPower loads to RLC
+# loads for transient simulations.
+
 # It is recommended to check `Tutorial 1: OMIB` first, since that includes more details and
 # explanations on all definitions and functions.
 
