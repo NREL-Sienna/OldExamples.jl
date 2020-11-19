@@ -1,4 +1,4 @@
-# # Selective flow constraints with [PowerSimulations.jl](https://github.com/NREL/PowerSimulations.jl)
+# # Simulations with TAMU data and [PowerSimulations.jl](https://github.com/NREL/PowerSimulations.jl)
 
 # **Originally Contributed by**: Clayton Barrows
 

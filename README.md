@@ -32,7 +32,7 @@ To get started running the Jupyter notebooks included in this repository, you ca
 
 - Introduction
   - [An Introduction to Julia](https://nbviewer.jupyter.org/github/nrel-siip/SIIPExamples.jl/blob/master/notebook/1_introduction/an_introduction_to_julia.ipynb)
-- [PowerSystems.jl](gihtub.com/NREL-SIIP/PowerSystems.jl) SIIPExamples.jl
+- [PowerSystems.jl](https://gihtub.com/NREL-SIIP/PowerSystems.jl) SIIPExamples.jl
   - [PowerSystems.jl Intro](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/PowerSystems_intro.ipynb)
   - Data Parsing:
     - [MATPOWER](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/parse_matpower.ipynb)
@@ -42,16 +42,16 @@ To get started running the Jupyter notebooks included in this repository, you ca
   - [Serialize data](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/serialize_data.ipynb)
   - [Network Matrices](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/network_matrices.ipynb)
   - [Large-scale U.S. dataset assembly](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/US_system.ipynb)
-- [PowerSimulations.jl](github.com/NREL-SIIP/PowerSimulations.jl) Examples
+- [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/02_sequential_simulations.ipynb)
   - [Hydro Modeling](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/05_hydropower_simulation.ipynb)
-  - [Sequential DA-RT 5bus Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/03_PowerSimulations_examples/03_5_bus_mkt_simulation.ipynb)
+  - [Sequential DA-RT 5bus Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/03_5_bus_mkt_simulation.ipynb)
   - [ACOPF Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/06_ACOPF.ipynb)
   - [Selective Line Enforcement Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/07_selective_network_constraints.ipynb)
   - [Simulations with large-scale U.S. systems](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/08_US-system-simulations.ipynb)
-  - [Simulations with TAMU test systems](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/09_TAMU_simulations.ipynb)
+  - [Simulations with TAMU test systems](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/09_tamu_simulation.ipynb)
   - [Simulating Time Varying Market Bids](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/10_market_bid_cost.ipynb)
-  - [PTDF Network and LMP Calculations](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/11.ipynb)
-  - Plotting with [PowerGraphics.jl](github.com/NREL-SIIP/PowerGraphics.jl)
+  - [PTDF Network and LMP Calculations](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/11_PTDF.ipynb)
+  - Plotting with [PowerGraphics.jl](https://github.com/NREL-SIIP/PowerGraphics.jl)
     - [Bar and Stack Plots](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/04_bar_stack_plots.ipynb)
