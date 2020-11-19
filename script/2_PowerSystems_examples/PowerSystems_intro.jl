@@ -8,7 +8,9 @@
 
 # This notebook is intended to show a power system data specification framework that exploits the
 # capabilities of Julia to improve performance and allow modelers to develop modular software
-# to create problems with different complexities and enable large scale analysis.
+# to create problems with different complexities and enable large scale analysis. The
+# [PowerSystems documentation](https://nrel-siip.github.io/PowerSystems.jl/stable/) is also
+# an excellent resource.
 #
 # ### Objective
 # PowerSystems.jl provides a type specification for bulk power system data.
@@ -28,9 +30,11 @@
 #
 # PowerSystems.jl relies on a framework for data handling established in
 # [InfrastructureSystems.jl](https://github.com/NREL-SIIP/InfrastructureSystems.jl).
-# Users of PowerSystems.jl should not need to interact directly with InfrastructureSystems.jl
+# Users of PowerSystems.jl should not need to interact directly with InfrastructureSystems.jl.
+# However, it's worth recognizing that InfrastructureSystems provides much of the back end
+# code for managing and accessing data, especially time series data.
 #
-# The examples in this notebook depend upon Julia 1.2 and a specific set of package releases
+# The examples in this notebook depend upon Julia 1.5 and a specific set of package releases
 # as defined in the `Manifest.toml`.
 using Pkg
 Pkg.status()
@@ -39,6 +43,7 @@ using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;
 IS = PowerSystems.IS
+
 # ## Types in PowerSystems
 # PowerSystems.jl provides a type hierarchy for specifying power system data. Data that
 # describes infrastructure components is held in `struct`s. For example, a `Bus` is defined
@@ -50,40 +55,54 @@ print_struct(Bus)
 # ### Type Hierarchy
 # PowerSystems is intended to organize data containers by the behavior of the devices that
 # the data represents. To that end, a type hierarchy has been defined with several levels of
-# abstract types starting with `PowerSystemType`:
+# abstract types starting with `InfrastructureSystemsType`. There are a bunch of subtypes of
+# `InfrastructureSystemsType`, but the important ones to know about are:
 # - `Component`: includes all elements of power system data
-#   - `PowerSystems.Topology`: includes non physical elements describing network connectivity
+#   - `Topology`: includes non physical elements describing network connectivity
 #   - `Service`: includes descriptions of system requirements (other than energy balance)
 #   - `Device`: includes descriptions of all the physical devices in a power system
-# - `PowerSystems.TechnicalParams`: includes structs that hold data describing the technical or economic capabilities of `Device`some
+# - `InfrastructureSystems.DeviceParameter`: includes structs that hold data describing the
+#  dynamic, or economic capabilities of `Device`.
+# - `TimeSeriesData`: Includes all time series types
+#   - `time series`: includes structs to define time series of forecasted data where multiple
+# values can represent each time stamp
+#   - `StaticTimeSeries`: includes structs to define time series with a single value for each
+# time stamp
 # - `System`: collects all of the `Component`s
 #
 # *The following trees are made with [D3TypeTrees](https://github.com/claytonpbarrows/D3TypeTrees.jl),
 # nodes that represent Structs will show the Fields in the hoverover tooltip.*
 
-# TypeTree(PowerSystemType)
+# TypeTree(InfrastructureSystemsType)
 
-# ### `Forecasts`
-# Every `Component` has a `_forecasts::InfrastructureSystems.Forecasts` field (even composite types).
-# `Forecasts` are used to hold time series information that describes the temporally dependent
-# data of fields within the same struct. For example, the `ThermalStandard._forecasts` field can
-# describe other fields in the struct (`available`, `activepower`, `reactivepower`), while
-# the `ThermalStandard.tech._forecasts` holds data for `rating` and other `TechThermal` fields.
+# ### `TimeSeriesData`
+# [_Read the Docs!_](https://nrel-siip.github.io/PowerSystems.jl/stable/modeler_guide/time_series/)
+# Every `Component` has a `time_series_container::InfrastructureSystems.TimeSeriesContainer`
+# field. `TimeSeriesData` are used to hold time series information that describes the
+# temporally dependent data of fields within the same struct. For example, the
+# `ThermalStandard.time_series_container` field can
+# describe other fields in the struct (`available`, `activepower`, `reactivepower`).
 
-# `Forecast`s themselves can take the form of the following:
-TypeTree(Forecast)
+# `TimeSeriesData`s themselves can take the form of the following:
+TypeTree(TimeSeriesData)
 
-# In each case, the forecast contains fields for `label` and `data` to identify the `Component`
-# field that the forecast describes, and the time series `data`. For example:
+# In each case, the time series contains fields for `scaling_factor_multiplier` and `data`
+# to identify the details of  th `Component` field that the time series describes, and the
+# time series `data`. For example: we commonly want to use a time series to
+# describe the maximum active power capability of a renewable generator. In this case, we
+# can create a `SingleTimeSeries` with a `TimeArray` and an accessor function to the
+# maximum active power field in the struct describing the generator. In this way, we can
+# store a scaling factor time series that will get multiplied by the maximum active power
+# rather than the magnitudes of the maximum active power time series.
 
 print_struct(Deterministic)
 
-# Examples of how to create and add forecasts to system can be found in the
-# [Add Forecasts Example](../PowerSystems.jl Examples/add_forecasts.ipynb)
+# Examples of how to create and add time series to system can be found in the
+# [Add Time Series Example](../PowerSystems.jl Examples/add_forecasts.ipynb)
 
 # ### System
 # The `System` object collects all of the individual components into a single struct along
-# with some metadata about the system itself (e.g. `basepower`)
+# with some metadata about the system itself (e.g. `base_power`)
 
 print_struct(System)
 
@@ -126,14 +145,17 @@ get_components(Bus, sys) |> collect
 get_components(Branch, sys) |> collect
 
 # The fields within a component can be accessed using the `get_*` functions:
+# *It's highly recommended that users avoid using the `.` to access fields since we make no
+# guarantees on the stability field names and locations. We do however promise to keep the
+# accessor functions stable.*
 
 bus1 = get_component(Bus, sys, "nodeA")
 @show get_name(bus1);
 @show get_magnitude(bus1);
 
-# #### Accessing `Forecast`s
+# #### Accessing `TimeSeries`
 
-# First we need to add some forecasts to the `System`
+# First we need to add some time series to the `System`
 loads = collect(get_components(PowerLoad, sys))
 for (l, ts) in zip(loads, load_timeseries_DA[2])
     add_time_series!(
@@ -146,18 +168,20 @@ for (l, ts) in zip(loads, load_timeseries_DA[2])
     )
 end
 
-# If we want to access a specific forecast for a specific component, we need to specify:
-#  - Forecast type
+# If we want to access a specific time series for a specific component, we need to specify:
+#  - time series type
 #  - `component`
 #  - initial_time
 #  - label
 #
-# We can find the unique set of initial times of all the forecasts in the system:
+# We can find the initial time of all the time series in the system:
 get_forecast_initial_times(sys)
 
-# We can find the fields for which a component has a forecast:
-@show labels = IS.get_time_series_names(Deterministic, loads[1])
+# We can find the names of all time series attached to a component:
+ts_names = get_time_series_names(Deterministic, loads[1])
 
-# Or for a specific component:
-@show initial_times =
-    IS.get_initial_timestamp(get_time_series(Deterministic, loads[1], labels[1]));
+# We can access a specific time series for a specific component:
+ta = get_time_series_array(Deterministic, loads[1], ts_names[1])
+
+# Or, we can just get the values of the time series:
+ts = get_time_series_values(Deterministic, loads[1], ts_names[1])

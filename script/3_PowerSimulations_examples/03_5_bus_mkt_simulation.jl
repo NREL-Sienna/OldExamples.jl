@@ -10,7 +10,7 @@
 
 # ## Dependencies and Data
 # First, let's create `System`s to represent the Day-Ahead and Real-Time market clearing
-# process with hourly, and 5-minute forecast data, respectively.
+# process with hourly, and 5-minute time series data, respectively.
 
 # ### Modeling Packages
 using PowerSystems

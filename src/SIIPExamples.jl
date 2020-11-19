@@ -165,9 +165,9 @@ function literate_file(folder, file; force = false, kwargs...)
         else
             @warn "Skipping tests for $filename."
         end
-        if make_notebook && mtime(srcpath) > mtime(notebookfilepath) ||
+        if make_notebook && (mtime(srcpath) > mtime(notebookfilepath) ||
            mtime(notebookfilepath) == 0.0 ||
-           force
+           force)
             @warn "Converting $filename to Jupyter Notebook."
             fn = Literate.notebook(srcpath, notebookpath; config = config, kwargs...)
             postprocess_notebook(fn)

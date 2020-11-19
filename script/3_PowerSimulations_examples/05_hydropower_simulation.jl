@@ -82,7 +82,7 @@ op_problem.psi_container.JuMPmodel
 # from the controllable `HydroEnergyReservoir` generators to be equal to the load (flat 10.0 for all time periods)
 # minus the generation from the `HydroDispatch` generators [1.97, 1.983, ...]. The 3rd and 4th
 # constraints limit the output of the `HydroEnergyReservoir` generator to the limit defined by the
-# `max_activepwoer` forecast. And the last 4 constraints are the lower and upper bounds of
+# `max_activepwoer` time series. And the last 4 constraints are the lower and upper bounds of
 # the `HydroEnergyReservoir` operating range.
 
 #-

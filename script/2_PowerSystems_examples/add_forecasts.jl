@@ -1,4 +1,4 @@
-# # Add Forecasts to `System`
+# # Add time series to `System`
 
 # **Originally Contributed by**: Clayton Barrows
 
@@ -7,7 +7,7 @@
 # An example of how to parse add time series data to a `System` using [PowerSystems.jl](github.com/NREL-SIIP/PowerSystems.jl)
 #
 # For example, a `System` created by [parsing a MATPOWER file](../../notebook/2_PowerSystems_examples/parse_matpower.ipynb)
-# doesn't contain any time series data. So a user may want to add forecasts to the `System`
+# doesn't contain any time series data. So a user may want to add time series to the `System`
 # ### Dependencies
 # Let's use the 5-bus dataset we parsed in the MATPOWER example
 using SIIPExamples
@@ -30,6 +30,6 @@ end
 # ### Read the pointers
 ts_pointers = PowerSystems.IS.read_time_series_file_metadata(fname)
 
-# ### Read and assign forecasts to `System` using the `ts_pointers` struct
+# ### Read and assign time series to `System` using the `ts_pointers` struct
 add_time_series!(sys, ts_pointers)
 sys

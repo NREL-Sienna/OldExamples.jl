@@ -8,7 +8,7 @@ IS = PowerSystems.IS
 
 print_struct(Bus)
 
-TypeTree(Forecast)
+TypeTree(TimeSeriesData)
 
 print_struct(Deterministic)
 
@@ -51,10 +51,11 @@ end
 
 get_forecast_initial_times(sys)
 
-@show labels = IS.get_time_series_names(Deterministic, loads[1])
+ts_names = get_time_series_names(Deterministic, loads[1])
 
-@show initial_times =
-    IS.get_initial_timestamp(get_time_series(Deterministic, loads[1], labels[1]));
+ta = get_time_series_array(Deterministic, loads[1], ts_names[1])
+
+ts = get_time_series_values(Deterministic, loads[1], ts_names[1])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
