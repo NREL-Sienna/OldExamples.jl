@@ -11,13 +11,13 @@
 using PowerSystems
 const PSY = PowerSystems
 
-## Step 1: System description
+# # Step 1: System description
 
 # Next we need to define the different elements required to run a simulation. To run a
 # simulation in `PowerSimulationsDynamics`, it is required to define a `System` that contains
 # the following components:
 
-### Static Components:
+# ## Static Components:
 
 # We called static components to those that are used to run a Power Flow problem.
 
@@ -35,7 +35,7 @@ const PSY = PowerSystems
 # - The base of power used to define per unit values, in MVA as a `Float64` value.
 # - The base frequency used in the system, in Hz as a `Float64` value.
 
-### Dynamic Components:
+# ## Dynamic Components:
 
 # Dynamic components are those that define differential equations to run a transient simulation.
 
@@ -52,16 +52,16 @@ const PSY = PowerSystems
 
 # The following describes the system creation for the OMIB case.
 
-### Static System creation
+# ## Static System creation
 
 # To create the system you need to pass the location of the RAW file
-file_dir = "OMIB.raw"
-omib_sys = System(omib_file_dir)
+file_dir = "script/4_PowerSimulationsDynamics_examples/Data/OMIB.raw"
+omib_sys = System(file_dir)
 
 # This system does not have an injection device in bus 1 (the reference bus).
 # We can add a source with small impedance directly as follows:
 
-slack_bus = [b for b in get_components(Bus, sys) if b.bustype == BusTypes.REF][1]
+slack_bus = [b for b in get_components(Bus, omib_sys) if b.bustype == BusTypes.REF][1]
 inf_source = Source(
 name = "InfBus", #name
 available = true, #availability
@@ -71,15 +71,15 @@ bus = slack_bus, #bus
 R_th = 0.0, #Rth
 X_th = 5e-6, #Xth
 )
-add_component!(sys, inf_source)
+add_component!(omib_sys, inf_source)
 
-# We just added a infinite source with ``X_{th} = 5\cdot 10^{-6}`` pu
+# We just added a infinite source with $X_{th} = 5\cdot 10^{-6}$ pu
 
 # The system can be explored directly using functions like:
 
 get_components(Source, omib_sys)
 
-get_components(Generators, omib_sys)
+get_components(Generator, omib_sys)
 
 # By exploring those it can be seen that the generators are named as: `generator-bus_number-id`.
 # Then, the generator attached at bus 2 is named `generator-102-1`.
@@ -93,29 +93,29 @@ get_components(Generators, omib_sys)
 # `avr`, `tg` and `pss`. So we will be adding functions to create all of its components and
 # the generator itself:
 
-# Machine
+# *Machine*
 machine_classic() = BaseMachine(
     0.0, #R
     0.2995, #Xd_p
     0.7087, #eq_p
 )
 
-# Shaft
+# *Shaft*
 shaft_damping() = SingleMass(
     3.148, #H
     2.0, #D
 )
 
-# AVR
+# *AVR: No AVR*
 avr_none() = AVRFixed(0.0)
 
-# TG
+# *TG: No TG*
 tg_none() = TGFixed(1.0) #efficiency
 
-# PSS
+# *PSS: No PSS*
 pss_none() = PSSFixed(0.0)
 
-# The last lines receives a static generator, and creates a `DynamicGenerator` based on
+# The next lines receives a static generator name, and creates a `DynamicGenerator` based on
 # that specific static generator, with the specific components defined previously. This is
 # a classic machine model without AVR, Turbine Governor and PSS.
 
@@ -131,20 +131,21 @@ dyn_gen = DynamicGenerator(
         pss = pss_none(),
     )
 
+# The dynamic generator is added to the system by specifying the dynamic and static generator
 add_component!(omib_sys, dyn_gen, static_gen)
 
 # Then we can serialize our system data to a json file that can be later read as:
 
-to_json(omib_sys, "omib_sys.json")
+to_json(omib_sys, "script/4_PowerSimulationsDynamics_examples/Data/omib_sys.json", force=true)
 
 # ## Dynamic Lines case: Data creation
 
 # We will now create a three bus system with one inverter and one generator.
 # In order to do so, we will parse the following `ThreebusInverter.raw` network:
 
-sys_file_dir = "ThreeBusInverter.raw"
+sys_file_dir = "script/4_PowerSimulationsDynamics_examples/Data/ThreeBusInverter.raw"
 threebus_sys = System(sys_file_dir)
-slack_bus = [b for b in get_components(Bus, sys) if b.bustype == BusTypes.REF][1]
+slack_bus = [b for b in get_components(Bus, threebus_sys) if b.bustype == BusTypes.REF][1]
 inf_source = Source(
 name = "InfBus", #name
 available = true, #availability
@@ -160,7 +161,7 @@ add_component!(threebus_sys, inf_source)
 # Inverter at bus 103. An inverter is composed by a `converter`, `outer control`,
 # `inner control`, `dc source`, `frequency estimator` and a `filter`.
 
-### Dynamic Inverter definition
+# ## Dynamic Inverter definition
 
 # We will create specific functions to create the components of the inverter as follows:
 
@@ -200,21 +201,9 @@ pll() = KauraPLL(
 #Define an LCL filter:
 filt() = LCLFilter(lf = 0.08, rf = 0.003, cf = 0.074, lg = 0.2, rg = 0.01)
 
-#Construct the Inverter:
-    return DynamicInverter(
-        static_device,
-        1.0, # ω_ref,
-        converter_high_power(), #converter
-        outer_control(), #outer control
-        inner_control(), #inner control voltage source
-        dc_source_lv(), #dc source
-        pll(), #pll
-        filt(), #filter
-    )
+# We will construct the inverter later by specifying to which static device is assigned.
 
-# The last function receives a static device, typically a generator, and defines a dynamic inverter based on the components already defined.
-
-# ### Dynamic Generator definition
+# ## Dynamic Generator definition
 
 # Similarly we will construct a dynamic generator as follows:
 # Create the machine
@@ -228,13 +217,13 @@ machine_oneDoneQ() = OneDOneQMachine(
     0.6, #Tq0_p
 )
 
-#Shaft
+# Shaft
 shaft_no_damping() = SingleMass(
     3.01, #H (M = 6.02 -> H = M/2)
-    0.0,
-) #D
+    0.0, #D
+)
 
-#AVR: Type I: Resembles a DC1 AVR
+# AVR: Type I: Resembles a DC1 AVR
 avr_type1() = AVRTypeI(
     20.0, #Ka - Gain
     0.01, #Ke
@@ -243,8 +232,7 @@ avr_type1() = AVRTypeI(
     0.314, #Te
     0.35, #Tf
     0.001, #Tr
-    5.0, #Vrmax
-    -5.0, #Vrmin
+    (min = -5.0, max = 5.0),
     0.0039, #Ae - 1st ceiling coefficient
     1.555, #Be - 2nd ceiling coefficient
 )
@@ -255,36 +243,43 @@ tg_none() = TGFixed(1.0) #efficiency
 #No PSS
 pss_none() = PSSFixed(0.0) #Vs
 
-#Construct the generator
- DynamicGenerator(
-        generator,
-        1.0, # ω_ref,
-        machine_oneDoneQ(), #machine
-        shaft_no_damping(), #shaft
-        avr_type1(), #avr
-        tg_none(), #tg
-        pss_none(), #pss
-    )
-
-### Add the components to the system
+# Now we will construct the dynamic generator and inverter.
+# ## Add the components to the system
 
 for g in get_components(Generator, threebus_sys)
     #Find the generator at bus 102
     if get_number(get_bus(g)) == 102
         #Create the dynamic generator
-        case_gen = dyn_gen_second_order(g)
-        #Attach the dynamic generator to the system
-        add_component!(threebus_sys, case_gen)
+        case_gen = DynamicGenerator(
+                get_name(g),
+                1.0, # ω_ref,
+                machine_oneDoneQ(), #machine
+                shaft_no_damping(), #shaft
+                avr_type1(), #avr
+                tg_none(), #tg
+                pss_none(), #pss
+            )
+        #Attach the dynamic generator to the system by specifying the dynamic and static part
+        add_component!(threebus_sys, case_gen, g)
     #Find the generator at bus 103
     elseif get_number(get_bus(g)) == 103
         #Create the dynamic inverter
-        case_inv = inv_case78(g)
+        case_inv = DynamicInverter(
+                get_name(g),
+                1.0, # ω_ref,
+                converter_high_power(), #converter
+                outer_control(), #outer control
+                inner_control(), #inner control voltage source
+                dc_source_lv(), #dc source
+                pll(), #pll
+                filt(), #filter
+            )
         #Attach the dynamic inverter to the system
-        add_component!(threebus_sys, case_inv)
+        add_component!(threebus_sys, case_inv, g)
     end
 end
 
 
 # ### Save the system in a JSON file
 
-to_json(threebus_sys, "threebus_sys.json")
+to_json(threebus_sys, "script/4_PowerSimulationsDynamics_examples/Data/threebus_sys.json", force=true)

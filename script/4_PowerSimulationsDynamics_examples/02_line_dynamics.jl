@@ -20,33 +20,33 @@
 # It is recommended to check `Tutorial 1: OMIB` first, since that includes more details and
 # explanations on all definitions and functions.
 
-## Step 1: Package Initialization
+# # Step 1: Package Initialization
 
 using PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
-const PSY = PowerSystems
 
-## Step 2: Data creation
+# # Step 2: Data creation
 
-threebus_sys = System("threebus_sys.json")
+file_dir = "script/4_PowerSimulationsDynamics_examples/Data/threebus_sys.json"
+threebus_sys = System(file_dir);
 
 # In addition, we will create a new copy of the system on which we will simulate the same
 # case, but will consider dynamic lines:
 
-threebus_sys_dyn = deepcopy(threebus_sys)
+threebus_sys_dyn = deepcopy(threebus_sys);
 
-## Step 3: Create the fault and simulation on the Static Lines system
+# # Step 3: Create the fault and simulation on the Static Lines system
 
 # First, we construct the perturbation, by properly computing the new Ybus on the system:
 
 #Make a copy of the original system
 sys2 = deepcopy(threebus_sys)
-#Triplicates the impedance of the line named "1"
+#Triplicates the impedance of the line named "BUS 1-BUS 3-i_1"
 fault_branches = get_components(ACBranch, sys2)
 for br in fault_branches
-    if get_name(br) == "1"
+    if get_name(br) == "BUS 1-BUS 3-i_1"
         br.r = 3 * br.r
         br.x = 3 * br.x
         b_new = (from = br.b.from / 3, to = br.b.to / 3)
@@ -56,10 +56,10 @@ end
 #Obtain the new Ybus
 Ybus_fault = Ybus(sys2).data
 #Define Fault: Change of YBus
-Ybus_change = PowerSimulationsDynamics.NetworkSwitch(
+Ybus_change = NetworkSwitch(
     1.0, #change at t = 1.0
     Ybus_fault, #New YBus
-)
+);
 
 
 # Now, we construct the simulation:
@@ -83,15 +83,15 @@ print_device_states(sim)
 #Will export a dictionary with the initial condition values to explore
 x0_init = get_initial_conditions(sim)
 
-## Step 4: Run the simulation of the Static Lines System
+# # Step 4: Run the simulation of the Static Lines System
 
 #Run the simulation
 execute!(sim, #simulation structure
-                IDA(), #Sundials DAE Solver
-                dtmax = 0.02, #Maximum step size
+         IDA(), #Sundials DAE Solver
+         dtmax = 0.02, #Maximum step size
 )
 
-## Step 5: Store the solution
+# # Step 5: Store the solution
 
 series2 = get_voltagemag_series(sim, 102)
 zoom = [
@@ -99,26 +99,26 @@ zoom = [
         for (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
     ];
 
-## Step 3.1: Create the fault and simulation on the Dynamic Lines system
+# # Step 3.1: Create the fault and simulation on the Dynamic Lines system
 
-# An important aspect to consider is that DynamicLines must not be considered in the computation of the Ybus. First we construct the Dynamic Line, by finding the Line named "3", and then adding it to the system.
+# An important aspect to consider is that DynamicLines must not be considered in the computation of the Ybus. First we construct the Dynamic Line, by finding the Line named "BUS 2-BUS 3-i_3", and then adding it to the system.
 
-# get component return the Branch on threebus_sys_dyn named "3"
-dyn_branch = DynamicBranch(get_component(Branch, threebus_sys_dyn, "3"))
+# get component return the Branch on threebus_sys_dyn named "BUS 2-BUS 3-i_3"
+dyn_branch = DynamicBranch(get_component(Branch, threebus_sys_dyn, "BUS 2-BUS 3-i_3"))
 # Adding a dynamic line will inmediately remove the static line from the system.
 add_component!(threebus_sys_dyn, dyn_branch)
 
 # Similarly, we construct the Ybus fault by creating a copy of the original system, but
-# removing the Line "3" to avoid considering it in the Ybus:
+# removing the Line "BUS 2-BUS 3-i_3" to avoid considering it in the Ybus:
 
 #Make a copy of the original system
-sys3 = deepcopy(threebus_sys)
-#Remove Line "3"
-remove_component!(Line, sys3, "3")
-#Triplicates the impedance of the line named "1"
+sys3 = deepcopy(threebus_sys);
+#Remove Line "BUS 2-BUS 3-i_3"
+remove_component!(Line, sys3, "BUS 2-BUS 3-i_3")
+#Triplicates the impedance of the line named "BUS 1-BUS 2-i_1"
 fault_branches2 = get_components(Line, sys3)
 for br in fault_branches2
-    if get_name(br) == "1"
+    if get_name(br) == "BUS 1-BUS 3-i_1"
         br.r = 3 * br.r
         br.x = 3 * br.x
         b_new = (from = br.b.from / 3, to = br.b.to / 3)
@@ -133,25 +133,26 @@ Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
     Ybus_fault_dyn, #New YBus
 )
 
-## Step 4.1: Run the simulation of the Dynamic Lines System
+# # Step 4.1: Run the simulation of the Dynamic Lines System
 
-#Run the simulation
-execute!(sim, #simulation structure
-                IDA(), #Sundials DAE Solver
-                dtmax = 0.02, #Maximum step size
-)
 
 # Now, we construct the simulation:
 
-#Time span of our simulation
+# Time span of our simulation
 tspan = (0.0, 30.0)
 
-#Define Simulation
+# Define Simulation
 sim_dyn = Simulation(
     pwd(), #folder to output results
     threebus_sys_dyn, #system
     tspan, #time span
     Ybus_change_dyn, #Type of perturbation
+)
+
+# Run the simulation
+execute!(sim_dyn, #simulation structure
+         IDA(), #Sundials DAE Solver
+         dtmax = 0.02, #Maximum step size
 )
 
 # We can obtain the initial conditions as:
@@ -161,7 +162,7 @@ print_device_states(sim_dyn)
 #Will export a dictionary with the initial condition values to explore
 x0_init_dyn = get_initial_conditions(sim_dyn)
 
-## Step 5.1: Store the solution
+# # Step 5.1: Store the solution
 
 series2_dyn = get_voltagemag_series(sim_dyn, 102)
 zoom_dyn = [
@@ -169,10 +170,9 @@ zoom_dyn = [
         for (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
     ];
 
-## Step 6.1: Compare the solutions:
+# # Step 6.1: Compare the solutions:
 
 # We can observe the effect of Dynamic Lines
-
 
 plot(series2_dyn, label="V_gen_dyn")
 plot!(series2, label="V_gen_st", xlabel="Time [s]", ylabel = "Voltage [pu]")
