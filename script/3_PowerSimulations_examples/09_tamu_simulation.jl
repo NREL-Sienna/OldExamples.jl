@@ -47,7 +47,7 @@ stages_definition = Dict(
         GenericOpProblem,
         template_unit_commitment(network = CopperPlatePowerModel),
         sys,
-        solver;
+        solver,
     ),
 )
 order = Dict(1 => "UC")

@@ -10,6 +10,7 @@ in many cases users may find the documentation pages for each package more infor
  - [PowerSystems.jl docs](https://nrel-siip.github.io/PowerSystems.jl/stable/)
  - [PowerSimulations.jl docs](https://nrel-siip.github.io/PowerSimulations.jl/latest/)
  - [PowerGraphics.jl docs](https://nrel-siip.github.io/PowerGraphics.jl/latest/)
+ - [PowerSimulationsDynamics.jl](https://nrel-siip.github.io/PowerSimulationsDynamics.jl/latest/)
 
 ## Run Notebooks in the Browser
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/SIIPExamples.jl/master)
@@ -42,6 +43,7 @@ To get started running the Jupyter notebooks included in this repository, you ca
   - [Serialize data](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/serialize_data.ipynb)
   - [Network Matrices](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/network_matrices.ipynb)
   - [Large-scale U.S. dataset assembly](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/US_system.ipynb)
+  - [Loading Dynamic System Data](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/loading_dynamic_systems_data.ipynb)
 - [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/02_sequential_simulations.ipynb)
@@ -55,3 +57,6 @@ To get started running the Jupyter notebooks included in this repository, you ca
   - [PTDF Network and LMP Calculations](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/11_PTDF.ipynb)
   - Plotting with [PowerGraphics.jl](https://github.com/NREL-SIIP/PowerGraphics.jl)
     - [Bar and Stack Plots](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/04_bar_stack_plots.ipynb)
+- [PowerSimulationsDynamics.jl](https://github.com/NREL-SIIP/PowerSimulationsDynamics.jl) Examples
+  - [One Machine Infinite Bus](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/4_PowerSimulationsDynamics_examples/01_omib.ipynb)
+  - [Line Dynamics](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/4_PowerSimulationsDynamics_examples/02_line_dynamics.ipynb)

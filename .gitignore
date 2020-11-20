@@ -11,3 +11,4 @@ TAMU-sim
 US-System
 texas_test
 Texas-sim
+script/*/Data/*.json

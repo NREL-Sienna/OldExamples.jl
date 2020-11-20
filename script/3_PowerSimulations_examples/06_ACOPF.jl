@@ -15,7 +15,12 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"));
+include(joinpath(
+    pkgpath,
+    "test",
+    "3_PowerSimulations_examples",
+    "01_operations_problems.jl",
+));
 
 # Since we'll be doing non-linear optimization, we need a solver that supports non-linear
 # problems. Ipopt is quite good.
