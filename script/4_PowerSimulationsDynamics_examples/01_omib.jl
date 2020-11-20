@@ -41,33 +41,20 @@ omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 # The next step is to create the simulation structure. This will create the indexing
 # of our system that will be used to formulate the differential-algebraic system of
 # equations. To do so, it is required to specify the perturbation that will occur in
-# the system. `PowerSimulationsDynamics` supports two types of perturbations:
+# the system. `PowerSimulationsDynamics` supports three types of perturbations:
 
 # - Network Switch: Change in the Y-bus values.
+# - Branch Trip: Disconnects a line from the system.
 # - Change in Reference Parameter
 
-# Here, we will use a Network Switch perturbation, that is modeled by modifying the
-# admittance matrix (Ybus) of the system. To do so we create a `NetworkSwitch` perturbation
-# by computing the Ybus after the fault as follows:
-
-# Collect the branch of the system as:
-fault_branch = deepcopy(collect(get_components(Branch, omib_sys))[1])
-
-# Duplicates the impedance of the reactance
-fault_branch.x = fault_branch.x * 2
-
-# Obtain the new Ybus of the faulted system
-Ybus_fault = Ybus([fault_branch], get_components(Bus, omib_sys))[:, :]
-
-# Construct the perturbation
-perturbation_Ybus = NetworkSwitch(
-    1.0, #change will occur at t = 1.0s
-    Ybus_fault, #new Ybus
-)
+# Here, we will use a Branch Trip perturbation, that is modeled by modifying the
+# specifying which line we want to trip. In this case we disconnect one of the lines 
+# that connects BUS 1 and BUS 2, named "BUS 1-BUS 2-i_1".
 
 # With this, we are ready to create our simulation structure:
 time_span = (0.0, 30.0)
-sim = Simulation(pwd(), omib_sys, time_span, perturbation_Ybus)
+perturbation_trip = BranchTrip(1.0, "BUS 1-BUS 2-i_1")
+sim = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 # This will automatically initialize the system by running a power flow
 # and update `V_ref`, `P_ref` and hence `eq_p` (the internal voltage) to match the
@@ -120,7 +107,7 @@ Plots.plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 # of the system for the differential states. This can be used to analyze the local stability
 # of the linearized system. We need to re-initialize our simulation:
 
-sim2 = Simulation(pwd(), omib_sys, time_span, perturbation_Ybus)
+sim2 = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 small_sig = small_signal_analysis(sim2)
 
