@@ -13,7 +13,7 @@
 # (doubling its resistance and impedance) of the line that connects both buses.
 
 # ## Dependencies
-
+using SIIPExamples
 using PowerSimulationsDynamics
 using PowerSystems
 using Sundials
@@ -28,7 +28,13 @@ gr()
 # _The following command requires that you have executed the
 # [dynamic systems data example](../../notebook/2_PowerSystems_examples/loading_dynamic_systems_data.jl.ipynb)
 # previously to generate the json file._
-omib_sys = System("script/4_PowerSimulationsDynamics_examples/Data/omib_sys.json")
+file_dir = joinpath(
+    dirname(dirname(pathof(SIIPExamples))),
+    "script",
+    "4_PowerSimulationsDynamics_examples",
+    "Data",
+)
+omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 
 # ## Build the simulation and initialize the problem
 
@@ -61,12 +67,7 @@ perturbation_Ybus = NetworkSwitch(
 
 # With this, we are ready to create our simulation structure:
 time_span = (0.0, 30.0)
-sim = Simulation(
-    pwd(),
-    omib_sys,
-    time_span,
-    perturbation_Ybus,
-)
+sim = Simulation(pwd(), omib_sys, time_span, perturbation_Ybus)
 
 # This will automatically initialize the system by running a power flow
 # and update `V_ref`, `P_ref` and hence `eq_p` (the internal voltage) to match the
@@ -80,9 +81,11 @@ x0_init = get_initial_conditions(sim)
 # ## Run the Simulation
 
 # Finally, to run the simulation we simply use:
-execute!(sim, #simulation structure
-         IDA(), #Sundials DAE Solver
-         dtmax=0.02); #Arguments: Maximum timestep allowed
+execute!(
+    sim, #simulation structure
+    IDA(), #Sundials DAE Solver
+    dtmax = 0.02,
+); #Arguments: Maximum timestep allowed
 
 # In some cases, the dynamic time step used for the simulation may fail. In such case, the
 # keyword argument `dtmax` can be used to limit the maximum time step allowed for the simulation.
@@ -102,14 +105,14 @@ sim.solution
 # of the generator named `"generator-102-1"`.
 
 angle = get_state_series(sim, ("generator-102-1", :δ));
-Plots.plot(angle, xlabel="time", ylabel="rotor angle [rad]", label="rotor angle")
+Plots.plot(angle, xlabel = "time", ylabel = "rotor angle [rad]", label = "rotor angle")
 
 # - `get_voltagemag_series(sim, 102)`: can be used to obtain the voltage magnitude as a
 # tuple of time and voltage. In this case, we are obtaining the voltage magnitude at bus 102
 # (where the generator is located).
 
 volt = get_voltagemag_series(sim, 102);
-Plots.plot(volt, xlabel="time", ylabel="Voltage [pu]", label="V_2")
+Plots.plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 
 # ## Optional: Small Signal Analysis
 
@@ -117,12 +120,7 @@ Plots.plot(volt, xlabel="time", ylabel="Voltage [pu]", label="V_2")
 # of the system for the differential states. This can be used to analyze the local stability
 # of the linearized system. We need to re-initialize our simulation:
 
-sim2 = Simulation(
-    pwd(),
-    omib_sys,
-    time_span,
-    perturbation_Ybus,
-)
+sim2 = Simulation(pwd(), omib_sys, time_span, perturbation_Ybus)
 
 small_sig = small_signal_analysis(sim2)
 

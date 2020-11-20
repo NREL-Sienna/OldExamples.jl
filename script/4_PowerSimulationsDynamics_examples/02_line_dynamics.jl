@@ -28,9 +28,13 @@ using Sundials
 using Plots
 
 # # Step 2: Data creation
-
-file_dir = "script/4_PowerSimulationsDynamics_examples/Data/threebus_sys.json"
-threebus_sys = System(file_dir);
+file_dir = joinpath(
+    dirname(dirname(pathof(SIIPExamples))),
+    "script",
+    "4_PowerSimulationsDynamics_examples",
+    "Data",
+)
+threebus_sys = System(joinpath(file_dir, "threebus_sys.json"));
 
 # In addition, we will create a new copy of the system on which we will simulate the same
 # case, but will consider dynamic lines:
@@ -61,7 +65,6 @@ Ybus_change = NetworkSwitch(
     Ybus_fault, #New YBus
 );
 
-
 # Now, we construct the simulation:
 
 #Time span of our simulation
@@ -75,7 +78,6 @@ sim = Simulation(
     Ybus_change, #Type of perturbation
 )
 
-
 # We can obtain the initial conditions as:
 
 #Will print the initial states. It also give the symbols used to describe those states.
@@ -86,18 +88,19 @@ x0_init = get_initial_conditions(sim)
 # # Step 4: Run the simulation of the Static Lines System
 
 #Run the simulation
-execute!(sim, #simulation structure
-         IDA(), #Sundials DAE Solver
-         dtmax = 0.02, #Maximum step size
+execute!(
+    sim, #simulation structure
+    IDA(), #Sundials DAE Solver
+    dtmax = 0.02, #Maximum step size
 )
 
 # # Step 5: Store the solution
 
 series2 = get_voltagemag_series(sim, 102)
 zoom = [
-        (series2[1][ix], series2[2][ix])
-        for (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
-    ];
+    (series2[1][ix], series2[2][ix])
+    for (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
+];
 
 # # Step 3.1: Create the fault and simulation on the Dynamic Lines system
 
@@ -135,7 +138,6 @@ Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
 
 # # Step 4.1: Run the simulation of the Dynamic Lines System
 
-
 # Now, we construct the simulation:
 
 # Time span of our simulation
@@ -150,9 +152,10 @@ sim_dyn = Simulation(
 )
 
 # Run the simulation
-execute!(sim_dyn, #simulation structure
-         IDA(), #Sundials DAE Solver
-         dtmax = 0.02, #Maximum step size
+execute!(
+    sim_dyn, #simulation structure
+    IDA(), #Sundials DAE Solver
+    dtmax = 0.02, #Maximum step size
 )
 
 # We can obtain the initial conditions as:
@@ -166,18 +169,18 @@ x0_init_dyn = get_initial_conditions(sim_dyn)
 
 series2_dyn = get_voltagemag_series(sim_dyn, 102)
 zoom_dyn = [
-        (series2_dyn[1][ix], series2_dyn[2][ix])
-        for (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
-    ];
+    (series2_dyn[1][ix], series2_dyn[2][ix])
+    for (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
+];
 
 # # Step 6.1: Compare the solutions:
 
 # We can observe the effect of Dynamic Lines
 
-plot(series2_dyn, label="V_gen_dyn")
-plot!(series2, label="V_gen_st", xlabel="Time [s]", ylabel = "Voltage [pu]")
+plot(series2_dyn, label = "V_gen_dyn")
+plot!(series2, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
 
 # that looks quite similar. The differences can be observed in the zoom plot:
 
-plot(zoom_dyn, label="V_gen_dyn")
-plot!(zoom, label="V_gen_st", xlabel="Time [s]", ylabel = "Voltage [pu]")
+plot(zoom_dyn, label = "V_gen_dyn")
+plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
