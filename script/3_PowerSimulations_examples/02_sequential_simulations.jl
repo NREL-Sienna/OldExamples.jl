@@ -14,7 +14,12 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"))
+include(joinpath(
+    pkgpath,
+    "test",
+    "3_PowerSimulations_examples",
+    "01_operations_problems.jl",
+))
 
 # ### 5-Minute system
 # We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.

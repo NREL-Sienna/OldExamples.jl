@@ -7,7 +7,7 @@
 # This tutorial briefly introduces how to create a system using `PowerSystems.jl` data
 # structures. The tutorial will guide you to create the JSON data file for the tutorial 1.
 # Start by calling `PowerSystems.jl`:
-
+using SIIPExamples
 using PowerSystems
 const PSY = PowerSystems
 
@@ -55,21 +55,27 @@ const PSY = PowerSystems
 # ## Static System creation
 
 # To create the system you need to pass the location of the RAW file
-file_dir = "script/4_PowerSimulationsDynamics_examples/Data/OMIB.raw"
-omib_sys = System(file_dir)
+
+file_dir = joinpath(
+    dirname(dirname(pathof(SIIPExamples))),
+    "script",
+    "4_PowerSimulationsDynamics_examples",
+    "Data",
+)
+omib_sys = System(joinpath(file_dir, "OMIB.raw"))
 
 # This system does not have an injection device in bus 1 (the reference bus).
 # We can add a source with small impedance directly as follows:
 
 slack_bus = [b for b in get_components(Bus, omib_sys) if b.bustype == BusTypes.REF][1]
 inf_source = Source(
-name = "InfBus", #name
-available = true, #availability
-active_power = 0.0,
-reactive_power = 0.0,
-bus = slack_bus, #bus
-R_th = 0.0, #Rth
-X_th = 5e-6, #Xth
+    name = "InfBus", #name
+    available = true, #availability
+    active_power = 0.0,
+    reactive_power = 0.0,
+    bus = slack_bus, #bus
+    R_th = 0.0, #Rth
+    X_th = 5e-6, #Xth
 )
 add_component!(omib_sys, inf_source)
 
@@ -122,38 +128,38 @@ pss_none() = PSSFixed(0.0)
 static_gen = get_component(Generator, omib_sys, "generator-102-1")
 
 dyn_gen = DynamicGenerator(
-        name = get_name(static_gen),
-        ω_ref = 1.0,
-        machine = machine_classic(),
-        shaft = shaft_damping(),
-        avr = avr_none(),
-        prime_mover = tg_none(),
-        pss = pss_none(),
-    )
+    name = get_name(static_gen),
+    ω_ref = 1.0,
+    machine = machine_classic(),
+    shaft = shaft_damping(),
+    avr = avr_none(),
+    prime_mover = tg_none(),
+    pss = pss_none(),
+)
 
 # The dynamic generator is added to the system by specifying the dynamic and static generator
 add_component!(omib_sys, dyn_gen, static_gen)
 
 # Then we can serialize our system data to a json file that can be later read as:
 
-to_json(omib_sys, "script/4_PowerSimulationsDynamics_examples/Data/omib_sys.json", force=true)
+to_json(omib_sys, joinpath(file_dir, "omib_sys.json"), force = true)
 
 # ## Dynamic Lines case: Data creation
 
 # We will now create a three bus system with one inverter and one generator.
 # In order to do so, we will parse the following `ThreebusInverter.raw` network:
 
-sys_file_dir = "script/4_PowerSimulationsDynamics_examples/Data/ThreeBusInverter.raw"
+sys_file_dir = joinpath(file_dir, "ThreeBusInverter.raw")
 threebus_sys = System(sys_file_dir)
 slack_bus = [b for b in get_components(Bus, threebus_sys) if b.bustype == BusTypes.REF][1]
 inf_source = Source(
-name = "InfBus", #name
-available = true, #availability
-active_power = 0.0,
-reactive_power = 0.0,
-bus = slack_bus, #bus
-R_th = 0.0, #Rth
-X_th = 5e-6, #Xth
+    name = "InfBus", #name
+    available = true, #availability
+    active_power = 0.0,
+    reactive_power = 0.0,
+    bus = slack_bus, #bus
+    R_th = 0.0, #Rth
+    X_th = 5e-6, #Xth
 )
 add_component!(threebus_sys, inf_source)
 
@@ -170,9 +176,9 @@ converter_high_power() = AverageConverter(rated_voltage = 138.0, rated_current =
 
 #Define Outer Control as a composition of Virtual Inertia + Reactive Power Droop
 outer_control() = OuterControl(
-                  VirtualInertia(Ta = 2.0, kd = 400.0, kω = 20.0),
-                  ReactivePowerDroop(kq = 0.2, ωf = 1000.0),
-                  )
+    VirtualInertia(Ta = 2.0, kd = 400.0, kω = 20.0),
+    ReactivePowerDroop(kq = 0.2, ωf = 1000.0),
+)
 
 #Define an Inner Control as a Voltage+Current Controler with Virtual Impedance:
 inner_control() = CurrentControl(
@@ -251,35 +257,34 @@ for g in get_components(Generator, threebus_sys)
     if get_number(get_bus(g)) == 102
         #Create the dynamic generator
         case_gen = DynamicGenerator(
-                get_name(g),
-                1.0, # ω_ref,
-                machine_oneDoneQ(), #machine
-                shaft_no_damping(), #shaft
-                avr_type1(), #avr
-                tg_none(), #tg
-                pss_none(), #pss
-            )
+            get_name(g),
+            1.0, # ω_ref,
+            machine_oneDoneQ(), #machine
+            shaft_no_damping(), #shaft
+            avr_type1(), #avr
+            tg_none(), #tg
+            pss_none(), #pss
+        )
         #Attach the dynamic generator to the system by specifying the dynamic and static part
         add_component!(threebus_sys, case_gen, g)
-    #Find the generator at bus 103
+        #Find the generator at bus 103
     elseif get_number(get_bus(g)) == 103
         #Create the dynamic inverter
         case_inv = DynamicInverter(
-                get_name(g),
-                1.0, # ω_ref,
-                converter_high_power(), #converter
-                outer_control(), #outer control
-                inner_control(), #inner control voltage source
-                dc_source_lv(), #dc source
-                pll(), #pll
-                filt(), #filter
-            )
+            get_name(g),
+            1.0, # ω_ref,
+            converter_high_power(), #converter
+            outer_control(), #outer control
+            inner_control(), #inner control voltage source
+            dc_source_lv(), #dc source
+            pll(), #pll
+            filt(), #filter
+        )
         #Attach the dynamic inverter to the system
         add_component!(threebus_sys, case_inv, g)
     end
 end
 
-
 # ### Save the system in a JSON file
 
-to_json(threebus_sys, "script/4_PowerSimulationsDynamics_examples/Data/threebus_sys.json", force=true)
+to_json(threebus_sys, joinpath(file_dir, "threebus_sys.json"), force = true)

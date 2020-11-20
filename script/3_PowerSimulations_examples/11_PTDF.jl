@@ -14,7 +14,12 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"));
+include(joinpath(
+    pkgpath,
+    "test",
+    "3_PowerSimulations_examples",
+    "01_operations_problems.jl",
+));
 
 # Since we'll be retreving duals, we need a solver that returns duals values
 # here we use Ipopt.
