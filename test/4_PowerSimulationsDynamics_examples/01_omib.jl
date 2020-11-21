@@ -5,27 +5,17 @@ using Sundials
 using Plots
 gr()
 
-file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
-    "script",
-    "4_PowerSimulationsDynamics_examples",
-    "Data",
-)
+file_dir = joinpath( #hide
+    dirname(dirname(pathof(SIIPExamples))),#hide
+    "script",#hide
+    "4_PowerSimulationsDynamics_examples",#hide
+    "Data",#hide
+)#hide
 omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 
-fault_branch = deepcopy(collect(get_components(Branch, omib_sys))[1])
-
-fault_branch.x = fault_branch.x * 2
-
-Ybus_fault = Ybus([fault_branch], get_components(Bus, omib_sys))[:, :]
-
-perturbation_Ybus = NetworkSwitch(
-    1.0, #change will occur at t = 1.0s
-    Ybus_fault, #new Ybus
-)
-
 time_span = (0.0, 30.0)
-sim = Simulation(pwd(), omib_sys, time_span, perturbation_Ybus)
+perturbation_trip = BranchTrip(1.0, "BUS 1-BUS 2-i_1")
+sim = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 print_device_states(sim)
 
@@ -45,7 +35,7 @@ Plots.plot(angle, xlabel = "time", ylabel = "rotor angle [rad]", label = "rotor 
 volt = get_voltagemag_series(sim, 102);
 Plots.plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 
-sim2 = Simulation(pwd(), omib_sys, time_span, perturbation_Ybus)
+sim2 = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 small_sig = small_signal_analysis(sim2)
 
