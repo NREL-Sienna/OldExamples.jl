@@ -13,7 +13,7 @@
 # (doubling its resistance and impedance) of the line that connects both buses.
 
 # ## Dependencies
-using SIIPExamples
+using SIIPExamples #hide
 using PowerSimulationsDynamics
 using PowerSystems
 using Sundials
@@ -48,7 +48,7 @@ omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 # - Change in Reference Parameter
 
 # Here, we will use a Branch Trip perturbation, that is modeled by modifying the
-# specifying which line we want to trip. In this case we disconnect one of the lines 
+# specifying which line we want to trip. In this case we disconnect one of the lines
 # that connects BUS 1 and BUS 2, named "BUS 1-BUS 2-i_1".
 
 # With this, we are ready to create our simulation structure:
