@@ -1,16 +1,16 @@
-using SIIPExamples
+using SIIPExamples #hide
 using PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
 gr()
 
-file_dir = joinpath( #hide
-    dirname(dirname(pathof(SIIPExamples))),#hide
-    "script",#hide
-    "4_PowerSimulationsDynamics_examples",#hide
-    "Data",#hide
-)#hide
+file_dir = joinpath(
+    dirname(dirname(pathof(SIIPExamples))),
+    "script",
+    "4_PowerSimulationsDynamics_examples",
+    "Data",
+)
 omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 
 time_span = (0.0, 30.0)
