@@ -289,6 +289,11 @@ git-tree-sha1 = "214c3fcac57755cfda163d91c58893a8723f93e9"
 uuid = "b552c78f-8df3-52c6-915a-8e097449b14b"
 version = "1.0.2"
 
+[[DisplayAs]]
+git-tree-sha1 = "44e8d47bc0b56ec09115056a692e5fa0976bfbff"
+uuid = "0b91fe84-8a4c-11e9-3e1d-67c38462b6d6"
+version = "0.1.2"
+
 [[Distances]]
 deps = ["LinearAlgebra", "Statistics"]
 git-tree-sha1 = "a5b88815e6984e9f3256b6ca0dc63109b16a506f"
@@ -968,13 +973,15 @@ version = "0.17.3"
 [[PowerSimulations]]
 deps = ["Arrow", "CSV", "DataFrames", "Dates", "InfrastructureSystems", "JSON", "JuMP", "LinearAlgebra", "Logging", "MathOptInterface", "ParameterJuMP", "Pkg", "PowerModels", "PowerSystems", "SHA", "Serialization", "TimeSeries", "TimerOutputs"]
 git-tree-sha1 = "f6563675149aa40a26b6df0f8e09d6fa186636be"
+repo-rev = "master"
+repo-url = "https://github.com/NREL-SIIP/PowerSimulations.jl.git"
 uuid = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 version = "0.8.0"
 
 [[PowerSimulationsDynamics]]
 deps = ["DiffEqBase", "DocStringExtensions", "ForwardDiff", "InfrastructureSystems", "LinearAlgebra", "Logging", "NLsolve", "PowerSystems", "SparseArrays"]
-git-tree-sha1 = "e1317bb6e5f38afa4580986ea527634da93fdd91"
-repo-rev = "jd/perturbation_refactor"
+git-tree-sha1 = "8d1e438081718769ccd9bf6e272ac4c9426d4dae"
+repo-rev = "master"
 repo-url = "https://github.com/NREL-SIIP/PowerSimulationsDynamics.jl.git"
 uuid = "398b2ede-47ed-4edc-b52e-69e4a48b4336"
 version = "0.3.0"
