@@ -39,7 +39,7 @@ for b in get_components(Bus, sys)
         label = "Bus - $(get_name(b))",
     )
 end
-img = DisplayAs.PNG(p) # This line is only needed because of literate
+img = DisplayAs.PNG(p) # This line is only needed because of literate use display(p) when running locally
 
 p2 = plot()
 for g in get_components(ThermalStandard, sys)
@@ -52,7 +52,7 @@ for g in get_components(ThermalStandard, sys)
         label = "$(get_name(g)) - ω",
     )
 end
-img = DisplayAs.PNG(p2) # This line is only needed because of literate
+img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
 
 res = small_signal_analysis(sim; reset_simulation = true)
 
@@ -130,7 +130,7 @@ res = small_signal_analysis(sim)
 
 scatter(res.eigenvalues)
 
-execute!(sim, IDA())
+execute!(sim, IDA(); abstol = 1e-8)
 
 p = plot()
 for b in get_components(Bus, sys)
@@ -143,7 +143,7 @@ for b in get_components(Bus, sys)
         label = "Bus - $(get_name(b))",
     )
 end
-img = DisplayAs.PNG(p) # This line is only needed because of literate
+img = DisplayAs.PNG(p) # This line is only needed because of literate use display(p) when running locally
 
 p2 = plot()
 for g in get_components(ThermalStandard, sys)
@@ -158,7 +158,7 @@ for g in get_components(ThermalStandard, sys)
 end
 state_series = get_state_series(sim, ("Battery", :ω_oc))
 plot!(p2, state_series; xlabel = "Time", ylabel = "Speed [pu]", label = "Battery - ω")
-img = DisplayAs.PNG(p2) # This line is only needed because of literate
+img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

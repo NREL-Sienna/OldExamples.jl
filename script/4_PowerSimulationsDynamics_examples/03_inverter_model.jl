@@ -65,7 +65,7 @@ for b in get_components(Bus, sys)
         label = "Bus - $(get_name(b))",
     )
 end
-img = DisplayAs.PNG(p) # This line is only needed because of literate
+img = DisplayAs.PNG(p) # This line is only needed because of literate use display(p) when running locally
 
 # We can also explore the frequency of the different generators
 
@@ -80,7 +80,7 @@ for g in get_components(ThermalStandard, sys)
         label = "$(get_name(g)) - ω",
     )
 end
-img = DisplayAs.PNG(p2) # This line is only needed because of literate
+img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
 
 # It is also possible to explore the small signal stability of this system we created. However,
 # Since a simulation has already taken place, we need to reset the model.
@@ -201,8 +201,7 @@ for b in get_components(Bus, sys)
         label = "Bus - $(get_name(b))",
     )
 end
-img = DisplayAs.PNG(p) # This line is only needed because of literate
-
+img = DisplayAs.PNG(p) # This line is only needed because of literate use display(p) when running locally
 # We can also explore the frequency of the different static generators and storage
 
 p2 = plot()
@@ -218,4 +217,4 @@ for g in get_components(ThermalStandard, sys)
 end
 state_series = get_state_series(sim, ("Battery", :ω_oc))
 plot!(p2, state_series; xlabel = "Time", ylabel = "Speed [pu]", label = "Battery - ω")
-img = DisplayAs.PNG(p2) # This line is only needed because of literate
+img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
