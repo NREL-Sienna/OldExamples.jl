@@ -79,13 +79,7 @@ execute!(
 
 # ## Exploring the solution
 
-# After execution, `sim` will contain the solution.
-#  - `sim.solution.t` contains the vector of time
-#  - `sim.solution.u` contains the array of states
-
-sim.solution
-
-# In addition, `PowerSimulationsDynamics` has two functions to obtain different
+# `PowerSimulationsDynamics` has two functions to obtain different
 # states of the solution:
 #  - `get_state_series(sim, ("generator-102-1", :δ))`: can be used to obtain the solution as
 # a tuple of time and the required state. In this case, we are obtaining the rotor angle `:δ`
