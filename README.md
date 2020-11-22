@@ -10,7 +10,7 @@ in many cases users may find the documentation pages for each package more infor
  - [PowerSystems.jl docs](https://nrel-siip.github.io/PowerSystems.jl/stable/)
  - [PowerSimulations.jl docs](https://nrel-siip.github.io/PowerSimulations.jl/latest/)
  - [PowerGraphics.jl docs](https://nrel-siip.github.io/PowerGraphics.jl/latest/)
- - [PowerSimulationsDynamics.jl](https://nrel-siip.github.io/PowerSimulationsDynamics.jl/latest/)
+ - [PowerSimulationsDynamics.jl docs](https://nrel-siip.github.io/PowerSimulationsDynamics.jl/stable/)
 
 ## Run Notebooks in the Browser
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/SIIPExamples.jl/master)
