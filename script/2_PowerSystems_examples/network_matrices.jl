@@ -13,6 +13,8 @@
 # ### Dependencies
 # Let's use a dataset from the [tabular data parsing example](../../notebook/2_PowerSystems_examples/parse_matpower.ipynb)
 using SIIPExamples
+using Logging
+logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"))
 

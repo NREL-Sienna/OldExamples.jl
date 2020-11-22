@@ -10,6 +10,8 @@
 # ### Dependencies
 # Let's use a dataset from the [tabular data parsing example](../../notebook/2_PowerSystems_examples/parse_matpower.ipynb)
 using SIIPExamples
+using Logging
+logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"))
 
@@ -17,10 +19,10 @@ include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"
 
 folder = mktempdir()
 path = joinpath(folder, "system.json")
-@info "Serializing to $path"
+println("Serializing to $path")
 to_json(sys, path)
 
-filesize(path) / 1000000 #MB
+filesize(path) / (1024 * 1024) #MiB
 
 # ### Read the JSON file and create a new `System`
 sys2 = System(path)
