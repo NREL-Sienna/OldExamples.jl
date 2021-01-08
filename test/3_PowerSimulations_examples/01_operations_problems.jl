@@ -1,6 +1,5 @@
 using SIIPExamples
 
-using InfrastructureSystems
 using PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations

@@ -14,7 +14,6 @@
 using SIIPExamples
 
 # ### Modeling Packages
-using InfrastructureSystems
 using PowerSystems
 using PowerSimulations
 const PSI = PowerSimulations
