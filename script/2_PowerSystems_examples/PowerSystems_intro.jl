@@ -34,11 +34,6 @@
 # However, it's worth recognizing that InfrastructureSystems provides much of the back end
 # code for managing and accessing data, especially time series data.
 #
-# The examples in this notebook depend upon Julia 1.5 and a specific set of package releases
-# as defined in the `Manifest.toml`.
-using Pkg
-Pkg.status()
-
 using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;

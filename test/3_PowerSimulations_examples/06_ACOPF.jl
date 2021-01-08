@@ -1,6 +1,11 @@
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"));
+include(joinpath(
+    pkgpath,
+    "test",
+    "3_PowerSimulations_examples",
+    "01_operations_problems.jl",
+));
 
 using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)

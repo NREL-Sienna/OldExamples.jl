@@ -27,8 +27,6 @@ execute!(
     dtmax = 0.02,
 ); #Arguments: Maximum timestep allowed
 
-sim.solution
-
 angle = get_state_series(sim, ("generator-102-1", :δ));
 Plots.plot(angle, xlabel = "time", ylabel = "rotor angle [rad]", label = "rotor angle")
 

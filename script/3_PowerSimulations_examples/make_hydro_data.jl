@@ -65,7 +65,7 @@ for load in get_components(PowerLoad, c_sys5_hy_uc)
     )
 end
 
-for gen in get_components(HydroGen, c_sys5_hy_uc)
+for gen in get_components(Union{HydroEnergyReservoir, HydroDispatch}, c_sys5_hy_uc)
     fc_values = Vector{Float64}()
     for t in MultiDay
         fc = get_time_series_array(Deterministic, gen, "max_active_power"; start_time = t)
@@ -82,7 +82,7 @@ for gen in get_components(HydroGen, c_sys5_hy_uc)
 end
 
 for gen in get_components(HydroEnergyReservoir, c_sys5_hy_uc)
-    for label in ["storage_capacity", "inflow", "storage_target"]
+    for label in ["hydro_budget", "inflow", "storage_target"]
         fc_values = Vector{Float64}()
         for t in MultiDay
             fc = get_time_series_array(

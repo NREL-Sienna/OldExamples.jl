@@ -33,7 +33,7 @@ To get started running the Jupyter notebooks included in this repository, you ca
 
 - Introduction
   - [An Introduction to Julia](https://nbviewer.jupyter.org/github/nrel-siip/SIIPExamples.jl/blob/master/notebook/1_introduction/an_introduction_to_julia.ipynb)
-- [PowerSystems.jl](https://gihtub.com/NREL-SIIP/PowerSystems.jl) SIIPExamples.jl
+- [PowerSystems.jl](https://github.com/NREL-SIIP/PowerSystems.jl) SIIPExamples.jl
   - [PowerSystems.jl Intro](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/PowerSystems_intro.ipynb)
   - Data Parsing:
     - [MATPOWER](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/parse_matpower.ipynb)

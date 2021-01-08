@@ -98,8 +98,8 @@ execute!(
 
 series2 = get_voltagemag_series(sim, 102)
 zoom = [
-    (series2[1][ix], series2[2][ix])
-    for (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
+    (series2[1][ix], series2[2][ix]) for
+    (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
 ];
 
 # # Step 3.1: Create the fault and simulation on the Dynamic Lines system
@@ -169,8 +169,8 @@ x0_init_dyn = get_initial_conditions(sim_dyn)
 
 series2_dyn = get_voltagemag_series(sim_dyn, 102)
 zoom_dyn = [
-    (series2_dyn[1][ix], series2_dyn[2][ix])
-    for (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
+    (series2_dyn[1][ix], series2_dyn[2][ix]) for
+    (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
 ];
 
 # # Step 6.1: Compare the solutions:

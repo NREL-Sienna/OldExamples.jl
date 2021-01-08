@@ -6,12 +6,6 @@
 
 # An example of how to parse PSS/e files and create a `System` using [PowerSystems.jl](github.com/NREL-SIIP/PowerSystems.jl)
 
-# ### Environment
-# This notebook depends on the SIIPExamples.jl environment which is loaded by default
-
-using Pkg
-Pkg.status()
-
 # ### Dependencies
 using SIIPExamples
 using PowerSystems
@@ -25,6 +19,6 @@ base_dir = dirname(dirname(pathof(PowerSystems)));
 
 # ### Create a `System`
 
-sys = System(PowerModelsData(joinpath(base_dir, "data", "psse_raw", "RTS-GMLC.RAW")));
+sys = System(joinpath(base_dir, "data", "psse_raw", "RTS-GMLC.RAW"));
 
 sys

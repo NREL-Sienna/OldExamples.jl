@@ -9,12 +9,6 @@
 # [Xu, et. al.](https://arxiv.org/abs/2002.06155). We'll use the same tabular data parsing
 # capability [demonstrated on the RTS-GMLC dataset](../../notebook/2_PowerSystems_examples/parse_tabulardata.ipynb).
 
-# ### Environment
-# This notebook depends on the SIIPExamples.jl environment which is loaded by default
-
-#nb using Pkg
-#nb Pkg.status()
-
 # ### Dependencies
 using SIIPExamples
 using PowerSystems
@@ -93,34 +87,34 @@ gen[:, :min_up_time] .= 0.0
 gen[:, :min_down_time] .= 0.0
 gen[:, :ramp_30] .= gen[:, :ramp_30] ./ 30.0 # we need ramp rates in MW/min
 [
-    gen[gen.type .== "wind", col] .= ["Wind", 0.0, 0.0][ix]
-    for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
+    gen[gen.type .== "wind", col] .= ["Wind", 0.0, 0.0][ix] for
+    (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type .== "solar", col] .= ["PV", 0.0, 0.0][ix]
-    for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
+    gen[gen.type .== "solar", col] .= ["PV", 0.0, 0.0][ix] for
+    (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type .== "hydro", col] .= ["HY", 0.0, 0.0][ix]
-    for (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
+    gen[gen.type .== "hydro", col] .= ["HY", 0.0, 0.0][ix] for
+    (ix, col) in enumerate([:unit_type, :min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type .== "ng", col] .= [4.5, 8][ix]
-    for (ix, col) in enumerate([:min_up_time, :min_down_time])
+    gen[gen.type .== "ng", col] .= [4.5, 8][ix] for
+    (ix, col) in enumerate([:min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type .== "coal", col] .= [24, 48][ix]
-    for (ix, col) in enumerate([:min_up_time, :min_down_time])
+    gen[gen.type .== "coal", col] .= [24, 48][ix] for
+    (ix, col) in enumerate([:min_up_time, :min_down_time])
 ]
 [
-    gen[gen.type .== "nuclear", col] .= [72, 72][ix]
-    for (ix, col) in enumerate([:min_up_time, :min_down_time])
+    gen[gen.type .== "nuclear", col] .= [72, 72][ix] for
+    (ix, col) in enumerate([:min_up_time, :min_down_time])
 ]
 
 # At the moment, PowerSimulations can't do unit commitment with generators that have Pmin = 0.0
 idx_zero_pmin = [
-    g.type in ["ng", "coal", "hydro", "nuclear"] && g.Pmin <= 0
-    for g in eachrow(gen[:, [:type, :Pmin]])
+    g.type in ["ng", "coal", "hydro", "nuclear"] && g.Pmin <= 0 for
+    g in eachrow(gen[:, [:type, :Pmin]])
 ]
 gen[idx_zero_pmin, :Pmin] = gen[idx_zero_pmin, :Pmax] .* 0.05
 
