@@ -4,7 +4,7 @@ export print_struct
 
 # using Weave
 using Literate
-using JSON2
+import JSON3
 
 repo_directory = dirname(joinpath(@__DIR__))
 
@@ -24,7 +24,7 @@ end
 
 function read_json(filename)
     return open(filename) do io
-        JSON2.read(io, Dict)
+        JSON3.read(io, Dict)
     end
 end
 

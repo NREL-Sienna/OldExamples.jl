@@ -23,11 +23,14 @@ using Dates
 using TimeZones
 using DataFrames
 using CSV
+using Logging
+
+logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 
 # ### Fetch Data
 # PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
-@info "downloading data..."
+println("downloading data...")
 datadir = joinpath(dirname(dirname(pathof(SIIPExamples))), "US-System")
 siip_data = joinpath(datadir, "SIIP")
 if !isdir(datadir)
@@ -57,8 +60,8 @@ initial_time = ZonedDateTime(DateTime("2016-01-01T00:00:00"), timezone)
 #
 # First, PowerSystems.jl only supports parsing piecewise linear generator costs from tabular
 # data. So, we can sample the quadratic polynomial cost curves and provide PWL points.
-@info "formatting data ..."
-!isnothing(interconnect) && @info "filtering data to include $interconnect ..."
+println("formatting data ...")
+!isnothing(interconnect) && println("filtering data to include $interconnect ...")
 gen = DataFrame(CSV.File(joinpath(datadir, "plant.csv")))
 filter!(row -> row[:interconnect] == interconnect, gen)
 gencost = DataFrame(CSV.File(joinpath(datadir, "gencost.csv")))
@@ -171,7 +174,7 @@ timeseries = []
 ts_csv = ["wind", "solar", "hydro", "demand"]
 plant_ids = Symbol.(string.(gen.plant_id))
 for f in ts_csv
-    @info "formatting $f.csv ..."
+    println("formatting $f.csv ...")
     csvpath = joinpath(siip_data, f * ".csv")
     csv = DataFrame(CSV.File(joinpath(datadir, f * ".csv")))
     (category, name_prefix, label) =
@@ -239,7 +242,7 @@ end
 # describing the column names of each file in PowerSystems terms, and the PowerSystems
 # data type that should be created for each generator type. The respective "us_decriptors.yaml"
 # and "US_generator_mapping.yaml" files have already been tailored to this dataset.
-@info "parsing csv files..."
+println("parsing csv files...")
 rawsys = PowerSystems.PowerSystemTableData(
     siip_data,
     100.0,
@@ -253,7 +256,7 @@ rawsys = PowerSystems.PowerSystemTableData(
 # time series, we also need to specify which time series we want to include in the `System`.
 # The `time_series_resolution` kwarg filters to only include time series with a matching resolution.
 
-@info "creating System"
+println("creating System")
 sys = System(rawsys; config_path = joinpath(config_dir, "us_system_validation.json"));
 sys
 

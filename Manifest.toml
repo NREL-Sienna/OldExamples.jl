@@ -543,12 +543,6 @@ git-tree-sha1 = "81690084b6198a2e1da36fcfda16eeca9f9f24e4"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.1"
 
-[[JSON2]]
-deps = ["Dates", "Parsers", "Test"]
-git-tree-sha1 = "66397cc6c08922f98a28ab05a8d3002f9853b129"
-uuid = "2535ab7d-5cd8-5a07-80ac-9b1792aadce3"
-version = "0.3.2"
-
 [[JSON3]]
 deps = ["Dates", "Mmap", "Parsers", "StructTypes", "UUIDs"]
 git-tree-sha1 = "f17f647d78ade849298039b75bbd48c05da77900"
@@ -843,9 +837,9 @@ version = "1.3.4+2"
 
 [[OpenBLAS32_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "a459bb2c511b679d726cfd6c4c370149c6837fe3"
+git-tree-sha1 = "ba4a8f683303c9082e84afba96f25af3c7fb2436"
 uuid = "656ef2d0-ae68-5445-9ca0-591084a874a2"
-version = "0.3.12+0"
+version = "0.3.12+1"
 
 [[OpenBLAS_jll]]
 deps = ["CompilerSupportLibraries_jll", "Libdl", "Pkg"]

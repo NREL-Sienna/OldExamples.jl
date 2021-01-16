@@ -42,7 +42,9 @@ Pkg.status()
 using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;
-IS = PowerSystems.IS
+using Logging
+
+logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 
 # ## Types in PowerSystems
 # PowerSystems.jl provides a type hierarchy for specifying power system data. Data that
