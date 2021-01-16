@@ -11,6 +11,10 @@
 # ### Dependencies
 # Let's use the 5-bus dataset we parsed in the MATPOWER example
 using SIIPExamples
+using PowerSystems
+using Logging
+
+logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"))
 
@@ -22,14 +26,9 @@ include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"
 FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts")
 fname = joinpath(FORECASTS_DIR, "timeseries_pointers_da.json")
 open(fname, "r") do f
-    for line in eachline(f)
-        println(line)
-    end
+    @JSON3.@pretty JSON3.read(f)
 end
 
-# ### Read the pointers
-ts_pointers = PowerSystems.IS.read_time_series_file_metadata(fname)
-
-# ### Read and assign time series to `System` using the `ts_pointers` struct
-add_time_series!(sys, ts_pointers)
+# ### Read and assign time series to `System` using these parameters.
+add_time_series!(sys, fname)
 sys

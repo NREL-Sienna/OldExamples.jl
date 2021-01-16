@@ -4,7 +4,7 @@ export print_struct
 export print_tree
 
 using Literate
-using JSON2
+using JSON3
 using AbstractTrees
 using InteractiveUtils
 # lightweight type tree printing
@@ -28,7 +28,7 @@ end
 
 function read_json(filename)
     return open(filename) do io
-        JSON2.read(io, Dict)
+        JSON3.read(io, Dict)
     end
 end
 

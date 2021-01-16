@@ -10,6 +10,9 @@
 using SIIPExamples
 using PowerSystems
 using TimeSeries
+using Logging
+
+logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 
 # ### Fetch Data
 # PowerSystems.jl links to some test data that is suitable for this example.
