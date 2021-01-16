@@ -37,9 +37,13 @@
 using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;
-using Logging
 
-logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
+# Normally, I'd add the following two lines to configure logging behavior, but something about
+# Literate.jl makes this fail, so these examples only work with the default log configuration.
+# ```julia
+# using Logging
+# logger = configure_logging(console_level = Logging.Error, file_level = Logging.Info, filename = "ex.log")
+# ````
 
 # ## Types in PowerSystems
 # PowerSystems.jl provides a type hierarchy for specifying power system data. Data that
@@ -95,7 +99,7 @@ TypeTree(TimeSeriesData)
 print_struct(Deterministic)
 
 # Examples of how to create and add time series to system can be found in the
-# [Add Time Series Example](../PowerSystems.jl Examples/add_forecasts.ipynb)
+# [Add Time Series Example](../PowerSystems.jl Examples/05_add_forecasts.ipynb)
 
 # ### System
 # The `System` object collects all of the individual components into a single struct along

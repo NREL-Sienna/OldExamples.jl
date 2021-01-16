@@ -22,7 +22,6 @@ using D3TypeTrees
 # ### Data management packages
 using Dates
 using DataFrames
-using Logging
 
 # ### Optimization packages
 using Cbc #solver
@@ -31,12 +30,11 @@ using Cbc #solver
 # This data depends upon the [RTS-GMLC](https://github.com/gridmod/rts-gmlc) dataset. Let's
 # download and extract the data.
 
-logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
 rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
 rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP");
 
-# ### Create a `System` from RTS-GMLC data just like we did in the [parsing tabular data example.](../../notebook/2_PowerSystems_examples/parse_tabulardata.jl)
+# ### Create a `System` from RTS-GMLC data just like we did in the [parsing tabular data example.](../../notebook/2_PowerSystems_examples/04_parse_tabulardata.jl)
 rawsys = PowerSystems.PowerSystemTableData(
     rts_src_dir,
     100.0,

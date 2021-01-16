@@ -24,7 +24,7 @@ problem = OperationsProblem(
     PTDF = PTDF_matrix,
 )
 
-res = solve!(problem)
+res = solve!(problem);
 
 λ = convert(Array, res.dual_values[:CopperPlateBalance])
 μ = convert(Array, res.dual_values[:network_flow])

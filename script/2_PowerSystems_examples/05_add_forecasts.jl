@@ -12,11 +12,10 @@
 # Let's use the 5-bus dataset we parsed in the MATPOWER example
 using SIIPExamples
 using PowerSystems
-using Logging
+using JSON3
 
-logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"))
+include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "02_parse_matpower.jl"))
 
 # ### Define pointers to time series files
 # For example, if we want to add a bunch of time series files, say one for each load and
@@ -26,7 +25,7 @@ include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"
 FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts")
 fname = joinpath(FORECASTS_DIR, "timeseries_pointers_da.json")
 open(fname, "r") do f
-    @JSON3.@pretty JSON3.read(f)
+    JSON3.@pretty JSON3.read(f)
 end
 
 # ### Read and assign time series to `System` using these parameters.

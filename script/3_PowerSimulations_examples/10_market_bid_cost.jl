@@ -35,7 +35,7 @@ rts_dir = SIIPExamples.download("https://github.com/GridMod/RTS-GMLC")
 rts_src_dir = joinpath(rts_dir, "RTS_Data", "SourceData")
 rts_siip_dir = joinpath(rts_dir, "RTS_Data", "FormattedData", "SIIP");
 
-# ### Create a `System` from RTS-GMLC data just like we did in the [parsing tabular data example.](../../notebook/2_PowerSystems_examples/parse_tabulardata.jl)
+# ### Create a `System` from RTS-GMLC data just like we did in the [parsing tabular data example.](../../notebook/2_PowerSystems_examples/04_parse_tabulardata.jl)
 rawsys = PowerSystems.PowerSystemTableData(
     rts_src_dir,
     100.0,

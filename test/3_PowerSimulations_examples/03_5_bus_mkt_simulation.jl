@@ -100,7 +100,7 @@ DA_RT_sequence = SimulationSequence(
     feedforward = feedforward,
 )
 
-file_path = tempdir()
+file_path = mkpath(joinpath(".","5-bus-simulation"))
 sim = Simulation(
     name = "5bus-test",
     steps = 1,
@@ -117,9 +117,9 @@ results = SimulationResults(sim)
 uc_results = get_stage_results(results, "UC")
 ed_results = get_stage_results(results, "ED");
 
-prices = read_dual(ed_results, :CopperPlateBalance)
+#prices = read_dual(ed_results, :CopperPlateBalance)
 
-read_realized_duals(ed_results)[:CopperPlateBalance]
+#read_realized_duals(ed_results)[:CopperPlateBalance]
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

@@ -26,7 +26,7 @@ gr()
 
 # ## Load the system
 # _The following command requires that you have executed the
-# [dynamic systems data example](../../notebook/2_PowerSystems_examples/loading_dynamic_systems_data.jl.ipynb)
+# [dynamic systems data example](../../notebook/2_PowerSystems_examples/09_loading_dynamic_systems_data.jl.ipynb)
 # previously to generate the json file._
 file_dir = joinpath(
     dirname(dirname(pathof(SIIPExamples))),

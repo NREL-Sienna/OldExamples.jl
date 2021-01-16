@@ -6,7 +6,7 @@
 # ## Introduction
 
 # This example shows a basic PCM simulation using the system data assembled in the
-# [US-System example](../../notebook/2_PowerSystems_examples/US_system.ipynb).
+# [US-System example](../../notebook/2_PowerSystems_examples/08_US_system.ipynb).
 
 # ### Dependencies
 using SIIPExamples

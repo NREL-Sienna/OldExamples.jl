@@ -126,8 +126,7 @@ DA_RT_sequence = SimulationSequence(
 )
 
 # ## `Simulation`
-
-file_path = tempdir()
+file_path = mkpath(joinpath(".","5-bus-simulation"))
 sim = Simulation(
     name = "5bus-test",
     steps = 1,
@@ -152,11 +151,11 @@ ed_results = get_stage_results(results, "ED");
 
 # Then we can read and examine the results of interest
 
-prices = read_dual(ed_results, :CopperPlateBalance)
+#prices = read_dual(ed_results, :CopperPlateBalance)
 
 # or if we want to look at the realized values
 
-read_realized_duals(ed_results)[:CopperPlateBalance]
+#read_realized_duals(ed_results)[:CopperPlateBalance]
 
 # *note that in this simulation the prices are all equal to the balance slack
 # penalty value of $100000/MWh because there is unserved energy in the result*

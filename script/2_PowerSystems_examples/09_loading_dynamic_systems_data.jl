@@ -10,10 +10,6 @@
 using SIIPExamples
 using PowerSystems
 const PSY = PowerSystems
-using Logging
-
-logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
-
 
 # # Step 1: System description
 

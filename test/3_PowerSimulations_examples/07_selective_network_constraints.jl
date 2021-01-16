@@ -7,7 +7,7 @@ using Cbc #solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_tabulardata.jl"))
+include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "04_parse_tabulardata.jl"))
 
 for line in get_components(Line, sys)
     if (get_base_voltage(get_from(get_arc(line))) >= 230.0) &&

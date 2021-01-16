@@ -7,7 +7,7 @@
 # This example demonstrates how to assemble a `System` representing the entire U.S. using
 # [PowerSystems.jl](https://github.com/NREL-SIIP/powersystems.jl) and the data assembled by
 # [Xu, et. al.](https://arxiv.org/abs/2002.06155). We'll use the same tabular data parsing
-# capability [demonstrated on the RTS-GMLC dataset](../../notebook/2_PowerSystems_examples/parse_tabulardata.ipynb).
+# capability [demonstrated on the RTS-GMLC dataset](../../notebook/2_PowerSystems_examples/04_parse_tabulardata.ipynb).
 
 # ### Dependencies
 using SIIPExamples
@@ -17,9 +17,6 @@ using Dates
 using TimeZones
 using DataFrames
 using CSV
-using Logging
-
-logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 
 # ### Fetch Data
 # PowerSystems.jl links to some test data that is suitable for this example.

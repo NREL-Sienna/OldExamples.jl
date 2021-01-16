@@ -1,6 +1,7 @@
 using SIIPExamples
+
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"))
+include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "02_parse_matpower.jl"))
 
 ybus = Ybus(sys)
 

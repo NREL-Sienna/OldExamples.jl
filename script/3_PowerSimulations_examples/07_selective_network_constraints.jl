@@ -23,9 +23,9 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 
 # ### Create a `System` from RTS-GMLC data
 # We can just use the
-# [parsing tabular data example.](../../notebook/2_PowerSystems_examples/parse_tabulardata.jl)
+# [parsing tabular data example.](../../notebook/2_PowerSystems_examples/04_parse_tabulardata.jl)
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_tabulardata.jl"))
+include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "04_parse_tabulardata.jl"))
 
 # ### Selecting flow limited lines
 # Since PowerSimulations will apply constraints by component type (e.g. Line), we need to
