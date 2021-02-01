@@ -10,25 +10,22 @@
 # AC optimal power flow.
 
 # ## Dependencies
-# We can use the same RTS data and some of the initialization as in
-# [OperationsProblem example](../../notebook/3_PowerSimulations_examples/1_operations_problems.ipynb)
-# by sourcing it as a dependency.
+# We can use the a TAMU synthetic ERCOT dataset that is included in the PowerSystemsTestData.
 using SIIPExamples
+using PowerSystems
+using PowerSimulations
 using Dates
 
-base_dir = PowerSystems.download(PowerSystems.TestData; branch = "master");
-sys = System(joinpath(base_dir, "matpower", "RTS_GMLC.m"))
-tsp = joinpath(base_dir, "RTS_GMLC", "timeseries_pointers.json")
-add_time_series!(sys, tsp, resolution = Hour(1))
-#=
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(
-    pkgpath,
-    "test",
-    "3_PowerSimulations_examples",
-    "01_operations_problems.jl",
-));
-=#
+pkgpath = pkgdir(SIIPExamples)
+PowerSystems.download(PowerSystems.TestData; branch = "master") # *note* add `force=true` to get a fresh copy
+base_dir = pkgdir(PowerSystems);
+
+# The TAMU data format relies on a folder containing `.m` or `.raw` files and `.csv`
+# files for the time series data. We have provided a parser for the TAMU data format with
+# the `TamuSystem()` function.
+
+TAMU_DIR = joinpath(base_dir, "data", "ACTIVSg2000");
+sys = TamuSystem(TAMU_DIR)
 transform_single_time_series!(sys, 2, Hour(1))
 
 # Since we'll be doing non-linear optimization, we need a solver that supports non-linear
@@ -47,48 +44,19 @@ solver = optimizer_with_attributes(Ipopt.Optimizer)
 # For now, let's just choose a standard ACOPF formulation.
 devices = Dict(
         :Generators => DeviceModel(ThermalStandard, ThermalDispatch),
-        :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
         :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-        #:HydroROR => DeviceModel(HydroDispatch, HydroDispatchRunOfRiver),
-        #:Hydro => DeviceModel(HydroEnergyReservoir, FixedOutput),
-        #:RenFx => DeviceModel(RenewableFix, FixedOutput),
+        :QLoads => DeviceModel(FixedAdmittance, StaticPowerLoad)
     )
 ed_template = template_economic_dispatch(network = ACPPowerModel, devices = devices)
 
-# Currently  energy budget data isn't stored in the RTS-GMLC dataset.
-#ed_template.devices[:Hydro] = DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
-
-
-# The ACOPF with linear dispatch decisions is infeasible for many of the 8760 time periods.
-# The data and baseline commitment pattern is based on a peak load flow case, so it's worth
-# selecting a peak period to analyze.
-
-loads = get_components(PowerLoad, sys)
-timerange = range(
-    get_forecast_initial_timestamp(sys),
-    step = get_time_series_resolution(sys),
-    stop =  get_forecast_initial_timestamp(sys) + get_forecast_total_period(sys)
-    )
-
-load_ts = []
-for (ix, load) in enumerate(loads)
-    push!(load_ts, get_time_series_values(SingleTimeSeries, load, "max_active_power"))
-end
-load_ts = Matrix(hcat(load_ts...))
-(peak_load, hour_id) = findmax(sum(load_ts, dims = 2))
-
-peak_time = timerange[hour_id,1]
-
-
-# Now we can build a 4-hour economic dispatch / ACOPF problem with the RTS data.
+# Now we can build a 4-hour economic dispatch / ACOPF problem with the TAMU data.
 problem = OperationsProblem(
     EconomicDispatchProblem,
     ed_template,
     sys,
     horizon = 1,
     optimizer = solver,
-    balance_slack_variables = false,
-    initial_time = peak_time
+    balance_slack_variables = true,
 )
 
 # And solve it ...
