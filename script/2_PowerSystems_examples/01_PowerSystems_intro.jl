@@ -65,7 +65,7 @@ print_struct(Bus)
 # - `InfrastructureSystems.DeviceParameter`: includes structs that hold data describing the
 #  dynamic, or economic capabilities of `Device`.
 # - `TimeSeriesData`: Includes all time series types
-#   - `time series`: includes structs to define time series of forecasted data where multiple
+#   - `Forecast`: includes structs to define time series of forecasted data where multiple
 # values can represent each time stamp
 #   - `StaticTimeSeries`: includes structs to define time series with a single value for each
 # time stamp
@@ -74,7 +74,7 @@ print_struct(Bus)
 # *The following trees are made with [D3TypeTrees](https://github.com/claytonpbarrows/D3TypeTrees.jl),
 # nodes that represent Structs will show the Fields in the hoverover tooltip.*
 
-# TypeTree(InfrastructureSystemsType)
+# TypeTree(PowerSystems.IS.InfrastructureSystemsType)
 
 # ### `TimeSeriesData`
 # [_Read the Docs!_](https://nrel-siip.github.io/PowerSystems.jl/stable/modeler_guide/time_series/)
