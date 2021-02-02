@@ -76,6 +76,6 @@ build!(sim)
 #nb execute!(sim)
 
 # ### Load and analyze results
-#nb sim_results = SimulationResults(sim)
+#nb sim_results = SimulationResults(sim);
 #nb uc_results = get_stage_results(sim_results, "UC")
 #nb read_realized_variables(uc_results, names = [:On__ThermalStandard])[:On__ThermalStandard]

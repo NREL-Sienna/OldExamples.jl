@@ -73,7 +73,7 @@ build!(sim)
 
 execute!(sim)
 
-results = SimulationResults(sim)
+results = SimulationResults(sim);
 uc_results = get_stage_results(results, "UC"); # UC stage result metadata
 ed_results = get_stage_results(results, "ED"); # ED stage result metadata
 

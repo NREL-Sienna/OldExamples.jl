@@ -23,7 +23,7 @@ simulation_folder = joinpath(pkgpath, "RTS-GMLC-master", "rts-test")
 simulation_folder =
     joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
 
-results = SimulationResults(simulation_folder)
+results = SimulationResults(simulation_folder);
 res = get_stage_results(results, "UC")
 
 # ## Plots

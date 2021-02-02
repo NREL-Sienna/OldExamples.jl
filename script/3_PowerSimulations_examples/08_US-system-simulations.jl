@@ -126,7 +126,7 @@ build!(
 #nb execute!(sim)
 
 # ### Load and analyze results
-#nb results = SimulationResults(sim)
+#nb results = SimulationResults(sim);
 #nb uc_results = get_stage_results(results, "UC");
 
 #nb fuel_plot(uc_results, load = true, curtailment = true, stack = true)

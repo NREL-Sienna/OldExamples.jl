@@ -165,7 +165,7 @@ execute!(sim)
 # To access the results, we need to load the simulation result metadata and then make
 # requests to the specific data of interest. This allows you to efficiently access the
 # results of interest without overloading resources.
-results = SimulationResults(sim)
+results = SimulationResults(sim);
 uc_results = get_stage_results(results, "UC"); # UC stage result metadata
 ed_results = get_stage_results(results, "ED"); # ED stage result metadata
 

@@ -9,7 +9,7 @@ using DataFrames
 using Cbc # mip solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 using Ipopt # solver that supports duals
-ipopt_solver = optimizer_with_attributes(Ipopt.Optimizer)
+ipopt_solver = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
 
 base_dir = PowerSystems.download(PowerSystems.TestData; branch = "master");
 pm_data = PowerSystems.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
@@ -113,13 +113,7 @@ build!(sim)
 
 execute!(sim)
 
-results = SimulationResults(sim)
-uc_results = get_stage_results(results, "UC")
-ed_results = get_stage_results(results, "ED");
-
-prices = read_dual(ed_results, :CopperPlateBalance)
-
-read_realized_duals(ed_results)[:CopperPlateBalance]
+# Results
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

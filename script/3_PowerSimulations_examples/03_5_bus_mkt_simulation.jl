@@ -26,7 +26,7 @@ using DataFrames
 using Cbc # mip solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 using Ipopt # solver that supports duals
-ipopt_solver = optimizer_with_attributes(Ipopt.Optimizer)
+ipopt_solver = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
 
 # ### 5-bus Data
 # The five bus system data here includes hourly day-ahead data, 5-minute real-time market
@@ -140,22 +140,27 @@ sim = Simulation(
 build!(sim)
 
 # ### Execute simulation
-
+# ```julia
 execute!(sim)
+# ```
 
-# ## Results
+## Results
 # First we can load the result metadata
-results = SimulationResults(sim)
-uc_results = get_stage_results(results, "UC")
-ed_results = get_stage_results(results, "ED");
+# ```julia
+# results = SimulationResults(sim);
+# uc_results = get_stage_results(results, "UC")
+# ed_results = get_stage_results(results, "ED");
+# ```
 
 # Then we can read and examine the results of interest
-
-prices = read_dual(ed_results, :CopperPlateBalance)
+# ```julia
+# prices = read_dual(ed_results, :CopperPlateBalance)
+# ```
 
 # or if we want to look at the realized values
-
-read_realized_duals(ed_results)[:CopperPlateBalance]
+# ```julia
+# read_realized_duals(ed_results)[:CopperPlateBalance]
+# ```
 
 # *note that in this simulation the prices are all equal to the balance slack
 # penalty value of $100000/MWh because there is unserved energy in the result*
