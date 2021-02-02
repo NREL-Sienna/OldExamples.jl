@@ -1,10 +1,14 @@
 module SIIPExamples
 
 export print_struct
+export print_tree
 
-# using Weave
 using Literate
-import JSON3
+using JSON3
+using AbstractTrees
+using InteractiveUtils
+# lightweight type tree printing
+AbstractTrees.children(x::Type) = subtypes(x)
 
 repo_directory = dirname(joinpath(@__DIR__))
 

@@ -1,13 +1,14 @@
 using SIIPExamples
+
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "parse_matpower.jl"))
+include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "02_parse_matpower.jl"))
 
 folder = mktempdir()
 path = joinpath(folder, "system.json")
-@info "Serializing to $path"
+println("Serializing to $path")
 to_json(sys, path)
 
-filesize(path) / 1000000 #MB
+filesize(path) / (1024 * 1024) #MiB
 
 sys2 = System(path)
 

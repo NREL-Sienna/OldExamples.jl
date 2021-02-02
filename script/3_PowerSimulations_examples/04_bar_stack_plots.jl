@@ -22,44 +22,54 @@ using PowerGraphics
 simulation_folder = joinpath(pkgpath, "RTS-GMLC-master", "rts-test")
 simulation_folder =
     joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
-res = load_simulation_results(simulation_folder, "UC")
+
+results = SimulationResults(simulation_folder);
+res = get_stage_results(results, "UC")
 
 # ## Plots
 # By default, PowerGraphics uses the GR graphics package as the backend for Plots.jl to
 # generate figures. This creates static plots and should execute without any extra steps.
-# For example, we can create a stacked bar_plot:
+# For example, we can create a plot of a particular variable in the `res` object:
 gr() # loads the GR backend
-bar_plot(res)
+timestamps = get_realized_timestamps(res)
+variables = read_realized_variables(res)
+
+plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps)
 
 # However, interactive plotting can generate much more insightful figures, especially when
 # creating somewhat complex stacked figures. So, we can use the PlotlyJS backend for Plots,
-# but it requires that PlotlyJS.jl, and ORCA.jl (if in a notebook, WebIO.jl is required too)
-# are installed in your Project.toml. To startup the PlotlyJS backend, run:
+# but it requires that PlotlyJS.jl is installed in your Project.toml (if in a notebook,
+# WebIO.jl is required too). To startup the PlotlyJS backend, run:
 plotlyjs()
 
-# Now we can create stacked bar plots that can be inspected interactively.
-bar_plot(res)
+# PowerGraphics creates an un-stacked line plot by default, but supports kwargs to
+# create a variety of different figure styles. For example, a stacked area figure can be
+# created with the `stack = true` kwarg:
 
-# Similarly, we can create a stack plot for any combination of variable to see the time
-# series values. *Note: the `load = true` kwarg populates a line for the total system load.*
+plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps; stack = true)
 
-stack_plot(res, [Symbol("P__ThermalStandard"), Symbol("P__RenewableDispatch")], load = true)
+# Or a bar chart can be created with `bar = true`:
+plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps; bar = true)
 
-# Or, we can create a series of stack plots for every variable in the dictionary:
-# ```julia
-# stack_plot(res)
-# ```
+# Or a stacked bar chart...
+plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps; bar = true, stack = true)
 
-# Generator fuel types are not stored in the model, or the associated results files. So,
-# to make aggregated fuel plots, we need to load the `System` as well. The simulation routine
-# automatically serializes the `System` data into the results directory, so we just need to
-# load it.
-uc_sys = System(joinpath(
-    simulation_folder,
-    "models_json",
-    "stage_UC_model",
-    "Stage1_sys_data.json",
-))
+# PowerGraphics also supports some basic aggregation to create cleaner plots. For example,
+# we can create a plot of the different variables:
+generation = get_generation_data(res)
+plot_pgdata(generation, stack = true)
 
-# Now we can make a set of aggregated plots by fuel type.
-fuel_plot(res, uc_sys, load = true)
+reserves = get_service_data(res)
+plot_pgdata(reserves)
+
+# Another standard aggregation is available to plot demand values:
+plot_demand(res)
+
+# The `plot_demand` function can also be called with the `System` rather than the `StageResults`
+# to inspect the input data. This method can also display demands aggregated by a specified
+# `<:Topology`:
+plot_demand(res.system, aggregation = Area)
+
+# Another standard aggregation exists based on the fuel categories of the generators in the
+# `System`
+plot_fuel(res, stack = true)

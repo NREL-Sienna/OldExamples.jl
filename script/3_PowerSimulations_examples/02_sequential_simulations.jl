@@ -14,12 +14,9 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(
-    pkgpath,
-    "test",
-    "3_PowerSimulations_examples",
-    "01_operations_problems.jl",
-))
+include(
+    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
+)
 
 # ### 5-Minute system
 # We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.
@@ -160,12 +157,37 @@ sim = Simulation(
 build!(sim)
 
 # ### Execute simulation
-
-sim_results = execute!(sim)
+# the following command returns the status of the simulation (0: is proper execution) and
+# stores the results in a set of HDF5 files on disk.
+execute!(sim)
 
 # ## Results
-uc_results = load_simulation_results(sim_results, "UC");
-ed_results = load_simulation_results(sim_results, "ED");
+# To access the results, we need to load the simulation result metadata and then make
+# requests to the specific data of interest. This allows you to efficiently access the
+# results of interest without overloading resources.
+results = SimulationResults(sim);
+uc_results = get_stage_results(results, "UC"); # UC stage result metadata
+ed_results = get_stage_results(results, "ED"); # ED stage result metadata
+
+# Now we can read the specific results of interest for a specific stage, time window (optional),
+# and set of variables, duals, or parameters (optional)
+
+read_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+
+# Or if we want the result of just one variable, parameter, or dual (must be defined in the
+# stage definition), we can use:
+
+read_parameter(
+    ed_results,
+    :P__max_active_power__RenewableFix,
+    initial_time = DateTime("2020-01-01T06:00:00"),
+    count = 5,
+)
+
+# * note that this returns the results of each execution step in a separate dataframe *
+# If you want the realized results (without lookahead periods), you can call `read_realized_*`:
+
+read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 # ## Plotting
 # Take a look at the examples in [the plotting folder.](../../notebook/3_PowerSimulations_examples/Plotting)

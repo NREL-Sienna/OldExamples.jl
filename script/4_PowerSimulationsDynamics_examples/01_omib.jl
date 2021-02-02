@@ -15,6 +15,7 @@
 # ## Dependencies
 using SIIPExamples #hide
 using PowerSimulationsDynamics
+PSID = PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
@@ -26,7 +27,7 @@ gr()
 
 # ## Load the system
 # _The following command requires that you have executed the
-# [dynamic systems data example](../../notebook/2_PowerSystems_examples/loading_dynamic_systems_data.jl.ipynb)
+# [dynamic systems data example](../../notebook/2_PowerSystems_examples/09_loading_dynamic_systems_data.jl.ipynb)
 # previously to generate the json file._
 file_dir = joinpath(
     dirname(dirname(pathof(SIIPExamples))),
@@ -54,7 +55,7 @@ omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 # With this, we are ready to create our simulation structure:
 time_span = (0.0, 30.0)
 perturbation_trip = BranchTrip(1.0, "BUS 1-BUS 2-i_1")
-sim = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
+sim = PSID.Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 # This will automatically initialize the system by running a power flow
 # and update `V_ref`, `P_ref` and hence `eq_p` (the internal voltage) to match the
@@ -63,12 +64,12 @@ sim = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 print_device_states(sim)
 
 # To examine the calculated initial conditions, we can export them into a dictionary:
-x0_init = get_initial_conditions(sim)
+x0_init = PSID.get_initial_conditions(sim)
 
 # ## Run the Simulation
 
 # Finally, to run the simulation we simply use:
-execute!(
+PSID.execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02,
@@ -101,7 +102,7 @@ Plots.plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 # of the system for the differential states. This can be used to analyze the local stability
 # of the linearized system. We need to re-initialize our simulation:
 
-sim2 = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
+sim2 = PSID.Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 small_sig = small_signal_analysis(sim2)
 

@@ -8,20 +8,11 @@
 # the [RTS-GMLC](github.com/gridmod/rts-gmlc/RTS_Data/SourceData) and create a `System` using
 # [PowerSystems.jl](github.com/NREL-SIIP/PowerSystems.jl)
 
-# ### Environment
-# This notebook depends on the SIIPExamples.jl environment which is loaded by default
-
-#nb using Pkg
-#nb Pkg.status()
-
 # ### Dependencies
 using SIIPExamples
 using PowerSystems
 using TimeSeries
 using Dates
-using Logging
-
-logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
 
 # ### Fetch Data
 # PowerSystems.jl links to some test data that is suitable for this example.

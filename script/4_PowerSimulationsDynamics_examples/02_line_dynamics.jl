@@ -23,6 +23,7 @@
 # # Step 1: Package Initialization
 using SIIPExamples
 using PowerSimulationsDynamics
+PSID = PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
@@ -71,7 +72,7 @@ Ybus_change = NetworkSwitch(
 tspan = (0.0, 30.0)
 
 #Define Simulation
-sim = Simulation(
+sim = PSID.Simulation(
     pwd(), #folder to output results
     threebus_sys, #system
     tspan, #time span
@@ -83,12 +84,12 @@ sim = Simulation(
 #Will print the initial states. It also give the symbols used to describe those states.
 print_device_states(sim)
 #Will export a dictionary with the initial condition values to explore
-x0_init = get_initial_conditions(sim)
+x0_init = PSID.get_initial_conditions(sim)
 
 # # Step 4: Run the simulation of the Static Lines System
 
 #Run the simulation
-execute!(
+PSID.execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -98,8 +99,8 @@ execute!(
 
 series2 = get_voltagemag_series(sim, 102)
 zoom = [
-    (series2[1][ix], series2[2][ix])
-    for (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
+    (series2[1][ix], series2[2][ix]) for
+    (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
 ];
 
 # # Step 3.1: Create the fault and simulation on the Dynamic Lines system
@@ -144,7 +145,7 @@ Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
 tspan = (0.0, 30.0)
 
 # Define Simulation
-sim_dyn = Simulation(
+sim_dyn = PSID.Simulation(
     pwd(), #folder to output results
     threebus_sys_dyn, #system
     tspan, #time span
@@ -152,7 +153,7 @@ sim_dyn = Simulation(
 )
 
 # Run the simulation
-execute!(
+PSID.execute!(
     sim_dyn, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -163,14 +164,14 @@ execute!(
 #Will print the initial states. It also give the symbols used to describe those states.
 print_device_states(sim_dyn)
 #Will export a dictionary with the initial condition values to explore
-x0_init_dyn = get_initial_conditions(sim_dyn)
+x0_init_dyn = PSID.get_initial_conditions(sim_dyn)
 
 # # Step 5.1: Store the solution
 
 series2_dyn = get_voltagemag_series(sim_dyn, 102)
 zoom_dyn = [
-    (series2_dyn[1][ix], series2_dyn[2][ix])
-    for (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
+    (series2_dyn[1][ix], series2_dyn[2][ix]) for
+    (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
 ];
 
 # # Step 6.1: Compare the solutions:

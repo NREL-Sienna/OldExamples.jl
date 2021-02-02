@@ -6,7 +6,7 @@
 # ## Introduction
 
 # This example shows a basic PCM simulation using the system data assembled in the
-# [US-System example](../../notebook/2_PowerSystems_examples/US_system.ipynb).
+# [US-System example](../../notebook/2_PowerSystems_examples/08_US_system.ipynb).
 
 # ### Dependencies
 using SIIPExamples
@@ -90,7 +90,7 @@ fuel_plot(res, sys, load = true)
 # ## Sequential Simulation
 # In addition to defining the formulation template, sequential simulations require
 # definitions for how information flows between problems.
-sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"),)
+sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"))
 stages_definition = Dict(
     "UC" =>
         Stage(GenericOpProblem, template, sys, solver; balance_slack_variables = true),
@@ -123,9 +123,10 @@ build!(
 )
 
 # ### Execute the simulation
-#nb sim_results = execute!(sim)
+#nb execute!(sim)
 
 # ### Load and analyze results
-#nb uc_results = load_simulation_results(sim_results, "UC");
+#nb results = SimulationResults(sim);
+#nb uc_results = get_stage_results(results, "UC");
 
-#nb fuel_plot(uc_results, sys, load = true, curtailment = true)
+#nb fuel_plot(uc_results, load = true, curtailment = true, stack = true)

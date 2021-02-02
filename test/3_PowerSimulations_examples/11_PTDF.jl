@@ -1,6 +1,8 @@
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"));
+include(
+    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
+);
 
 using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)
@@ -22,7 +24,7 @@ problem = OperationsProblem(
     PTDF = PTDF_matrix,
 )
 
-res = solve!(problem)
+res = solve!(problem);
 
 λ = convert(Array, res.dual_values[:CopperPlateBalance])
 μ = convert(Array, res.dual_values[:network_flow])

@@ -6,26 +6,25 @@ IS = PowerSystems.IS
 using Dates
 using DataFrames
 
-using Cbc #solver
+using Cbc # mip solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+using Ipopt # solver that supports duals
+ipopt_solver = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
 
 base_dir = PowerSystems.download(PowerSystems.TestData; branch = "master");
 pm_data = PowerSystems.PowerModelsData(joinpath(base_dir, "matpower", "case5_re_uc.m"))
 
 FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts", "7day")
 
-tsp_da = IS.read_time_series_file_metadata(joinpath(
-    FORECASTS_DIR,
-    "timeseries_pointers_da_7day.json",
-))
-tsp_rt = IS.read_time_series_file_metadata(joinpath(
-    FORECASTS_DIR,
-    "timeseries_pointers_rt_7day.json",
-))
-tsp_agc = IS.read_time_series_file_metadata(joinpath(
-    FORECASTS_DIR,
-    "timeseries_pointers_agc_7day.json",
-))
+tsp_da = IS.read_time_series_file_metadata(
+    joinpath(FORECASTS_DIR, "timeseries_pointers_da_7day.json"),
+)
+tsp_rt = IS.read_time_series_file_metadata(
+    joinpath(FORECASTS_DIR, "timeseries_pointers_rt_7day.json"),
+)
+tsp_agc = IS.read_time_series_file_metadata(
+    joinpath(FORECASTS_DIR, "timeseries_pointers_agc_7day.json"),
+)
 
 sys_DA = System(pm_data)
 reserves = [
@@ -40,7 +39,7 @@ for r in reserves
 end
 
 add_time_series!(sys_DA, tsp_da)
-transform_single_time_series!(sys_DA, 24, Hour(24))
+transform_single_time_series!(sys_DA, 48, Hour(24))
 
 sys_RT = System(pm_data)
 add_time_series!(sys_RT, tsp_rt)
@@ -60,8 +59,20 @@ devices = Dict(
 template_ed = template_economic_dispatch(devices = devices)
 
 stages_definition = Dict(
-    "UC" => Stage(GenericOpProblem, template_uc, sys_DA, solver),
-    "ED" => Stage(GenericOpProblem, template_ed, sys_RT, solver),
+    "UC" => Stage(
+        GenericOpProblem,
+        template_uc,
+        sys_DA,
+        solver,
+        balance_slack_variables = true,
+    ),
+    "ED" => Stage(
+        GenericOpProblem,
+        template_ed,
+        sys_RT,
+        ipopt_solver,
+        constraint_duals = [:CopperPlateBalance],
+    ),
 )
 
 feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
@@ -76,7 +87,7 @@ feedforward = Dict(
 cache = Dict("UC" => [TimeStatusChange(ThermalStandard, PSI.ON)])
 
 order = Dict(1 => "UC", 2 => "ED")
-horizons = Dict("UC" => 24, "ED" => 12)
+horizons = Dict("UC" => 48, "ED" => 12)
 intervals = Dict("UC" => (Hour(24), Consecutive()), "ED" => (Hour(1), Consecutive()))
 
 DA_RT_sequence = SimulationSequence(
@@ -87,10 +98,9 @@ DA_RT_sequence = SimulationSequence(
     ini_cond_chronology = InterStageChronology(),
     feedforward_chronologies = feedforward_chronologies,
     feedforward = feedforward,
-    #cache = cache,
 )
 
-file_path = tempdir()
+file_path = mkpath(joinpath(".","5-bus-simulation"))
 sim = Simulation(
     name = "5bus-test",
     steps = 1,
@@ -101,9 +111,9 @@ sim = Simulation(
 
 build!(sim)
 
-sim_results = execute!(sim)
+execute!(sim)
 
-ed_results = load_simulation_results(sim_results, "ED");
+# Results
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

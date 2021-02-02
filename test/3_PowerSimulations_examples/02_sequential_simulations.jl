@@ -1,6 +1,8 @@
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"))
+include(
+    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
+)
 
 sys_RT = System(rawsys; time_series_resolution = Dates.Minute(5))
 transform_single_time_series!(sys_RT, 12, Hour(1))
@@ -69,10 +71,22 @@ sim = Simulation(
 
 build!(sim)
 
-sim_results = execute!(sim)
+execute!(sim)
 
-uc_results = load_simulation_results(sim_results, "UC");
-ed_results = load_simulation_results(sim_results, "ED");
+results = SimulationResults(sim);
+uc_results = get_stage_results(results, "UC"); # UC stage result metadata
+ed_results = get_stage_results(results, "ED"); # ED stage result metadata
+
+read_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+
+read_parameter(
+    ed_results,
+    :P__max_active_power__RenewableFix,
+    initial_time = DateTime("2020-01-01T06:00:00"),
+    count = 5,
+)
+
+read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

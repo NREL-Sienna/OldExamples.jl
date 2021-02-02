@@ -5,7 +5,7 @@
 # ## Introduction
 
 # PowerSimulations.jl supports linear PTDF optimal power flow formulation. This example shows a
-# single multi-period optimization of economic dispatch with a linearilzed DC-OPF representation of
+# single multi-period optimization of economic dispatch with a linearized DC-OPF representation of
 # using PTDF power flow and how to extract duals values or locational marginal prices for energy.
 
 # ## Dependencies
@@ -14,14 +14,11 @@
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(
-    pkgpath,
-    "test",
-    "3_PowerSimulations_examples",
-    "01_operations_problems.jl",
-));
+include(
+    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
+);
 
-# Since we'll be retreving duals, we need a solver that returns duals values
+# Since we'll be retrieving duals, we need a solver that returns duals values
 # here we use Ipopt.
 using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)
@@ -58,11 +55,11 @@ problem = OperationsProblem(
 )
 
 # And solve the problem and collect the results
-res = solve!(problem)
+res = solve!(problem);
 
 # Here we collect the dual values from the results for the `CopperPlateBalance` and `network_flow`
 # constraints. In the case of PTDF network formulation we need to compute the final LMP for each bus in the system by
-# subtracting the duals (μ) of `network_flow` constraint multipled by the PTDF matrix
+# subtracting the duals (μ) of `network_flow` constraint multiplied by the PTDF matrix
 # from the  dual (λ) of `CopperPlateBalance` constraint.
 # Note:we convert the results from DataFrame to Array for ease of use.
 λ = convert(Array, res.dual_values[:CopperPlateBalance])

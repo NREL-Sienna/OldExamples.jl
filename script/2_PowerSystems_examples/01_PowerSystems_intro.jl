@@ -34,17 +34,16 @@
 # However, it's worth recognizing that InfrastructureSystems provides much of the back end
 # code for managing and accessing data, especially time series data.
 #
-# The examples in this notebook depend upon Julia 1.5 and a specific set of package releases
-# as defined in the `Manifest.toml`.
-using Pkg
-Pkg.status()
-
 using SIIPExamples;
 using PowerSystems;
 using D3TypeTrees;
-using Logging
 
-logger = configure_logging(console_level = Error, file_level = Info, filename = "ex.log")
+# Normally, I'd add the following two lines to configure logging behavior, but something about
+# Literate.jl makes this fail, so these examples only work with the default log configuration.
+# ```julia
+# using Logging
+# logger = configure_logging(console_level = Logging.Error, file_level = Logging.Info, filename = "ex.log")
+# ````
 
 # ## Types in PowerSystems
 # PowerSystems.jl provides a type hierarchy for specifying power system data. Data that
@@ -66,7 +65,7 @@ print_struct(Bus)
 # - `InfrastructureSystems.DeviceParameter`: includes structs that hold data describing the
 #  dynamic, or economic capabilities of `Device`.
 # - `TimeSeriesData`: Includes all time series types
-#   - `time series`: includes structs to define time series of forecasted data where multiple
+#   - `Forecast`: includes structs to define time series of forecasted data where multiple
 # values can represent each time stamp
 #   - `StaticTimeSeries`: includes structs to define time series with a single value for each
 # time stamp
@@ -75,7 +74,7 @@ print_struct(Bus)
 # *The following trees are made with [D3TypeTrees](https://github.com/claytonpbarrows/D3TypeTrees.jl),
 # nodes that represent Structs will show the Fields in the hoverover tooltip.*
 
-# TypeTree(InfrastructureSystemsType)
+# TypeTree(PowerSystems.IS.InfrastructureSystemsType)
 
 # ### `TimeSeriesData`
 # [_Read the Docs!_](https://nrel-siip.github.io/PowerSystems.jl/stable/modeler_guide/time_series/)
@@ -100,7 +99,7 @@ TypeTree(TimeSeriesData)
 print_struct(Deterministic)
 
 # Examples of how to create and add time series to system can be found in the
-# [Add Time Series Example](../PowerSystems.jl Examples/add_forecasts.ipynb)
+# [Add Time Series Example](../PowerSystems.jl Examples/05_add_forecasts.ipynb)
 
 # ### System
 # The `System` object collects all of the individual components into a single struct along
