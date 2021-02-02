@@ -1,5 +1,5 @@
 using SIIPExamples
-using InfrastructureSystems
+using PowerSystems
 using Logging
 
 using Test
@@ -9,7 +9,7 @@ testpath = joinpath(pkgpath, "test")
 
 exclude = ["04_bar_stack_plots.jl", "US-system-simulations.jl", "08_US_system.jl"]
 
-logger = InfrastructureSystems.configure_logging(console_level = Logging.Error)
+logger = configure_logging(console_level = Logging.Error)
 
 for (root, dirs, files) in walkdir(testpath)
     if root != testpath
