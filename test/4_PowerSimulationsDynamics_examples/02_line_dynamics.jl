@@ -1,5 +1,6 @@
 using SIIPExamples
 using PowerSimulationsDynamics
+PSID = PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
@@ -38,7 +39,7 @@ Ybus_change = NetworkSwitch(
 tspan = (0.0, 30.0)
 
 #Define Simulation
-sim = Simulation(
+sim = PSID.Simulation(
     pwd(), #folder to output results
     threebus_sys, #system
     tspan, #time span
@@ -48,10 +49,10 @@ sim = Simulation(
 #Will print the initial states. It also give the symbols used to describe those states.
 print_device_states(sim)
 #Will export a dictionary with the initial condition values to explore
-x0_init = get_initial_conditions(sim)
+x0_init = PSID.get_initial_conditions(sim)
 
 #Run the simulation
-execute!(
+PSID.execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -91,14 +92,14 @@ Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
 
 tspan = (0.0, 30.0)
 
-sim_dyn = Simulation(
+sim_dyn = PSID.Simulation(
     pwd(), #folder to output results
     threebus_sys_dyn, #system
     tspan, #time span
     Ybus_change_dyn, #Type of perturbation
 )
 
-execute!(
+PSID.execute!(
     sim_dyn, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -107,7 +108,7 @@ execute!(
 #Will print the initial states. It also give the symbols used to describe those states.
 print_device_states(sim_dyn)
 #Will export a dictionary with the initial condition values to explore
-x0_init_dyn = get_initial_conditions(sim_dyn)
+x0_init_dyn = PSID.get_initial_conditions(sim_dyn)
 
 series2_dyn = get_voltagemag_series(sim_dyn, 102)
 zoom_dyn = [

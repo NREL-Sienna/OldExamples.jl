@@ -1,5 +1,6 @@
 using SIIPExamples #hide
 using PowerSimulationsDynamics
+PSID = PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
@@ -15,13 +16,13 @@ omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 
 time_span = (0.0, 30.0)
 perturbation_trip = BranchTrip(1.0, "BUS 1-BUS 2-i_1")
-sim = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
+sim = PSID.Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 print_device_states(sim)
 
-x0_init = get_initial_conditions(sim)
+x0_init = PSID.get_initial_conditions(sim)
 
-execute!(
+PSID.execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02,
@@ -33,7 +34,7 @@ Plots.plot(angle, xlabel = "time", ylabel = "rotor angle [rad]", label = "rotor 
 volt = get_voltagemag_series(sim, 102);
 Plots.plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 
-sim2 = Simulation(pwd(), omib_sys, time_span, perturbation_trip)
+sim2 = PSID.Simulation(pwd(), omib_sys, time_span, perturbation_trip)
 
 small_sig = small_signal_analysis(sim2)
 

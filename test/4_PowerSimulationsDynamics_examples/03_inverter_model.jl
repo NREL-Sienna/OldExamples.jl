@@ -1,6 +1,7 @@
 using SIIPExamples # Only needed for the tutorial, comment if you want to run
 import DisplayAs # Only needed for the tutorial
 using PowerSimulationsDynamics
+PSID = PowerSimulationsDynamics
 using PowerSystems
 using Logging
 using Sundials
@@ -16,7 +17,7 @@ file_dir = joinpath(
 
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))
 
-sim = Simulation(
+sim = PSID.Simulation(
     file_dir,       #path for the simulation output
     sys,         #system
     (0.0, 20.0), #time span
@@ -26,7 +27,7 @@ sim = Simulation(
 
 print_device_states(sim)
 
-execute!(sim, IDA(); abstol = 1e-8)
+PSID.execute!(sim, IDA(); abstol = 1e-8)
 
 p = plot()
 for b in get_components(Bus, sys)
@@ -118,7 +119,7 @@ add_component!(sys, inverter, storage)
 
 sys
 
-sim = Simulation(
+sim = PSID.Simulation(
     file_dir,       #path for the simulation output
     sys,         #system
     (0.0, 20.0), #time span
@@ -130,7 +131,7 @@ res = small_signal_analysis(sim)
 
 scatter(res.eigenvalues)
 
-execute!(sim, IDA(); abstol = 1e-8)
+PSID.execute!(sim, IDA(); abstol = 1e-8)
 
 p = plot()
 for b in get_components(Bus, sys)
