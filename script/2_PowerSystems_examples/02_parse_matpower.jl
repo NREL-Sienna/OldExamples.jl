@@ -7,7 +7,6 @@
 # An example of how to parse MATPOWER files and create a `System` using [PowerSystems.jl](github.com/NREL-SIIP/PowerSystems.jl)
 
 # ### Dependencies
-using SIIPExamples
 using PowerSystems
 using TimeSeries
 

@@ -1,10 +1,11 @@
 using SIIPExamples;
 using PowerSystems;
-using D3TypeTrees;
 
 print_struct(Bus)
 
-TypeTree(TimeSeriesData)
+print_tree(PowerSystems.IS.InfrastructureSystemsType)
+
+print_tree(TimeSeriesData)
 
 print_struct(Deterministic)
 

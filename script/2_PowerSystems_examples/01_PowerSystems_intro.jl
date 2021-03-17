@@ -36,7 +36,6 @@
 #
 using SIIPExamples;
 using PowerSystems;
-using D3TypeTrees;
 
 # Normally, I'd add the following two lines to configure logging behavior, but something about
 # Literate.jl makes this fail, so these examples only work with the default log configuration.
@@ -71,10 +70,7 @@ print_struct(Bus)
 # time stamp
 # - `System`: collects all of the `Component`s
 #
-# *The following trees are made with [D3TypeTrees](https://github.com/claytonpbarrows/D3TypeTrees.jl),
-# nodes that represent Structs will show the Fields in the hoverover tooltip.*
-
-# TypeTree(PowerSystems.IS.InfrastructureSystemsType)
+print_tree(PowerSystems.IS.InfrastructureSystemsType)
 
 # ### `TimeSeriesData`
 # [_Read the Docs!_](https://nrel-siip.github.io/PowerSystems.jl/stable/modeler_guide/time_series/)
@@ -85,7 +81,7 @@ print_struct(Bus)
 # describe other fields in the struct (`available`, `activepower`, `reactivepower`).
 
 # `TimeSeriesData`s themselves can take the form of the following:
-TypeTree(TimeSeriesData)
+print_tree(TimeSeriesData)
 
 # In each case, the time series contains fields for `scaling_factor_multiplier` and `data`
 # to identify the details of  th `Component` field that the time series describes, and the

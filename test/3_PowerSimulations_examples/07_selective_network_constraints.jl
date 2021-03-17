@@ -1,13 +1,11 @@
-using SIIPExamples
-
 using PowerSystems
 using PowerSimulations
+using PowerSystemCaseBuilder
 
 using Cbc #solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "04_parse_tabulardata.jl"))
+sys = build_system(PSITestSystems, "test_RTS_GMLC_sys")
 
 for line in get_components(Line, sys)
     if (get_base_voltage(get_from(get_arc(line))) >= 230.0) &&
@@ -18,12 +16,14 @@ for line in get_components(Line, sys)
     end
 end
 
-uc_prob =
-    UnitCommitmentProblem(sys, optimizer = solver, horizon = 24, network = DCPPowerModel)
+template = template_unit_commitment(transmission = PTDFPowerModel)
 
-set_branch_model!(uc_prob, :L, DeviceModel(Line, StaticLineUnbounded))
+set_device_model!(template, MonitoredLine, StaticBranch)
 
-construct_device!(uc_prob, :ML, DeviceModel(MonitoredLine, StaticLine))
+set_device_model!(template, Line, StaticBranchUnbounded)
+
+uc_prob = OperationsProblem(template, sys, horizon = 24, optimizer = solver)
+build!(uc_prob, output_dir = mktempdir())
 
 solve!(uc_prob)
 

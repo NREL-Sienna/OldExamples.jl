@@ -10,11 +10,10 @@
 # when trying to build large scale simulations.
 
 # ## Dependencies
-using SIIPExamples
-
 # ### Modeling Packages
 using PowerSystems
 using PowerSimulations
+using PowerSystemCaseBuilder
 
 # ### Optimization packages
 # For this simple example, we can use the Cbc solver with a relatively relaxed tolerance.
@@ -22,10 +21,7 @@ using Cbc #solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
 # ### Create a `System` from RTS-GMLC data
-# We can just use the
-# [parsing tabular data example.](../../notebook/2_PowerSystems_examples/04_parse_tabulardata.jl)
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "04_parse_tabulardata.jl"))
+sys = build_system(PSITestSystems, "test_RTS_GMLC_sys")
 
 # ### Selecting flow limited lines
 # Since PowerSimulations will apply constraints by component type (e.g. Line), we need to
@@ -43,17 +39,20 @@ for line in get_components(Line, sys)
     end
 end
 
-# ## Build an `OperationsProblem`
-uc_prob =
-    UnitCommitmentProblem(sys, optimizer = solver, horizon = 24, network = DCPPowerModel)
+# Let's start with a standard unit commitment template using the `PTDFPowerModel` network
+# formulation which only constructs the admittance matrix rows corresponding to "bounded" lines:
+template = template_unit_commitment(transmission = PTDFPowerModel)
 
-# Let's change the formulation of the `Line` components to an unbounded flow formulation.
+# Notice that there is no entry for `MonitoredLine`, so we can add one:
+set_device_model!(template, MonitoredLine, StaticBranch)
+
+# We can also relax the formulation applied to the `Line` components to an unbounded flow formulation.
 # This formulation still enforces Kirchoff's laws, but does not apply flow constraints.
-set_branch_model!(uc_prob, :L, DeviceModel(Line, StaticLineUnbounded))
+set_device_model!(template, Line, StaticBranchUnbounded)
 
-# Notice that there is no entry for `MonitoredLine` branches. So, let's add one.
-construct_device!(uc_prob, :ML, DeviceModel(MonitoredLine, StaticLine))
+# ## Build an `OperationsProblem`
+uc_prob = OperationsProblem(template, sys, horizon = 24, optimizer = solver)
+build!(uc_prob, output_dir = mktempdir())
 
 # Solve the relaxed problem
-
 solve!(uc_prob)

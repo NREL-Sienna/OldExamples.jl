@@ -1,4 +1,3 @@
-using SIIPExamples
 using PowerSystems
 using TimeSeries
 using Dates
@@ -12,7 +11,7 @@ rawsys = PowerSystems.PowerSystemTableData(
     100.0,
     joinpath(RTS_GMLC_DIR, "user_descriptors.yaml"),
     timeseries_metadata_file = joinpath(RTS_GMLC_DIR, "timeseries_pointers.json"),
-    generator_mapping_file = joinpath(RTS_GMLC_DIR, "generator_mapping.yaml"),
+    generator_mapping_file = joinpath(RTS_GMLC_DIR, "generator_mapping_multi_start.yaml"),
 )
 
 sys = System(rawsys; time_series_resolution = Dates.Hour(1));
