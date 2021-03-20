@@ -31,7 +31,7 @@ build!(problem, output_dir = mktempdir())
 
 solve!(problem)
 
-res = OperationsProblemResults(problem)
+res = ProblemResults(problem)
 duals = get_duals(res)
 λ = convert(Array, duals[:CopperPlateBalance][:,:var])
 flow_duals = outerjoin([duals[k] for k in [:network_flow__Line,:network_flow__TapTransformer]]..., on = :DateTime)

@@ -117,13 +117,12 @@ DA_RT_sequence = SimulationSequence(
 # ## `Simulation`
 # Now, we can build and execute a simulation using the `SimulationSequence` and `Stage`s
 # that we've defined.
-tmp_folder = mktempdir()
 sim = Simulation(
     name = "rts-test",
     steps = 1,
     problems = problems,
     sequence = DA_RT_sequence,
-    simulation_folder = tmp_folder,
+    simulation_folder = dirname(dirname(pathof(SIIPExamples))),
 )
 
 # ### Build simulation

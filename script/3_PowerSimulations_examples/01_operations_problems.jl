@@ -129,9 +129,9 @@ build!(op_problem, output_dir = mktempdir())
 #nb # ## Results Inspection
 #nb # PowerSimulations collects the `OperationsProblem` results into a struct:
 #
-#nb print_struct(PSI.OperationsProblemResults)
+#nb print_struct(PSI.ProblemResults)
 #
-#nb res = OperationsProblemResults(op_problem);
+#nb res = ProblemResults(op_problem);
 #
 #nb # ### Optimizer Stats
 #nb # The optimizer summary is included

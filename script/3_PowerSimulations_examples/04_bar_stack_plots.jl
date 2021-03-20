@@ -19,12 +19,13 @@ using PowerGraphics
 # (If you haven't run some of the other simulaitons, you can run
 # `include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "2_sequential_simulations.jl"))`).
 # You can load the results into memory with:
-simulation_folder = joinpath(pkgpath, "RTS-GMLC-master", "rts-test")
+simulation_folder = joinpath(dirname(dirname(pathof(SIIPExamples))), "rts-test")
 simulation_folder =
     joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
 
 results = SimulationResults(simulation_folder);
-res = get_stage_results(results, "UC")
+res = get_problem_results(results, "UC")
+
 
 # ## Plots
 # By default, PowerGraphics uses the GR graphics package as the backend for Plots.jl to

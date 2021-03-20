@@ -61,7 +61,7 @@ solve!(problem)
 # constraints. In the case of PTDF network formulation we need to compute the final LMP for each bus in the system by
 # subtracting the duals (μ) of `:network_flow` constraints multiplied by the PTDF matrix
 # from the  dual (λ) of `:CopperPlateBalance` constraint.
-res = OperationsProblemResults(problem)
+res = ProblemResults(problem)
 duals = get_duals(res)
 λ = convert(Array, duals[:CopperPlateBalance][:,:var])
 flow_duals = outerjoin([duals[k] for k in [:network_flow__Line,:network_flow__TapTransformer]]..., on = :DateTime)
