@@ -34,14 +34,8 @@ set_transmission_model!(template_uc, CopperPlatePowerModel)
 
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
 
-op_problem = OperationsProblem(
-    template_uc,
-    sys;
-    optimizer = solver,
-    horizon = 24,
-)
+op_problem = OperationsProblem(template_uc, sys; optimizer = solver, horizon = 24)
 
 build!(op_problem, output_dir = mktempdir())
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

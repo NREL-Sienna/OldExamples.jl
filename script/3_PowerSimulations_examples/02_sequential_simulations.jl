@@ -47,9 +47,14 @@ template_ed = template_economic_dispatch()
 # a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s
 # and the `System`s that we've already created.
 problems = SimulationProblems(
-        UC = OperationsProblem(template_uc, sys, optimizer = solver),
-        ED = OperationsProblem(template_ed, sys_RT, optimizer = solver, balance_slack_variables = true),
-    )
+    UC = OperationsProblem(template_uc, sys, optimizer = solver),
+    ED = OperationsProblem(
+        template_ed,
+        sys_RT,
+        optimizer = solver,
+        balance_slack_variables = true,
+    ),
+)
 # Note that the "ED" problem has a `balance_slack_variables = true` argument. This adds slack
 # variables with a default penalty of 1e6 to the nodal energy balance constraint and helps
 # ensure feasibility with some performance impacts.

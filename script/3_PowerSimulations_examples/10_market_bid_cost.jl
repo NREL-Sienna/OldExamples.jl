@@ -29,7 +29,9 @@ using Cbc #solver
 # ### Data
 # This data depends upon the [RTS-GMLC](https://github.com/gridmod/rts-gmlc) dataset that we
 # assembled in the [tabular data parsing example](../../notebook/3_PowerSimulations_examples/1_operations_problems.ipynb).
-include(joinpath(SIIPExamples.TEST_DIR, SIIPExamples.PSY_EX_FOLDER, "04_parse_tabulardata.jl"))
+include(
+    joinpath(SIIPExamples.TEST_DIR, SIIPExamples.PSY_EX_FOLDER, "04_parse_tabulardata.jl"),
+)
 
 # ### Creating the Time Series data for Energy bid
 MultiDay = collect(

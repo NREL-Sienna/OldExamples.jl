@@ -33,7 +33,6 @@ c_sys5_hy_wk = build_system(SIIPExampleSystems, "5_bus_hydro_wk_sys")
 c_sys5_hy_uc = build_system(SIIPExampleSystems, "5_bus_hydro_uc_sys")
 c_sys5_hy_ed = build_system(SIIPExampleSystems, "5_bus_hydro_ed_sys")
 
-
 # This line just overloads JuMP printing to remove double underscores added by PowerSimulations.jl
 PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 

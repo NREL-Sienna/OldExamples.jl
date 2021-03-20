@@ -87,7 +87,12 @@ fuel_plot(op_problem, sys, load = true)
 # definitions for how information flows between problems.
 sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"))
 problems = SimulationProblems(
-    UC = OperationsProblem(template, sys, optimizer = solver, balance_slack_variables = true),
+    UC = OperationsProblem(
+        template,
+        sys,
+        optimizer = solver,
+        balance_slack_variables = true,
+    ),
 )
 intervals = Dict("UC" => (Hour(24), Consecutive()))
 DA_sequence = SimulationSequence(

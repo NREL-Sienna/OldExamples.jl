@@ -73,7 +73,6 @@ set_device_model!(template_uc, RenewableFix, FixedOutput)
 set_service_model!(template_uc, VariableReserve{ReserveUp}, RangeReserve)
 set_service_model!(template_uc, VariableReserve{ReserveDown}, RangeReserve)
 
-
 # ### Network Formulations
 # Finally, we can define the transmission network specification that we'd like to model. For simplicity, we'll
 # choose a copper plate formulation. But there are dozens of specifications available through
@@ -96,12 +95,7 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # The construction of an `OperationsProblem` essentially applies an `OperationsProblemTemplate`
 # to `System` data to create a JuMP model.
 
-op_problem = OperationsProblem(
-    template_uc,
-    sys;
-    optimizer = solver,
-    horizon = 24,
-)
+op_problem = OperationsProblem(template_uc, sys; optimizer = solver, horizon = 24)
 
 build!(op_problem, output_dir = mktempdir())
 

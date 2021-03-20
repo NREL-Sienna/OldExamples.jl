@@ -26,7 +26,6 @@ simulation_folder =
 results = SimulationResults(simulation_folder);
 res = get_problem_results(results, "UC")
 
-
 # ## Plots
 # By default, PowerGraphics uses the GR graphics package as the backend for Plots.jl to
 # generate figures. This creates static plots and should execute without any extra steps.

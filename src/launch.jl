@@ -117,7 +117,6 @@ function literate_all(; force = false, kwargs...)
     end
 end
 
-
 function notebook(example::Type{<:Examples})
     literate_folder(example; execute = false)
     IJulia.notebook(dir = joinpath(NB_DIR, get_dir(example)))

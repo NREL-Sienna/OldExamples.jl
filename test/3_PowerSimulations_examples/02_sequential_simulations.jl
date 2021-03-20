@@ -12,9 +12,14 @@ template_uc
 template_ed = template_economic_dispatch()
 
 problems = SimulationProblems(
-        UC = OperationsProblem(template_uc, sys, optimizer = solver),
-        ED = OperationsProblem(template_ed, sys_RT, optimizer = solver, balance_slack_variables = true),
-    )
+    UC = OperationsProblem(template_uc, sys, optimizer = solver),
+    ED = OperationsProblem(
+        template_ed,
+        sys_RT,
+        optimizer = solver,
+        balance_slack_variables = true,
+    ),
+)
 
 feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 
@@ -63,4 +68,3 @@ read_parameter(
 read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

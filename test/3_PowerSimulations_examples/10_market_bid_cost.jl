@@ -10,7 +10,9 @@ using TimeSeries
 
 using Cbc #solver
 
-include(joinpath(SIIPExamples.TEST_DIR, SIIPExamples.PSY_EX_FOLDER, "04_parse_tabulardata.jl"))
+include(
+    joinpath(SIIPExamples.TEST_DIR, SIIPExamples.PSY_EX_FOLDER, "04_parse_tabulardata.jl"),
+)
 
 MultiDay = collect(
     DateTime("2020-01-01T00:00:00"):Hour(1):(DateTime("2020-01-01T00:00:00") + Hour(8783)),
@@ -48,4 +50,3 @@ build!(problem, output_dir = mktempdir())
 solve!(problem)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

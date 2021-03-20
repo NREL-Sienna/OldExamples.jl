@@ -51,7 +51,7 @@ DA_RT_sequence = SimulationSequence(
     feedforward = feedforward,
 )
 
-file_path = mkpath(joinpath(".","5-bus-simulation"))
+file_path = mkpath(joinpath(".", "5-bus-simulation"))
 sim = Simulation(
     name = "5bus-test",
     steps = 1,
@@ -67,4 +67,3 @@ execute!(sim, enable_progress_bar = false)
 # Results
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

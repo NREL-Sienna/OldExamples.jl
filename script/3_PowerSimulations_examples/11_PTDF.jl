@@ -49,7 +49,11 @@ problem = OperationsProblem(
     horizon = 1,
     optimizer = solver,
     balance_slack_variables = true,
-    constraint_duals = [:CopperPlateBalance, :network_flow__Line, :network_flow__TapTransformer],
+    constraint_duals = [
+        :CopperPlateBalance,
+        :network_flow__Line,
+        :network_flow__TapTransformer,
+    ],
     PTDF = PTDF_matrix,
 )
 build!(problem, output_dir = mktempdir())
@@ -63,9 +67,12 @@ solve!(problem)
 # from the  dual (λ) of `:CopperPlateBalance` constraint.
 res = ProblemResults(problem)
 duals = get_duals(res)
-λ = convert(Array, duals[:CopperPlateBalance][:,:var])
-flow_duals = outerjoin([duals[k] for k in [:network_flow__Line,:network_flow__TapTransformer]]..., on = :DateTime)
-μ = Matrix(flow_duals[:,PTDF_matrix.axes[1]])
+λ = convert(Array, duals[:CopperPlateBalance][:, :var])
+flow_duals = outerjoin(
+    [duals[k] for k in [:network_flow__Line, :network_flow__TapTransformer]]...,
+    on = :DateTime,
+)
+μ = Matrix(flow_duals[:, PTDF_matrix.axes[1]])
 
 # Here we create Dict to store the calculate congestion component of the LMP which is a product of μ and the PTDF matrix.
 buses = get_components(Bus, sys)

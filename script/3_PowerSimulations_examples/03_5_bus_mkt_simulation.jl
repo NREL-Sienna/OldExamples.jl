@@ -77,7 +77,7 @@ DA_RT_sequence = SimulationSequence(
 )
 
 # ## `Simulation`
-file_path = mkpath(joinpath(".","5-bus-simulation"))
+file_path = mkpath(joinpath(".", "5-bus-simulation"))
 sim = Simulation(
     name = "5bus-test",
     steps = 1,

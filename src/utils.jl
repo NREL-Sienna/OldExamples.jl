@@ -38,7 +38,6 @@ else
     const os = Linux
 end
 
-
 """
 Download Data from `branch="master"` name into a "data" folder in given argument path.
 Skip the actual download if the folder already exists and force=false.
