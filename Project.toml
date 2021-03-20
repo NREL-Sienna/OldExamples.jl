@@ -35,3 +35,9 @@ WebIO = "0f1e0344-ec1d-5b48-a673-e5cf874b6c29"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+PowerSystems = "^1.2.5"
+PowerSimulations = "~0.12.0"
+PowerGraphics = "~0.8.0"
+PowerSystemCaseBuilder = "0.3.3"
