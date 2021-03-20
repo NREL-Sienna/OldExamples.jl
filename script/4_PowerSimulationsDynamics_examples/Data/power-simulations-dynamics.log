@@ -1,0 +1,46 @@
+┌ Info: 2021-03-20T07:13:18.313 [54632:1]: Unit System changed to UnitSystem.DEVICE_BASE = 1
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/base.jl:320
+┌ Info: 2021-03-20T07:13:18.314 [54632:1]: The System has no islands
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/utils/network_calculations/ybus_calculations.jl:229
+┌ Info: 2021-03-20T07:13:18.356 [54632:1]: Initializing Simulation States
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation.jl:181
+┌ Info: 2021-03-20T07:13:18.356 [54632:1]: Unit System changed to UnitSystem.SYSTEM_BASE = 0
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/base.jl:320
+┌ Info: 2021-03-20T07:13:18.356 [54632:1]: The System has no islands
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/utils/network_calculations/ybus_calculations.jl:229
+┌ Info: 2021-03-20T07:13:18.374 [54632:1]: PowerFlow solve converged, the results have been stored in the system
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/utils/power_flow.jl:307
+┌ Info: 2021-03-20T07:13:18.374 [54632:1]: Unit System changed to UnitSystem.DEVICE_BASE = 1
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/base.jl:326
+┌ Warning: 2021-03-20T07:13:22.27 [54632:1]: Initialization failed, initial conditions do not meet conditions for an stable equilibrium.
+│ Trying to solve again reducing numeric tolerance from 1.0e-9:
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation_initialization.jl:117
+┌ Info: 2021-03-20T07:13:22.648 [54632:1]: Initialization succeeded with a relaxed tolerance of 1.0e-6. Saving solution
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation_initialization.jl:126
+┌ Info: 2021-03-20T07:13:22.648 [54632:1]: Attaching Perturbations
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation.jl:221
+┌ Info: 2021-03-20T07:13:22.648 [54632:1]: Completed Build Successfully. Simulations status = BUILT
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation.jl:204
+┌ Info: 2021-03-20T07:13:25.15 [54632:1]: Unit System changed to UnitSystem.DEVICE_BASE = 1
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/base.jl:320
+┌ Info: 2021-03-20T07:13:25.15 [54632:1]: The System has no islands
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/utils/network_calculations/ybus_calculations.jl:229
+┌ Info: 2021-03-20T07:13:25.151 [54632:1]: Initializing Simulation States
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation.jl:181
+┌ Info: 2021-03-20T07:13:25.151 [54632:1]: Unit System changed to UnitSystem.SYSTEM_BASE = 0
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/base.jl:320
+┌ Info: 2021-03-20T07:13:25.151 [54632:1]: The System has no islands
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/utils/network_calculations/ybus_calculations.jl:229
+┌ Info: 2021-03-20T07:13:25.152 [54632:1]: PowerFlow solve converged, the results have been stored in the system
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/utils/power_flow.jl:307
+┌ Info: 2021-03-20T07:13:25.152 [54632:1]: Unit System changed to UnitSystem.DEVICE_BASE = 1
+└ @ PowerSystems /Users/cbarrows/.julia/packages/PowerSystems/4kGrw/src/base.jl:326
+┌ Warning: 2021-03-20T07:13:28.759 [54632:1]: Initialization failed, initial conditions do not meet conditions for an stable equilibrium.
+│ Trying to solve again reducing numeric tolerance from 1.0e-9:
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation_initialization.jl:117
+┌ Info: 2021-03-20T07:13:29.069 [54632:1]: Initialization succeeded with a relaxed tolerance of 1.0e-6. Saving solution
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation_initialization.jl:126
+┌ Info: 2021-03-20T07:13:29.069 [54632:1]: Attaching Perturbations
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation.jl:221
+┌ Info: 2021-03-20T07:13:29.07 [54632:1]: Completed Build Successfully. Simulations status = BUILT
+└ @ PowerSimulationsDynamics /Users/cbarrows/.julia/packages/PowerSimulationsDynamics/HqcnV/src/base/simulation.jl:204

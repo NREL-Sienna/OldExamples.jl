@@ -56,24 +56,17 @@ end
 # ### Create a `template`
 # Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
 # flow limited formulation to `MonitoredLine`s.
-branches = Dict{Symbol, DeviceModel}(
-    :L => DeviceModel(Line, StaticLineUnbounded),
-    :TT => DeviceModel(TapTransformer, StaticTransformer),
-    :ML => DeviceModel(MonitoredLine, StaticLine),
-)
-
-devices = Dict(
-    :Generators => DeviceModel(ThermalStandard, ThermalStandardUnitCommitment),
-    :Ren => DeviceModel(RenewableDispatch, RenewableFullDispatch),
-    :Loads => DeviceModel(PowerLoad, StaticPowerLoad),
-    :HydroROR => DeviceModel(HydroDispatch, FixedOutput),
-)
-
-template = OperationsProblemTemplate(DCPPowerModel, devices, branches, Dict());
+template = OperationsProblemTemplate(PTDFPowerModel)
+set_device_model!(template, Line, StaticBranchUnbounded)
+set_device_model!(template, TapTransformer, StaticBranchUnbounded)
+set_device_model!(template, MonitoredLine, StaticBranch)
+set_device_model!(template, ThermalStandard, ThermalStandardUnitCommitment)
+set_device_model!(template, RenewableDispatch, RenewableFullDispatch)
+set_device_model!(template, PowerLoad, StaticPowerLoad)
+set_device_model!(template, HydroDispatch, FixedOutput)
 
 # ### Build and execute single step problem
 op_problem = OperationsProblem(
-    GenericOpProblem,
     template,
     sys;
     optimizer = solver,
@@ -82,36 +75,32 @@ op_problem = OperationsProblem(
     use_parameters = true,
 )
 
-res = solve!(op_problem)
+build!(op_problem, output_dir = mktempdir())
+
+solve!(op_problem)
 
 # ### Analyze results
-fuel_plot(res, sys, load = true)
+fuel_plot(op_problem, sys, load = true)
 
 # ## Sequential Simulation
 # In addition to defining the formulation template, sequential simulations require
 # definitions for how information flows between problems.
 sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"))
-stages_definition = Dict(
-    "UC" =>
-        Stage(GenericOpProblem, template, sys, solver; balance_slack_variables = true),
+problems = SimulationProblems(
+    UC = OperationsProblem(template, sys, optimizer = solver, balance_slack_variables = true),
 )
-order = Dict(1 => "UC")
-horizons = Dict("UC" => 24)
 intervals = Dict("UC" => (Hour(24), Consecutive()))
 DA_sequence = SimulationSequence(
-    step_resolution = Hour(24),
-    order = order,
-    horizons = horizons,
     intervals = intervals,
-    ini_cond_chronology = IntraStageChronology(),
+    ini_cond_chronology = IntraProblemChronology(),
 )
 
 # ### Define and build a simulation
 sim = Simulation(
     name = "Texas-test",
     steps = 3,
-    stages = stages_definition,
-    stages_sequence = DA_sequence,
+    problems = problems,
+    sequence = DA_sequence,
     simulation_folder = "Texas-sim",
 )
 
@@ -127,6 +116,6 @@ build!(
 
 # ### Load and analyze results
 #nb results = SimulationResults(sim);
-#nb uc_results = get_stage_results(results, "UC");
+#nb uc_results = get_problem_results(results, "UC");
 
 #nb fuel_plot(uc_results, load = true, curtailment = true, stack = true)

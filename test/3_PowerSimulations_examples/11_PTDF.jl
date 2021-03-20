@@ -1,15 +1,19 @@
 using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(
-    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
-);
+using PowerSystems
+using PowerSimulations
+using PowerSystemCaseBuilder
+using DataFrames
 
 using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)
 
+sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
+
+print_tree(PowerSimulations.PM.AbstractPowerModel)
+
 ed_template = template_economic_dispatch(network = StandardPTDFModel)
 
-ed_template.devices[:Hydro] = DeviceModel(HydroEnergyReservoir, HydroDispatchRunOfRiver)
+set_device_model!(ed_template, HydroEnergyReservoir, HydroDispatchRunOfRiver)
 
 PTDF_matrix = PTDF(sys)
 
@@ -17,17 +21,21 @@ problem = OperationsProblem(
     EconomicDispatchProblem,
     ed_template,
     sys,
-    horizon = 4,
+    horizon = 1,
     optimizer = solver,
     balance_slack_variables = true,
-    constraint_duals = [:CopperPlateBalance, :network_flow],
+    constraint_duals = [:CopperPlateBalance, :network_flow__Line, :network_flow__TapTransformer],
     PTDF = PTDF_matrix,
 )
+build!(problem, output_dir = mktempdir())
 
-res = solve!(problem);
+solve!(problem)
 
-λ = convert(Array, res.dual_values[:CopperPlateBalance])
-μ = convert(Array, res.dual_values[:network_flow])
+res = ProblemResults(problem)
+duals = get_duals(res)
+λ = convert(Array, duals[:CopperPlateBalance][:,:var])
+flow_duals = outerjoin([duals[k] for k in [:network_flow__Line,:network_flow__TapTransformer]]..., on = :DateTime)
+μ = Matrix(flow_duals[:,PTDF_matrix.axes[1]])
 
 buses = get_components(Bus, sys)
 congestion_lmp = Dict()

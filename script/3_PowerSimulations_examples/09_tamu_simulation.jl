@@ -14,6 +14,7 @@ using Dates
 # ### Modeling Packages
 using PowerSystems
 using PowerSimulations
+using PowerSystemCaseBuilder
 
 # ### Optimization packages
 # For this simple example, we can use the Cbc solver with a relatively relaxed tolerance.
@@ -22,17 +23,9 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 
 # ### Create a `System` from TAMU data
 # We have included some of the TAMU cases (with truncated time series info)
-# in the [PowerSystemsTestData](https://github.com/nrel-siip/powersystemstestdata)
-# repository for testing, so we can just use that.
-PowerSystems.download(PowerSystems.TestData; branch = "master") # *note* add `force=true` to get a fresh copy
-base_dir = dirname(dirname(pathof(PowerSystems)));
+# in the PowerSystemCaseBuilder testing, so we can just use that.
+sys = build_system(PSYTestSystems, "tamu_ACTIVSg2000_sys")
 
-# The TAMU data format relies on a folder containing `.m` or `.raw` files and `.csv`
-# files for the time series data. We have provided a parser for the TAMU data format with
-# the `TamuSystem()` fuction.
-
-TAMU_DIR = joinpath(base_dir, "data", "ACTIVSg2000");
-sys = TamuSystem(TAMU_DIR)
 horizon = 24;
 interval = Dates.Hour(24);
 transform_single_time_series!(sys, horizon, interval);
@@ -42,40 +35,35 @@ transform_single_time_series!(sys, horizon, interval);
 # time limits, so a UC problem merely respects minmum generation levels.
 
 sim_folder = mkpath(joinpath(pkgpath, "TAMU-sim"))
-stages_definition = Dict(
-    "UC" => Stage(
-        GenericOpProblem,
-        template_unit_commitment(network = CopperPlatePowerModel),
+problems = SimulationProblems(
+    UC = OperationsProblem(
+        template_unit_commitment(transmission = CopperPlatePowerModel),
         sys,
-        solver,
+        optimizer = solver,
     ),
 )
-order = Dict(1 => "UC")
-horizons = Dict("UC" => 24)
 intervals = Dict("UC" => (Hour(24), Consecutive()))
 DA_sequence = SimulationSequence(
-    step_resolution = Hour(24),
-    order = order,
-    horizons = horizons,
+    problems = problems,
     intervals = intervals,
-    ini_cond_chronology = IntraStageChronology(),
+    ini_cond_chronology = IntraProblemChronology(),
 )
 
 # ### Define and build a simulation
 sim = Simulation(
     name = "TAMU-test",
     steps = 3,
-    stages = stages_definition,
-    stages_sequence = DA_sequence,
+    problems = problems,
+    sequence = DA_sequence,
     simulation_folder = sim_folder,
 )
 
 build!(sim)
 
 # ### Execute the simulation
-#nb execute!(sim)
+execute!(sim)
 
 # ### Load and analyze results
-#nb sim_results = SimulationResults(sim);
-#nb uc_results = get_stage_results(sim_results, "UC")
-#nb read_realized_variables(uc_results, names = [:On__ThermalStandard])[:On__ThermalStandard]
+sim_results = SimulationResults(sim);
+uc_results = get_problem_results(sim_results, "UC")
+read_realized_variables(uc_results, names = [:On__ThermalStandard])[:On__ThermalStandard]

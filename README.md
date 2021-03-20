@@ -44,6 +44,7 @@ To get started running the Jupyter notebooks included in this repository, you ca
   - [Network Matrices](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/07_network_matrices.ipynb)
   - [Large-scale U.S. dataset assembly](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/08_US_system.ipynb)
   - [Loading Dynamic System Data](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/09_loading_dynamic_systems_data.ipynb)
+  - Managing systems with [PowerSystemCaseBuilder.jl](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/10_PowerSystemCaseBuilder.ipynb)
 - [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/02_sequential_simulations.ipynb)
