@@ -1,9 +1,9 @@
 # SIIPExamples.jl [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/SIIPExamples.jl/master) [![Build Status](https://travis-ci.org/NREL-SIIP/SIIPExamples.jl.svg?branch=master)](https://travis-ci.org/NREL-SIIP/SIIPExamples.jl)
 [<img src="https://img.shields.io/badge/slack-@SIIP/Examples-blue.svg?logo=slack">](https://join.slack.com/t/nrel-siip/shared_invite/zt-glam9vdu-o8A9TwZTZqqNTKHa7q3BpQ)
 
-This repository contains examples and tutorials for [Scalable Integrated Infrastructure Planning (SIIP) packages developed at the National Renewable Energy Laboratory (NREL)](https://www.nrel.gov/analysis/siip.html). This repository uses a template established by [JuMPTutorials.jl](https://github.com/JuliaOpt/JuMPTutorials.jl).
+This package contains examples and tutorials for [Scalable Integrated Infrastructure Planning (SIIP) packages developed at the National Renewable Energy Laboratory (NREL)](https://www.nrel.gov/analysis/siip.html). This repository uses a template established by [JuMPTutorials.jl](https://github.com/JuliaOpt/JuMPTutorials.jl).
 
-The examples in this repository are intended as practical examples of using [SIIP packages](https://github.com/nrel-siip). However,
+The examples included here are intended as practical examples of using [SIIP packages](https://github.com/nrel-siip). However,
 in many cases users may find the documentation pages for each package more informative:
 
  - [InfrastructureSystems.jl docs](https://nrel-siip.github.io/InfrastructureSystems.jl/stable/)
@@ -21,13 +21,11 @@ To try out any of the tutorials in the browser without downloading Julia, click 
 
 _Prerequisites:_
  - Install [Julia](https://julialang.org)
- - Download and extract or clone (via [git](https://git-scm.com)) the code in this repository
 
-To get started running the Jupyter notebooks included in this repository, you can follow the process in [this video](https://www.youtube.com/watch?v=n1NvcnLczJ8&feature=youtu.be) demonstrating the following steps:
+To get started running the Jupyter notebooks included in this package, you can follow the process in [this video](https://www.youtube.com/watch?v=n1NvcnLczJ8&feature=youtu.be) demonstrating the following steps:
 
-1. Install IJulia: `using Pkg; Pkg.add("IJulia")`
-2. Instantiate the SIIPExamples.jl environment (_note:_ this can take 30+ minutes the first time you run): `Pkg.activate("path/to/SIIPExamples.jl/."); Pkg.instantiate()`
-3. Launch a notebook server: `using IJulia; notebook(dir = "path/to/SIIPExamples/notebook")`
+1. Install SIIPExamples: `using Pkg; Pkg.add("SIIPExamples")`
+2. Launch a notebook server for any of the example categories (`JuliaExamples, PSYExamples, PSIExamples, PSDExamples`): `notebook(PSYExamples)`
 
 ## Table of Contents
 

@@ -7,7 +7,7 @@
 # This example demonstrates how to assemble a `System` representing the entire U.S. using
 # [PowerSystems.jl](https://github.com/NREL-SIIP/powersystems.jl) and the data assembled by
 # [Xu, et. al.](https://arxiv.org/abs/2002.06155). We'll use the same tabular data parsing
-# capability [demonstrated on the RTS-GMLC dataset](../../notebook/2_PowerSystems_examples/04_parse_tabulardata.ipynb).
+# capability [demonstrated on the RTS-GMLC dataset](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/04_parse_tabulardata.ipynb).
 
 # ### Dependencies
 using SIIPExamples

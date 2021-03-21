@@ -10,7 +10,7 @@
 
 # ## Dependencies
 # Since the `OperatiotnsProblem` is the fundamental building block of a sequential
-# simulation in PowerSimulations, we will build on the [OperationsProblem example](../../notebook/3_PowerSimulations_examples/1_operations_problems.ipynb)
+# simulation in PowerSimulations, we will build on the [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 # by sourcing it as a dependency.
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
@@ -168,4 +168,4 @@ read_parameter(
 read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 # ## Plotting
-# Take a look at the [plotting examples.](../../notebook/3_PowerSimulations_examples/04_bar_stack_plots.ipynb)
+# Take a look at the [plotting examples.](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/04_bar_stack_plots.ipynb)

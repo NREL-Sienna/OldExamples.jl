@@ -28,7 +28,7 @@ transform_single_time_series!(sys, 2, Hour(1))
 using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)
 
-# In the [OperationsProblem example](../../notebook/3_PowerSimulations_examples/1_operations_problems.ipynb)
+# In the [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 # we defined a unit-commitment problem with a copper plate representation of the network.
 # Here, we want do define an economic dispatch (linear generation decisions) with an ACOPF
 # network representation.

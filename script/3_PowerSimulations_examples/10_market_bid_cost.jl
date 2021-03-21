@@ -28,7 +28,7 @@ using Cbc #solver
 
 # ### Data
 # This data depends upon the [RTS-GMLC](https://github.com/gridmod/rts-gmlc) dataset that we
-# assembled in the [tabular data parsing example](../../notebook/3_PowerSimulations_examples/1_operations_problems.ipynb).
+# assembled in the [tabular data parsing example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb).
 include(
     joinpath(SIIPExamples.TEST_DIR, SIIPExamples.PSY_EX_FOLDER, "04_parse_tabulardata.jl"),
 )
@@ -60,7 +60,7 @@ horizon = 24;
 interval = Dates.Hour(24);
 transform_single_time_series!(sys, horizon, interval)
 
-# In the [OperationsProblem example](../../notebook/3_PowerSimulations_examples/1_operations_problems.ipynb)
+# In the [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 # we defined a unit-commitment problem with a copper plate representation of the network.
 # Here, we want do define unit-commitment problem  with ThermalMultiStartUnitCommitment
 # formulation for thermal device representation.

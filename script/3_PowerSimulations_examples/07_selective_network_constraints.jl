@@ -4,7 +4,7 @@
 
 # ## Introduction
 
-# The [Operations Problems example]](../../notebook/3_PowerSimulations_examples/sequential_simulations.ipynb)
+# The [Operations Problems example]](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/02_sequential_simulations.ipynb)
 # shows the basic building blocks of building optimization problems with PowerSimulations.jl.
 # This example shows how to customize the enforcement of branch flow constraints as is common
 # when trying to build large scale simulations.

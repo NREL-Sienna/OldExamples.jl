@@ -8,7 +8,7 @@
 # provides an example of how to write and read a `System` to/from disk.
 
 # ### Dependencies
-# Let's use a dataset from the [tabular data parsing example](../../notebook/2_PowerSystems_examples/parse_matpower.ipynb)
+# Let's use a dataset from the [tabular data parsing example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/parse_matpower.ipynb)
 using SIIPExamples
 
 pkgpath = dirname(dirname(pathof(SIIPExamples)))

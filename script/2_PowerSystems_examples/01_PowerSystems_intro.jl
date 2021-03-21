@@ -95,7 +95,7 @@ print_tree(TimeSeriesData)
 print_struct(Deterministic)
 
 # Examples of how to create and add time series to system can be found in the
-# [Add Time Series Example](../PowerSystems.jl Examples/05_add_forecasts.ipynb)
+# [Add Time Series Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/05_add_forecasts.ipynb)
 
 # ### System
 # The `System` object collects all of the individual components into a single struct along

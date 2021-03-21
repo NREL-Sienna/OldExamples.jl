@@ -6,7 +6,7 @@
 
 # PowerSimulations.jl supports the construction and solution of optimal power system
 # scheduling problems (Operations Problems). Operations problems form the fundamental
-# building blocks for [sequential simulations](../../notebook/3_PowerSimulations_examples/sequential_simulations.ipynb).
+# building blocks for [sequential simulations](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/02_sequential_simulations.ipynb).
 # This example shows how to specify and customize a the mathematics that will be applied to the data with
 # an `OperationsProblemTemplate`, build and execute an `OperationsProblem`, and access the results.
 
@@ -28,7 +28,7 @@ using Cbc #solver
 
 # ### Data
 # This data depends upon the [RTS-GMLC](https://github.com/gridmod/rts-gmlc) dataset. Let's
-# use [PowerSystemCaseBuilder.jl](../../notebook/2_PowerSystems_examples/10_PowerSystemCaseBuilder.ipynb) to download and build a `System`.
+# use [PowerSystemCaseBuilder.jl](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/10_PowerSystemCaseBuilder.ipynb) to download and build a `System`.
 
 sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 

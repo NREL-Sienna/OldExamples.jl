@@ -21,7 +21,7 @@ using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)
 
 # We can use the same RTS data and some of the initialization as in
-# [OperationsProblem example](../../notebook/3_PowerSimulations_examples/1_operations_problems.ipynb)
+# [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
 # Here, we want do define an economic dispatch (linear generation decisions) with
