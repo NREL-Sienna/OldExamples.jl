@@ -1,7 +1,7 @@
 name = "SIIPExamples"
 uuid = "2c79006f-6450-48c4-b124-fbadab4f299d"
 authors = ["Clayton Barrows", "Sourabh Dalvi"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
@@ -48,9 +48,9 @@ PowerGraphics = "~0.8"
 PowerSimulations = "^0.12.0"
 PowerSimulationsDynamics = "^0.3.0"
 PowerSystemCaseBuilder = "^0.3.3"
-PowerSystems = "1.2.5"
+PowerSystems = "1.3.0"
 Sundials = "~4.4"
-TimeSeries = "~0.20"
+TimeSeries = "~0.21"
 TimeZones = "~1.5"
 WebIO = "~0.8"
 julia = "^1.5"
