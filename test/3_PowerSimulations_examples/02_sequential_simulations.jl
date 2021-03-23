@@ -68,3 +68,4 @@ read_parameter(
 read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

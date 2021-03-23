@@ -126,25 +126,23 @@ bus = DataFrame(CSV.File(joinpath(datadir, "bus.csv")))
 !isnothing(interconnect) && filter!(row -> row[:interconnect] == interconnect, bus)
 zone = DataFrame(CSV.File(joinpath(datadir, "zone.csv")))
 bus = leftjoin(bus, zone, on = :zone_id)
-int2bustype(b) =
-    replace(split(string(PowerSystems.BusTypes.BusType(b)), ".")[end], "]" => "")
-bus.bustype = int2bustype.(bus.type)
+bustypes = Dict(1 => "PV", 2 => "PQ", 3 => "REF", 4 => "ISOLATED")
+bus.bustype = [bustypes[b] for b in bus.type]
+filter!(row -> row[:bustype] != PowerSystems.BusTypes.ISOLATED, bus)
 bus.name = "bus" .* string.(bus.bus_id)
 CSV.write(joinpath(siip_data, "bus.csv"), bus)
 
 # We need branch names as strings
 branch = DataFrame(CSV.File(joinpath(datadir, "branch.csv")))
-branch = join(
+branch = leftjoin(
     branch,
     DataFrames.rename!(bus[:, [:bus_id, :baseKV]], [:from_bus_id, :from_baseKV]),
     on = :from_bus_id,
-    kind = :left,
 )
-branch = join(
+branch = leftjoin(
     branch,
     DataFrames.rename!(bus[:, [:bus_id, :baseKV]], [:to_bus_id, :to_baseKV]),
     on = :to_bus_id,
-    kind = :left,
 )
 !isnothing(interconnect) && filter!(row -> row[:interconnect] == interconnect, branch)
 branch.name = "branch" .* string.(branch.branch_id)
@@ -212,7 +210,7 @@ for f in ts_csv
                     "type" => "SingleTimeSeries",
                     "component_name" => String(colname),
                     "name" => label,
-                    "resolution" => 300,
+                    "resolution" => 3600,
                     "scaling_factor_multiplier" => "get_max_active_power",
                     "scaling_factor_multiplier_module" => "PowerSystems",
                     "normalization_factor" => sf,

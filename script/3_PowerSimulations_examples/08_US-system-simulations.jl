@@ -56,7 +56,7 @@ end
 # ### Create a `template`
 # Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
 # flow limited formulation to `MonitoredLine`s.
-template = OperationsProblemTemplate(PTDFPowerModel)
+template = OperationsProblemTemplate(StandardPTDFModel)
 set_device_model!(template, Line, StaticBranchUnbounded)
 set_device_model!(template, TapTransformer, StaticBranchUnbounded)
 set_device_model!(template, MonitoredLine, StaticBranch)
@@ -64,6 +64,8 @@ set_device_model!(template, ThermalStandard, ThermalStandardUnitCommitment)
 set_device_model!(template, RenewableDispatch, RenewableFullDispatch)
 set_device_model!(template, PowerLoad, StaticPowerLoad)
 set_device_model!(template, HydroDispatch, FixedOutput)
+
+ptdf = PTDF(sys)
 
 # ### Build and execute single step problem
 op_problem = OperationsProblem(
@@ -73,14 +75,16 @@ op_problem = OperationsProblem(
     horizon = 24,
     balance_slack_variables = false,
     use_parameters = true,
+    PTDF = ptdf,
 )
 
-build!(op_problem, output_dir = mktempdir())
+build!(op_problem, output_dir = mktempdir(), console_level = Logging.Info)
 
 solve!(op_problem)
 
 # ### Analyze results
-fuel_plot(op_problem, sys, load = true)
+res = ProblemResults(op_problem)
+plot_fuel(res)
 
 # ## Sequential Simulation
 # In addition to defining the formulation template, sequential simulations require
@@ -92,10 +96,13 @@ problems = SimulationProblems(
         sys,
         optimizer = solver,
         balance_slack_variables = true,
+        system_to_file = false,
+        PTDF = ptdf,
     ),
 )
 intervals = Dict("UC" => (Hour(24), Consecutive()))
 DA_sequence = SimulationSequence(
+    problems = problems,
     intervals = intervals,
     ini_cond_chronology = IntraProblemChronology(),
 )
@@ -123,4 +130,4 @@ build!(
 #nb results = SimulationResults(sim);
 #nb uc_results = get_problem_results(results, "UC");
 
-#nb fuel_plot(uc_results, load = true, curtailment = true, stack = true)
+#nb plot_fuel(uc_results)
