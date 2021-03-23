@@ -976,7 +976,7 @@ version = "1.2.1"
 
 [[PowerGraphics]]
 deps = ["CSV", "Colors", "DataFrames", "DataStructures", "Dates", "InfrastructureSystems", "InteractiveUtils", "Plots", "PowerSimulations", "PowerSystems", "Reexport", "Requires", "TimeSeries", "YAML"]
-path = "../PowerGraphics.jl"
+git-tree-sha1 = "0a2b8beb4add4b3ef47b97bb990c5d31cd341c2d"
 uuid = "5f7eddb3-86b1-49e8-a95a-ddc0f45eea41"
 version = "0.8.1"
 
