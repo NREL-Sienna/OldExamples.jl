@@ -56,7 +56,7 @@ end
 # ### Create a `template`
 # Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
 # flow limited formulation to `MonitoredLine`s.
-template = OperationsProblemTemplate(StandardPTDFModel)
+template = OperationsProblemTemplate(DCPPowerModel)
 set_device_model!(template, Line, StaticBranchUnbounded)
 set_device_model!(template, TapTransformer, StaticBranchUnbounded)
 set_device_model!(template, MonitoredLine, StaticBranch)
