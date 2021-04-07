@@ -1,4 +1,5 @@
 
+#jl #! format: off
 # # Introduction to [PowerSystems.jl](https://github.com/NREL-SIIP/PowerSystems.jl)
 #
 

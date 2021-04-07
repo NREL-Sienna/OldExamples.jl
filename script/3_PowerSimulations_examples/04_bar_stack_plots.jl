@@ -1,4 +1,5 @@
 
+#jl #! format: off
 # # Bar and stack plots with [PowerGraphics.jl](github.com/nrel-siip/PowerGraphics.jl)
 # PowerGraphics also provides some basic specifications for plotting `SimulationResults`.
 # This example demonstrates some simple plotting capabilities using different Plots.julia

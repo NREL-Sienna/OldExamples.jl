@@ -1,3 +1,5 @@
+#! format: off
+
 using SIIPExamples # Only needed for the tutorial, comment if you want to run
 import DisplayAs # Only needed for the tutorial
 using PowerSimulationsDynamics

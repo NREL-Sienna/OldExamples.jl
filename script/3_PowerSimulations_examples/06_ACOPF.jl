@@ -1,3 +1,4 @@
+#jl #! format: off
 # # ACOPF with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl) using [PowerModels.jl](https://github.com/lanl-ansi/PowerModels.jl)
 
 # **Originally Contributed by**: Clayton Barrows

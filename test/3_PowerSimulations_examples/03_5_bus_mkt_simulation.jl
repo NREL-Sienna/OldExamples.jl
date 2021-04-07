@@ -1,3 +1,5 @@
+#! format: off
+
 using PowerSystems
 using PowerSimulations
 using PowerSystemCaseBuilder

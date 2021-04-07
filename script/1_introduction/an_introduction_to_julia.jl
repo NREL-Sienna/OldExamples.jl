@@ -1,11 +1,12 @@
+#jl #! format: off
 # # Intro to Julia
 # **Originally Contributed by**: Juan Pablo Vielma
 
 # ## Introduction
 
-# Since JuMP is embedded in Julia, knowing some basic Julia is important 
-# for learning JuMP. This notebook is designed to provide a minimalist 
-# crash course in the basics of Julia. You can find resources that provide 
+# Since JuMP is embedded in Julia, knowing some basic Julia is important
+# for learning JuMP. This notebook is designed to provide a minimalist
+# crash course in the basics of Julia. You can find resources that provide
 # a more comprehensive introduction to Julia [here](https://julialang.org/learning/).
 
 # ### How to Print
@@ -22,7 +23,7 @@ typeof(1 + -2)
 
 typeof(1.2 - 2.3)
 
-# There are also some cool things like an irrational representation of π. To make π 
+# There are also some cool things like an irrational representation of π. To make π
 # (and most other greek letters), type \pi and then press [TAB].
 
 π
@@ -70,8 +71,8 @@ sin(2π / 3) - √3 / 2
 
 sin(2π / 3) ≈ √3 / 2
 
-# Note that this time we used ≈ instead of ==. That is because computers don't use 
-# real numbers. They use a discrete representation called floating point. If you aren't 
+# Note that this time we used ≈ instead of ==. That is because computers don't use
+# real numbers. They use a discrete representation called floating point. If you aren't
 # careful, this can throw up all manner of issues. For example:
 
 1 + 1e-16 == 1
@@ -90,11 +91,11 @@ b = [5, 6]
 
 A = [1 2; 3 4]
 
-# We can do linear algebra: 
+# We can do linear algebra:
 
 x = A \ b
 
-# 
+#
 
 A * x
 
@@ -105,89 +106,89 @@ A * x == b
 # Note that when multiplying vectors and matrices, dimensions matter. For example, you can't multiply a vector by a vector:
 # ```julia
 # b * b
-# 
+#
 # MethodError: no method matching *(::Array{Int64,1}, ::Array{Int64,1})
 # Closest candidates are:
 #   *(::Any, ::Any, !Matched::Any, !Matched::Any...) at operators.jl:529
 #   *(!Matched::LinearAlgebra.Adjoint{#s617,#s616} where #s616<:Union{DenseArray{T<:Union{Complex{Float32}, Complex{Float64}, Float32, Float64},2}, Base.ReinterpretArray{T<:Union{Complex{Float32}, Complex{Float64}, Float32, Float64},2,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray}, Base.ReshapedArray{T<:Union{Complex{Float32}, Complex{Float64}, Float32, Float64},2,A,MI} where MI<:Tuple{Vararg{Base.MultiplicativeInverses.SignedMultiplicativeInverse{Int64},N} where N} where A<:Union{Base.ReinterpretArray{T,N,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray}, SubArray{T<:Union{Complex{Float32}, Complex{Float64}, Float32, Float64},2,A,I,L} where L where I<:Tuple{Vararg{Union{Int64, AbstractRange{Int64}, Base.AbstractCartesianIndex},N} where N} where A<:Union{Base.ReinterpretArray{T,N,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, Base.ReshapedArray{T,N,A,MI} where MI<:Tuple{Vararg{Base.MultiplicativeInverses.SignedMultiplicativeInverse{Int64},N} where N} where A<:Union{Base.ReinterpretArray{T,N,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, DenseArray}} where #s617, ::Union{DenseArray{S,1}, Base.ReinterpretArray{S,1,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray}, Base.ReshapedArray{S,1,A,MI} where MI<:Tuple{Vararg{Base.MultiplicativeInverses.SignedMultiplicativeInverse{Int64},N} where N} where A<:Union{Base.ReinterpretArray{T,N,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray}, SubArray{S,1,A,I,L} where L where I<:Tuple{Vararg{Union{Int64, AbstractRange{Int64}, Base.AbstractCartesianIndex},N} where N} where A<:Union{Base.ReinterpretArray{T,N,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, Base.ReshapedArray{T,N,A,MI} where MI<:Tuple{Vararg{Base.MultiplicativeInverses.SignedMultiplicativeInverse{Int64},N} where N} where A<:Union{Base.ReinterpretArray{T,N,S,A} where S where A<:Union{SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, SubArray{T,N,A,I,true} where I<:Union{Tuple{Vararg{Real,N} where N}, Tuple{AbstractUnitRange,Vararg{Any,N} where N}} where A<:DenseArray where N where T, DenseArray} where N where T, DenseArray}}) where {T<:Union{Complex{Float32}, Complex{Float64}, Float32, Float64}, S} at /Users/sabae/buildbot/worker/package_macos64/build/usr/share/julia/stdlib/v1.2/LinearAlgebra/src/matmul.jl:99
 #   *(!Matched::LinearAlgebra.Adjoint{#s617,#s616} where #s616<:LinearAlgebra.AbstractTriangular where #s617, ::AbstractArray{T,1} where T) at /Users/sabae/buildbot/worker/package_macos64/build/usr/share/julia/stdlib/v1.2/LinearAlgebra/src/triangular.jl:1850
 #   ...
-# 
+#
 # Stacktrace:
 #  [1] top-level scope at In[16]:4
 # ```
 
-# But multiplying transposes works: 
+# But multiplying transposes works:
 
 @show b' * b
 @show b * b';
 
-# ### Tuples 
+# ### Tuples
 # Julia makes extensive use of a simple data structure called Tuples.  Tuples are immutable collections of values.
 # For example,
 
 t = ("hello", 1.2, :foo)
 
-#+ 
+#+
 
 typeof(t)
 
-# Tuples can be accessed by index, similar to arrays, 
+# Tuples can be accessed by index, similar to arrays,
 
 t[2]
 
-# And can be "unpacked" like so, 
+# And can be "unpacked" like so,
 
 a, b, c = t
 b
 
-# The values can also be given names, which is a convenient way of making light-weight data structures. 
+# The values can also be given names, which is a convenient way of making light-weight data structures.
 
 t = (word = "hello", num = 1.2, sym = :foo)
 
-# Then values can be accessed using a dot syntax, 
+# Then values can be accessed using a dot syntax,
 
 t.word
 
 # ### Dictionaries
-# Similar to Python, Julia has native support for dictionaries.  Dictionaries provide a very generic way of mapping keys to values.  For example, a map of integers to strings, 
+# Similar to Python, Julia has native support for dictionaries.  Dictionaries provide a very generic way of mapping keys to values.  For example, a map of integers to strings,
 
 d1 = Dict(1 => "A", 2 => "B", 4 => "D")
 
-# Looking up a values uses the bracket syntax, 
+# Looking up a values uses the bracket syntax,
 
 d1[2]
 
-# Dictionaries support non-integer keys and can mix data types, 
+# Dictionaries support non-integer keys and can mix data types,
 
 Dict("A" => 1, "B" => 2.5, "D" => 2 - 3im)
 
-# Dictionaries can be nested 
+# Dictionaries can be nested
 
 d2 = Dict("A" => 1, "B" => 2, "D" => Dict(:foo => 3, :bar => 4))
 
-#+ 
+#+
 
 d2["B"]
 
-#+ 
+#+
 
 d2["D"][:foo]
 
-# ### For-Each Loops 
+# ### For-Each Loops
 # Julia has native support for for-each style loops with the syntax `for <value> in <collection> end`.
 
 for i in 1:5
     println(i)
 end
 
-# 
+#
 
 for i in [1.2, 2.3, 3.4, 4.5, 5.6]
     println(i)
 end
 
-# This for-each loop also works with dictionaries. 
+# This for-each loop also works with dictionaries.
 
 for (key, value) in Dict("A" => 1, "B" => 2.5, "D" => 2 - 3im)
     println("$key: $value")
@@ -196,7 +197,7 @@ end
 # Note that in contrast to vector languages like Matlab and R, loops do not result in a significant performance degradation in Julia.
 
 # ### Control Flow
-# Julia control flow is similar to Matlab, using the keywords `if-elseif-else-end`, and the logical operators `||` and `&&` for *or* and *and* respectively. 
+# Julia control flow is similar to Matlab, using the keywords `if-elseif-else-end`, and the logical operators `||` and `&&` for *or* and *and* respectively.
 
 i = 10
 for i in 0:3:15
@@ -215,24 +216,24 @@ end
 
 # ### Comprehensions
 # Similar to languages like Haskell and Python, Julia supports the use of simple loops in the construction of arrays and dictionaries, called comprehenions.
-# 
+#
 # A list of increasing integers,
 
 [i for i in 1:5]
 
-# Matrices can be built by including multiple indices, 
+# Matrices can be built by including multiple indices,
 
 [i * j for i in 1:5, j in 5:10]
 
-# Conditional statements can be used to filter out some values, 
+# Conditional statements can be used to filter out some values,
 
 [i for i in 1:10 if i % 2 == 1]
 
-# A similar syntax can be used for building dictionaries 
+# A similar syntax can be used for building dictionaries
 
 Dict("$i" => i for i in 1:10 if i % 2 == 1)
 
-# ### Functions 
+# ### Functions
 # A simple function is defined as follows,
 
 function print_hello()
@@ -240,7 +241,7 @@ function print_hello()
 end
 print_hello()
 
-# Arguments can be added to a function, 
+# Arguments can be added to a function,
 
 function print_it(x)
     println(x)
@@ -249,7 +250,7 @@ print_it("hello")
 print_it(1.234)
 print_it(:my_id)
 
-# Optional keyword arguments are also possible  
+# Optional keyword arguments are also possible
 
 function print_it(x; prefix = "value:")
     println("$(prefix) $x")
@@ -257,28 +258,28 @@ end
 print_it(1.234)
 print_it(1.234, prefix = "val:")
 
-# The keyword `return` is used to specify the return values of a function. 
+# The keyword `return` is used to specify the return values of a function.
 
 function mult(x; y = 2.0)
     return x * y
 end
 mult(4.0)
 
-#+ 
+#+
 
 mult(4.0, y = 5.0)
 
-# ### Other notes on types 
+# ### Other notes on types
 # Usually, specifing types is not required to use Julia.  However, it can be helpful to understand the basics of Julia types for debugging.
 # For example this list has a type of `Array{Int64,1}` indicating that it is a one dimensional array of integer values.
 
 [1, 5, -2, 7]
 
-# In this example, the decimal values lead to a one dimensional array of floating point values, i.e. `Array{Float64,1}`.  Notice that the integer `7` is promoted to a `Float64`, because all elements in the array need share a common type. 
+# In this example, the decimal values lead to a one dimensional array of floating point values, i.e. `Array{Float64,1}`.  Notice that the integer `7` is promoted to a `Float64`, because all elements in the array need share a common type.
 
 [1.0, 5.2, -2.1, 7]
 
-# ### Mutable vs immutable objects 
+# ### Mutable vs immutable objects
 # Some types in Julia are *mutable*, which means you can change the values inside them. A good example is an array. You can modify the contents of an array without having to make a new array.
 # In contrast, types like `Float64` are *immutable*. You can't modify the contents of a `Float64`.
 # This is something to be aware of when passing types into functions. For example:
@@ -297,19 +298,19 @@ mutability_example(mutable_type, immutable_type)
 println("mutable_type: $(mutable_type)")
 println("immutable_type: $(immutable_type)")
 
-# Because `Vector{Int}` is a mutable type, modifying the variable inside the function changed the value outside of the function. In constrast, the change to `immutable_type` didn't modify the value outside the function. 
+# Because `Vector{Int}` is a mutable type, modifying the variable inside the function changed the value outside of the function. In constrast, the change to `immutable_type` didn't modify the value outside the function.
 # You can check mutability with the `isimmutable` function.
 
 @show isimmutable([1, 2, 3])
 @show isimmutable(1);
 
-# ### Using Packages and the Package Manager 
+# ### Using Packages and the Package Manager
 # No matter how wonderful Julia's base language is, at some point you will want to use an extension package.  Some of these are built-in, for example random number generation is available in the `Random` package in the standard library. These packages are loaded with the commands `using` and `import`.
 
 using Random
 [rand() for i in 1:10]
 
-# The Package Manager is used to install packages that are not part of Julia's standard library. 
+# The Package Manager is used to install packages that are not part of Julia's standard library.
 # For example the following can be used to install JuMP,
 
 # ```julia
@@ -325,7 +326,7 @@ using Random
 # Pkg.add("https://github.com/user-name/MyPackage.jl.git")
 # ```
 
-# Note that for clarity this example uses the package manager `Pkg`.  Julia includes an interactive package manager that can be accessed using `]`.  [This video](https://youtu.be/76KL8aSz0Sg) gives an overview of using the interactive package manager environment. 
+# Note that for clarity this example uses the package manager `Pkg`.  Julia includes an interactive package manager that can be accessed using `]`.  [This video](https://youtu.be/76KL8aSz0Sg) gives an overview of using the interactive package manager environment.
 # The state of installed packages can also be saved in two files: `Project.toml` and `Manifest.toml`. If these files are stored in the same directory than a notebook, the state of the packages can be recovered by running
 # ```julia
 # import Pkg
@@ -333,7 +334,7 @@ using Random
 # Pkg.instantiate()
 # ```
 
-# ### HELP! 
+# ### HELP!
 # Julia includes a help mode that can be accessed using `?`.  Entering any object (e.g. function, type, struct, ...) into the help mode will show its documentation, if any is available.
 
 # ### Some Common Gotchas

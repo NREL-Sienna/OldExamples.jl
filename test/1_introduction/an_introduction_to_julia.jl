@@ -1,3 +1,5 @@
+#! format: off
+
 println("Hello, World!")
 
 typeof(1 + -2)

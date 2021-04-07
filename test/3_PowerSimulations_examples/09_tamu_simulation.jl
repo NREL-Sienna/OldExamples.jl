@@ -1,3 +1,5 @@
+#! format: off
+
 using SIIPExamples
 pkgpath = dirname(dirname(pathof(SIIPExamples)))
 using Dates

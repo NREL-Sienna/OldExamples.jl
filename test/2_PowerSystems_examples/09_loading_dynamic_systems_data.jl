@@ -1,3 +1,5 @@
+#! format: off
+
 using SIIPExamples
 using PowerSystems
 const PSY = PowerSystems

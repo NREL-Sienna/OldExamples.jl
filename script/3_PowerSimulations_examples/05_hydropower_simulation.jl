@@ -1,3 +1,4 @@
+#jl #! format: off
 # # Hydropower Simulations with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl)
 
 # **Originally Contributed by**: Clayton Barrows and Sourabh Dalvi

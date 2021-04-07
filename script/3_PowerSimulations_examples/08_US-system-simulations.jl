@@ -1,4 +1,5 @@
 
+#jl #! format: off
 # # Large Scale Production Cost Modeling with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl)
 
 # **Originally Contributed by**: Clayton Barrows
