@@ -55,7 +55,7 @@ omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 # With this, we are ready to create our simulation structure:
 time_span = (0.0, 30.0)
 perturbation_trip = BranchTrip(1.0, "BUS 1-BUS 2-i_1")
-sim = PSID.Simulation(pwd(), omib_sys, time_span, perturbation_trip)
+sim = PSID.Simulation(PSID.ImplicitModel, omib_sys, pwd(), time_span, perturbation_trip)
 
 # This will automatically initialize the system by running a power flow
 # and update `V_ref`, `P_ref` and hence `eq_p` (the internal voltage) to match the
@@ -93,7 +93,7 @@ Plots.plot(angle, xlabel = "time", ylabel = "rotor angle [rad]", label = "rotor 
 # tuple of time and voltage. In this case, we are obtaining the voltage magnitude at bus 102
 # (where the generator is located).
 
-volt = get_voltagemag_series(sim, 102);
+volt = get_voltage_magnitude_series(sim, 102);
 Plots.plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 
 # ## Optional: Small Signal Analysis
@@ -102,7 +102,7 @@ Plots.plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 # of the system for the differential states. This can be used to analyze the local stability
 # of the linearized system. We need to re-initialize our simulation:
 
-sim2 = PSID.Simulation(pwd(), omib_sys, time_span, perturbation_trip)
+sim2 = PSID.Simulation(PSID.ImplicitModel, omib_sys, pwd(), time_span, perturbation_trip)
 
 small_sig = small_signal_analysis(sim2)
 
