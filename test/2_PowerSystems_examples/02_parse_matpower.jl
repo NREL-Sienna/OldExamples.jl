@@ -1,3 +1,5 @@
+#! format: off
+
 using PowerSystems
 using TimeSeries
 
@@ -7,3 +9,4 @@ sys = System(joinpath(base_dir, "matpower", "case5_re.m"))
 sys
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

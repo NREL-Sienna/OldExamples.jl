@@ -1,3 +1,5 @@
+#! format: off
+
 using SIIPExamples
 using PowerSystems
 using PowerSimulations
@@ -50,3 +52,4 @@ build!(problem, output_dir = mktempdir())
 solve!(problem)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

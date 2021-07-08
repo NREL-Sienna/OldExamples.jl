@@ -1,3 +1,4 @@
+#jl #! format: off
 # # Creating a `System` representing the entire U.S.
 
 # **Originally Contributed by**: Clayton Barrows
@@ -236,7 +237,7 @@ rawsys = PowerSystems.PowerSystemTableData(
     siip_data,
     100.0,
     joinpath(config_dir, "us_descriptors.yaml"),
-    generator_mapping_file = joinpath(config_dir, "US_generator_mapping.yaml"),
+    generator_mapping_file = joinpath(config_dir, "us_generator_mapping.yaml"),
 )
 
 # ### Create a `System`

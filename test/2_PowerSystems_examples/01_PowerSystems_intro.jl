@@ -1,3 +1,5 @@
+#! format: off
+
 using SIIPExamples;
 using PowerSystems;
 
@@ -55,3 +57,4 @@ ta = get_time_series_array(Deterministic, loads[1], ts_names[1])
 ts = get_time_series_values(Deterministic, loads[1], ts_names[1])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

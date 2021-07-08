@@ -1,3 +1,5 @@
+#! format: off
+
 using PowerSystems
 using PowerSimulations
 using PowerSystemCaseBuilder
@@ -67,3 +69,4 @@ execute!(sim, enable_progress_bar = false)
 # Results
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

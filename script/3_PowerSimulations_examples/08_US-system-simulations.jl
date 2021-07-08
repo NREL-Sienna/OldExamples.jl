@@ -1,4 +1,5 @@
 
+#jl #! format: off
 # # Large Scale Production Cost Modeling with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl)
 
 # **Originally Contributed by**: Clayton Barrows
@@ -56,7 +57,7 @@ end
 # ### Create a `template`
 # Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
 # flow limited formulation to `MonitoredLine`s.
-template = OperationsProblemTemplate(StandardPTDFModel)
+template = OperationsProblemTemplate(DCPPowerModel)
 set_device_model!(template, Line, StaticBranchUnbounded)
 set_device_model!(template, TapTransformer, StaticBranchUnbounded)
 set_device_model!(template, MonitoredLine, StaticBranch)

@@ -1,3 +1,5 @@
+#! format: off
+
 using SIIPExamples
 using PowerSystems
 const PSY = PowerSystems
@@ -179,3 +181,4 @@ end
 to_json(threebus_sys, joinpath(file_dir, "threebus_sys.json"), force = true)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

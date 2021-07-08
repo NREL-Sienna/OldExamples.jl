@@ -1,3 +1,4 @@
+#jl #! format: off
 # # Time-varying bid problems with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl)
 
 # **Originally Contributed by**: Sourabh Dalvi

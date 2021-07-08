@@ -1,3 +1,4 @@
+#jl #! format: off
 # # 5-bus Market simulation with [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl)
 
 # **Originally Contributed by**: Clayton Barrows

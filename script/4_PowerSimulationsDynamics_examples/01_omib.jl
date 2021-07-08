@@ -1,3 +1,4 @@
+#jl #! format: off
 # One Machine against Infinite Bus (OMIB) simulation with [PowerSimulationsDynamics.jl](https://github.com/NREL-SIIP/PowerSimulationsDynamics.jl)
 
 # **Originally Contributed by**: Rodrigo Henriquez and José Daniel Lara
