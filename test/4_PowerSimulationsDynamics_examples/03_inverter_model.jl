@@ -20,8 +20,9 @@ file_dir = joinpath(
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))
 
 sim = PSID.Simulation(
-    file_dir,       #path for the simulation output
+    PSID.ImplicitModel, #Type of model used
     sys,         #system
+    file_dir,       #path for the simulation output
     (0.0, 20.0), #time span
     BranchTrip(1.0, "BUS 02-BUS 04-i_4");
     console_level = Logging.Info,
@@ -33,7 +34,7 @@ PSID.execute!(sim, IDA(); abstol = 1e-8)
 
 p = plot()
 for b in get_components(Bus, sys)
-    voltage_series = get_voltagemag_series(sim, get_number(b))
+    voltage_series = get_voltage_magnitude_series(sim, get_number(b))
     plot!(
         p,
         voltage_series;
@@ -122,8 +123,9 @@ add_component!(sys, inverter, storage)
 sys
 
 sim = PSID.Simulation(
-    file_dir,       #path for the simulation output
+    PSID.ImplicitModel, #Type of model used
     sys,         #system
+    file_dir,       #path for the simulation output
     (0.0, 20.0), #time span
     BranchTrip(1.0, "BUS 02-BUS 04-i_4");
     console_level = Logging.Info,
@@ -137,7 +139,7 @@ PSID.execute!(sim, IDA(); abstol = 1e-8)
 
 p = plot()
 for b in get_components(Bus, sys)
-    voltage_series = get_voltagemag_series(sim, get_number(b))
+    voltage_series = get_voltage_magnitude_series(sim, get_number(b))
     plot!(
         p,
         voltage_series;
