@@ -68,7 +68,7 @@ solve!(problem)
 # from the  dual (λ) of `:CopperPlateBalance` constraint.
 res = ProblemResults(problem)
 duals = get_duals(res)
-λ = convert(Array, duals[:CopperPlateBalance][:, :var])
+λ = convert(Array, duals[:CopperPlateBalance][:, :CopperPlateBalance])
 flow_duals = outerjoin(
     [duals[k] for k in [:network_flow__Line, :network_flow__TapTransformer]]...,
     on = :DateTime,

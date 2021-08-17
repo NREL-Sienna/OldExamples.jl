@@ -62,7 +62,7 @@ read_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 read_parameter(
     ed_results,
-    :P__max_active_power__RenewableFix,
+    :P__max_active_power__RenewableFix_max_active_power,
     initial_time = DateTime("2020-01-01T06:00:00"),
     count = 5,
 )

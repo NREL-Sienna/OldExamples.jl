@@ -42,7 +42,7 @@ template_uc
 # example, PSI also provides pre-specified templates for some standard problems:
 template_ed = template_economic_dispatch()
 
-# ### Define the `SimulaitonProblems`
+# ### Define the `SimulationProblems`
 # `OperationsProblem`s define models. The actual problem will change as the stage gets updated to represent
 # different time periods, but the formulations applied to the components is constant within
 # a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s
@@ -132,7 +132,6 @@ sim = Simulation(
 )
 
 # ### Build simulation
-
 build!(sim)
 
 # ### Execute simulation
@@ -158,7 +157,7 @@ read_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 read_parameter(
     ed_results,
-    :P__max_active_power__RenewableFix,
+    :P__max_active_power__RenewableFix_max_active_power,
     initial_time = DateTime("2020-01-01T06:00:00"),
     count = 5,
 )
