@@ -166,4 +166,3 @@ plot!(p2, state_series; xlabel = "Time", ylabel = "Speed [pu]", label = "Battery
 img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-
