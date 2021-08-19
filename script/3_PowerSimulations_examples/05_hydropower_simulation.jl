@@ -211,7 +211,7 @@ problems = SimulationProblems(
     ),
     ED = OperationsProblem(
         template_da,
-        c_sys5_hy_ed,
+        c_sys5_hy_ed_targets,
         optimizer = solver,
         system_to_file = false,
     ),
@@ -224,7 +224,7 @@ sequence = SimulationSequence(
         ("DA" => "ED") => Synchronize(periods = 24),
     ),
     intervals = Dict(
-        "MD" => (Hour(24), Consecutive()),
+        "MD" => (Hour(48), Consecutive()),
         "DA" => (Hour(24), Consecutive()),
         "ED" => (Hour(1), Consecutive()),
     ),
