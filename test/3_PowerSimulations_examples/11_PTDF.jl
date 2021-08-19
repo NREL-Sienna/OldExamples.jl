@@ -39,7 +39,7 @@ solve!(problem)
 
 res = ProblemResults(problem)
 duals = get_duals(res)
-λ = convert(Array, duals[:CopperPlateBalance][:, :var])
+λ = convert(Array, duals[:CopperPlateBalance][:, :CopperPlateBalance])
 flow_duals = outerjoin(
     [duals[k] for k in [:network_flow__Line, :network_flow__TapTransformer]]...,
     on = :DateTime,
@@ -56,4 +56,3 @@ congestion_lmp = DataFrame(congestion_lmp)
 LMP = λ .- congestion_lmp
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

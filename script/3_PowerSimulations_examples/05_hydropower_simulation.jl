@@ -34,6 +34,10 @@ c_sys5_hy_wk = build_system(SIIPExampleSystems, "5_bus_hydro_wk_sys")
 c_sys5_hy_uc = build_system(SIIPExampleSystems, "5_bus_hydro_uc_sys")
 c_sys5_hy_ed = build_system(SIIPExampleSystems, "5_bus_hydro_ed_sys")
 
+c_sys5_hy_wk_targets = build_system(SIIPExampleSystems, "5_bus_hydro_wk_sys_with_targets")
+c_sys5_hy_uc_targets = build_system(SIIPExampleSystems, "5_bus_hydro_uc_sys_with_targets")
+c_sys5_hy_ed_targets = build_system(SIIPExampleSystems, "5_bus_hydro_ed_sys_with_targets")
+
 # This line just overloads JuMP printing to remove double underscores added by PowerSimulations.jl
 PSI.JuMP._wrap_in_math_mode(str) = "\$\$ $(replace(str, "__"=>"")) \$\$"
 
@@ -102,7 +106,7 @@ template = OperationsProblemTemplate()
 set_device_model!(template, HydroEnergyReservoir, HydroDispatchReservoirStorage)
 set_device_model!(template, PowerLoad, StaticPowerLoad)
 
-op_problem = PSI.OperationsProblem(template, c_sys5_hy_uc, horizon = 24)
+op_problem = PSI.OperationsProblem(template, c_sys5_hy_uc_targets, horizon = 24)
 build!(op_problem, output_dir = odir)
 
 #-
@@ -133,13 +137,13 @@ set_device_model!(template_da, HydroEnergyReservoir, HydroDispatchReservoirStora
 problems = SimulationProblems(
     MD = OperationsProblem(
         template_md,
-        c_sys5_hy_wk,
+        c_sys5_hy_wk_targets,
         optimizer = solver,
         system_to_file = false,
     ),
     DA = OperationsProblem(
         template_da,
-        c_sys5_hy_uc,
+        c_sys5_hy_uc_targets,
         optimizer = solver,
         system_to_file = false,
     ),
@@ -195,19 +199,19 @@ transform_single_time_series!(c_sys5_hy_wk, 2, Hour(24)) # TODO fix PSI to enabl
 problems = SimulationProblems(
     MD = OperationsProblem(
         template_md,
-        c_sys5_hy_wk,
+        c_sys5_hy_wk_targets,
         optimizer = solver,
         system_to_file = false,
     ),
     DA = OperationsProblem(
         template_da,
-        c_sys5_hy_uc,
+        c_sys5_hy_uc_targets,
         optimizer = solver,
         system_to_file = false,
     ),
     ED = OperationsProblem(
         template_da,
-        c_sys5_hy_ed,
+        c_sys5_hy_ed_targets,
         optimizer = solver,
         system_to_file = false,
     ),
@@ -220,7 +224,7 @@ sequence = SimulationSequence(
         ("DA" => "ED") => Synchronize(periods = 24),
     ),
     intervals = Dict(
-        "MD" => (Hour(24), Consecutive()),
+        "MD" => (Hour(48), Consecutive()),
         "DA" => (Hour(24), Consecutive()),
         "ED" => (Hour(1), Consecutive()),
     ),
