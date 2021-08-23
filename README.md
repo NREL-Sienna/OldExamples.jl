@@ -59,3 +59,21 @@ To get started running the Jupyter notebooks included in this package, you can f
 - [PowerSimulationsDynamics.jl](https://github.com/NREL-SIIP/PowerSimulationsDynamics.jl) Examples
   - [One Machine Infinite Bus](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/4_PowerSimulationsDynamics_examples/01_omib.ipynb)
   - [Line Dynamics](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/4_PowerSimulationsDynamics_examples/02_line_dynamics.ipynb)
+
+## Debugging:
+
+On occasion, you may have constructed a `System` using PowerSystemsCaseBuilder.jl that need
+to be reconstructed. In this case, you may receive an error such as:
+
+```julia
+ERROR: UndefVarError: PowerSystems.ReserveUp not defined
+```
+
+To resolve this issue, you can purge the serialized system data from your
+PowerSystemsCaseBuilder.jl instance by running:
+
+```julia
+using PowerSystemCaseBuilder
+PowerSystemCaseBuilder.clear_all_serialized_system()
+```
+
