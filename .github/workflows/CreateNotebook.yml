@@ -25,7 +25,9 @@ jobs:
         shell: bash
         run: |
           julia --project=.
-          julia 'using Pkg; Pkg.activate(@__DIR__); Pkg.instantiate(); Pkg.instantiate(); using Literate'
+          julia 'using Pkg; Pkg.activate(@__DIR__); Pkg.instantiate()'
+          julia 'using SIIPExamples'
+          julia 'using Literate'
           julia 'SIIPExamples.literate_all()'          
 
 
