@@ -31,12 +31,11 @@ jobs:
           # julia 'using SIIPExamples'
           # julia 'using Literate'
           # julia 'SIIPExamples.literate_all()'          
-
-    - name: Create file
-      run: |
-        echo First        > test.jl
-        echo Second Line >> test.jl
-        echo Third       >> test.jl
+      - name: Create file
+        run: |
+          echo First        > test.jl
+          echo Second Line >> test.jl
+          echo Third       >> test.jl
 
 
       - name: Commit Files to 
