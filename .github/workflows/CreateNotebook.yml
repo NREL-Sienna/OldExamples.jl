@@ -17,20 +17,26 @@ jobs:
       - name: Check out repository 
         run: echo "The name of current branch is ${{ github.ref }} and its repository is ${{ github.repository }}."
 
-      - uses: julia-actions/setup-julia@latest
-        with:
-          version: '1.6'
+      # - uses: julia-actions/setup-julia@latest
+      #   with:
+      #     version: '1.6'
 
-      - name: Create Notebook
-        shell: bash
-        run: |
-          julia --project=.
-          julia -e 'using Pkg'
-          julia 'Pkg.activate(@__DIR__)'
-          julia 'Pkg.instantiate()'
-          julia 'using SIIPExamples'
-          julia 'using Literate'
-          julia 'SIIPExamples.literate_all()'          
+      # - name: Create Notebook
+      #   shell: bash
+      #   run: |
+          # julia --project=.
+          # julia -e 'using Pkg'
+          # julia 'Pkg.activate(@__DIR__)'
+          # julia 'Pkg.instantiate()'
+          # julia 'using SIIPExamples'
+          # julia 'using Literate'
+          # julia 'SIIPExamples.literate_all()'          
+
+    - name: Create file
+      run: |
+        echo First        > test.jl
+        echo Second Line >> test.jl
+        echo Third       >> test.jl
 
 
       - name: Commit Files to 
