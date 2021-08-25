@@ -17,25 +17,24 @@ jobs:
       - name: Check out repository 
         run: echo "The name of current branch is ${{ github.ref }} and its repository is ${{ github.repository }}."
 
-      # - uses: julia-actions/setup-julia@latest
-      #   with:
-      #     version: '1.6'
-
-      # - name: Create Notebook
-      #   shell: bash
-      #   run: |
-          # julia --project=.
-          # julia -e 'using Pkg'
-          # julia 'Pkg.activate(@__DIR__)'
-          # julia 'Pkg.instantiate()'
-          # julia 'using SIIPExamples'
-          # julia 'using Literate'
-          # julia 'SIIPExamples.literate_all()'          
-      - name: Create file
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: '1.6'
+       
+      - name: Create a gen_notebook.jl
         run: |
-          echo First        > test.jl
-          echo Second Line >> test.jl
-          echo Third       >> test.jl
+          echo import Pkg                    > gen_notebook.jl
+          echo Pkg.activate(@__DIR__)       >> gen_notebook.jl
+          echo Pkg.instantiate()            >> gen_notebook.jl
+          echo using SIIPExamples           >> gen_notebook.jl
+          echo using Literate               >> gen_notebook.jl
+          echo SIIPExamples.literate_all()  >> gen_notebook.jl
+
+      - name: Call Julia to create Notebook
+        shell: bash
+        run: |
+          julia --project=.
+          julia 'gen_notebook.jl'   
 
 
       - name: Commit Files to 
