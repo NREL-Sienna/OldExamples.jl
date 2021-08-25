@@ -1,7 +1,6 @@
-.github
-.vscode
+# .vscode
 extra
-.ipynb*
+# .ipynb*
 .DS_Store
 *.h5
 *.txt
