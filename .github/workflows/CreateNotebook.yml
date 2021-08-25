@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: |
           julia --project=.
-          julia 'using Pkg'
+          julia -e 'using Pkg'
           julia 'Pkg.activate(@__DIR__)'
           julia 'Pkg.instantiate()'
           julia 'using SIIPExamples'
