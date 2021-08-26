@@ -3,7 +3,7 @@ There is a CreateNotebook.yml, located at ~/GitHub/SIIPExamples.jl/.github/workf
 - Start the virtual machine with files from GitHub's *master* branch
 - Create gen_notebook.jl
 - Run Julia command on gen_notebook.jl
-  - covert each *.jl file to *.ipynb in the ~/GitHub/SIIPExamples.jl/.github/script/
+  - covert each *.jl file to *.ipynb in the ~/GitHub/SIIPExamples.jl/script/
 - Commit and push those files into GitHub's *notebook* branch (nothing on *master*)
 
 
