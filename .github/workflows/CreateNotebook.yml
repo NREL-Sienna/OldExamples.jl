@@ -36,7 +36,6 @@ jobs:
           julia --project=.
           julia 'gen_notebook.jl'   
 
-
       - name: Commit Files to 
         run: |
           git config --global user.name "ptn111"
