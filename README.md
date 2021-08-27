@@ -124,8 +124,8 @@ jobs:
 ```
       - name: Commit Files to 
         run: |
-          git config --global user.name "ptn111"
-          git config --global user.email "32492807+ptn111@users.noreply.github.com"
+          git config --global user.name <username>
+          git config --global user.email <username>@users.noreply.github.com
 
           git add -A
           git commit -a -m "Push *.ipynb to notebook branch"
