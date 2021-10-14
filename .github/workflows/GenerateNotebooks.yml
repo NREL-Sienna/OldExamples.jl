@@ -30,5 +30,4 @@ jobs:
       - run: pip install ghp-import
 
       - name: ghp-import
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: ghp-import -b notebook --no-history --force --push -m "$(git log --format=oneline -n 1 HEAD)"
