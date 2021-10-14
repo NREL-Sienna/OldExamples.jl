@@ -1,0 +1,26 @@
+name: CreateNotebook
+
+on:
+  push:
+    branches:
+      - master
+    tags: "*"
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check out repository
+        run: echo "The name of current branch is ${{ github.ref }} and its repository is ${{ github.repository }}."
+
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: "1" # get the latest Julia version
+
+      - name: Call Julia to create Notebook
+        shell: bash
+        run: |
+          julia --project .github/workflows/generate-notebooks.jl
