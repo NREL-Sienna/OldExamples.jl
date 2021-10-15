@@ -31,10 +31,8 @@ To get started running the Jupyter notebooks included in this package, you can f
 ## Table of Contents
 
 - Introduction
-
   - [An Introduction to Julia](https://nbviewer.jupyter.org/github/nrel-siip/SIIPExamples.jl/blob/notebook/1_introduction/an_introduction_to_julia.ipynb)
-
-- [PowerSystems.jl](https://github.com/NREL-SIIP/PowerSystems.jl) SIIPExamples.jl
+- [PowerSystems.jl](https://github.com/NREL-SIIP/PowerSystems.jl) Examples
   - [PowerSystems.jl Intro](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/2_PowerSystems_examples/01_PowerSystems_intro.ipynb)
   - Data Parsing:
     - [MATPOWER](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/2_PowerSystems_examples/02_parse_matpower.ipynb)
@@ -65,7 +63,7 @@ To get started running the Jupyter notebooks included in this package, you can f
 
 ## Debugging:
 
-On occasion, you may have constructed a `System` using PowerSystemsCaseBuilder.jl that need
+On occasion, you may have constructed a `System` using PowerSystemsCaseBuilder.jl that needs
 to be reconstructed. In this case, you may receive an error such as:
 
 ```julia
