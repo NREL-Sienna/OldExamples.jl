@@ -5,4 +5,4 @@ Pkg.instantiate()
 using SIIPExamples
 using Literate
 
-SIIPExamples.literate_all()
+SIIPExamples.literate_all(force=true)
