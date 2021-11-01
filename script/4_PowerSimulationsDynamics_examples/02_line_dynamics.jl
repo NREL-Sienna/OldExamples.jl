@@ -24,7 +24,6 @@
 # # Step 1: Package Initialization
 using SIIPExamples
 using PowerSimulationsDynamics
-PSID = PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
@@ -73,8 +72,8 @@ Ybus_change = NetworkSwitch(
 tspan = (0.0, 30.0)
 
 #Define Simulation
-sim = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim = Simulation(
+    ResidualModel, #Type of model used
     threebus_sys, #system
     pwd(), #folder to output results
     tspan, #time span
@@ -84,14 +83,15 @@ sim = PSID.Simulation(
 # We can obtain the initial conditions as:
 
 #Will print the initial states. It also give the symbols used to describe those states.
-print_device_states(sim)
+show_device_states(sim)
+
 #Will export a dictionary with the initial condition values to explore
-x0_init = PSID.get_initial_conditions(sim)
+x0_init = get_initial_conditions(sim)
 
 # # Step 4: Run the simulation of the Static Lines System
 
 #Run the simulation
-PSID.execute!(
+execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -134,7 +134,7 @@ end
 #Obtain the new Ybus
 Ybus_fault_dyn = Ybus(sys3).data
 #Define Fault: Change of YBus
-Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
+Ybus_change_dyn = NetworkSwitch(
     1.0, #change at t = 1.0
     Ybus_fault_dyn, #New YBus
 )
@@ -143,20 +143,17 @@ Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
 
 # Now, we construct the simulation:
 
-# Time span of our simulation
-tspan = (0.0, 30.0)
-
 # Define Simulation
-sim_dyn = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim_dyn = Simulation(
+    ResidualModel, #Type of model used
     threebus_sys_dyn, #system
     pwd(), #folder to output results
-    tspan, #time span
+    (0.0, 30.0), #time span
     Ybus_change_dyn, #Type of perturbation
 )
 
 # Run the simulation
-PSID.execute!(
+execute!(
     sim_dyn, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -165,9 +162,9 @@ PSID.execute!(
 # We can obtain the initial conditions as:
 
 #Will print the initial states. It also give the symbols used to describe those states.
-print_device_states(sim_dyn)
+show_device_states(sim_dyn)
 #Will export a dictionary with the initial condition values to explore
-x0_init_dyn = PSID.get_initial_conditions(sim_dyn)
+x0_init_dyn = get_initial_conditions(sim_dyn)
 
 # # Step 5.1: Store the solution
 
@@ -181,10 +178,10 @@ zoom_dyn = [
 
 # We can observe the effect of Dynamic Lines
 
-Plots.plot(series2_dyn, label = "V_gen_dyn")
-Plots.plot!(series2, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
+plot(series2_dyn, label = "V_gen_dyn")
+plot!(series2, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
 
 # that looks quite similar. The differences can be observed in the zoom plot:
 
-Plots.plot(zoom_dyn, label = "V_gen_dyn")
-Plots.plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
+plot(zoom_dyn, label = "V_gen_dyn")
+plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
