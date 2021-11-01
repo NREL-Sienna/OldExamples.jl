@@ -17,7 +17,6 @@ using Sundials
 using Plots
 using OrdinaryDiffEq
 
-
 # ## Load the system
 # The system data is provided through PowerSystemCaseBuilder.
 sys = build_system(PSSETestSystems, "psse_240_case_renewable_sys")
@@ -33,13 +32,13 @@ sys = build_system(PSSETestSystems, "psse_240_case_renewable_sys")
 
 using Logging
 sim_ida = Simulation(
-            ResidualModel,
-            sys, #system
-            pwd(),
-            (0.0, 20.0), #time span
-            BranchTrip(1.0, Line, "CORONADO    -1101-PALOVRDE    -1401-i_10");
-            console_level = Logging.Info
-        )
+    ResidualModel,
+    sys, #system
+    pwd(),
+    (0.0, 20.0), #time span
+    BranchTrip(1.0, Line, "CORONADO    -1101-PALOVRDE    -1401-i_10");
+    console_level = Logging.Info,
+)
 
 # ## Run the simulation using Sundials
 # We will now run the simulation using Sundials.jl solver IDA() by specifying the maximum
@@ -60,14 +59,13 @@ plot(v1101_ida)
 # in `PowerSimulationsDynamics.jl` documentation
 
 sim_rodas = Simulation(
-            MassMatrixModel,
-            sys, #system
-            pwd(),
-            (0.0, 20.0), #time span
-            BranchTrip(1.0, Line, "CORONADO    -1101-PALOVRDE    -1401-i_10");
-            console_level = Logging.Info
-        )
-
+    MassMatrixModel,
+    sys, #system
+    pwd(),
+    (0.0, 20.0), #time span
+    BranchTrip(1.0, Line, "CORONADO    -1101-PALOVRDE    -1401-i_10");
+    console_level = Logging.Info,
+)
 
 # We will now run the simulation using OrdinaryDiffEq.jl solver Rodas4() by specifying the
 # tolerance we want for the simulation. In our experience with this solver, solution times are faster
@@ -75,14 +73,19 @@ sim_rodas = Simulation(
 # work with a specified dtmax but take a significantly longer time to solve.
 # When using OrdinaryDiffEq.jl solvers always pass the option `initializealg = NoInit()` to avoid
 # unnecessary re-initialization of the algebraic equations.
-execute!(sim_rodas, Rodas4(), saveat = 0.01, atol=1e-10, rtol=1e-10, initializealg = NoInit())
-
+execute!(
+    sim_rodas,
+    Rodas4(),
+    saveat = 0.01,
+    atol = 1e-10,
+    rtol = 1e-10,
+    initializealg = NoInit(),
+)
 
 # ## Read the results
 # After the simulation is completed, we can extract the results and make plots as desired.
 # In this case, we will plot the voltage magnited at the bus at which the line was connected.
 res_rodas = read_results(sim_rodas)
-
 
 # ## Compare the results
 # After the simulation is completed, we can extract the results and make plots as desired.
