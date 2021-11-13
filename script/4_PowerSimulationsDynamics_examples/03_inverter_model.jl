@@ -19,7 +19,6 @@
 using SIIPExamples # Only needed for the tutorial, comment if you want to run
 import DisplayAs # Only needed for the tutorial
 using PowerSimulationsDynamics
-PSID = PowerSimulationsDynamics
 using PowerSystems
 using Logging
 using Sundials
@@ -38,12 +37,12 @@ file_dir = joinpath(
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))
 
 # Define Simulation Problem with a 20 second simulation period and the branch trip at t = 1.0
-sim = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim = Simulation(
+    ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
     (0.0, 20.0), #time span
-    BranchTrip(1.0, "BUS 02-BUS 04-i_4");
+    BranchTrip(1.0, Line, "BUS 02-BUS 04-i_4");
     console_level = Logging.Info,
 )
 
@@ -52,7 +51,7 @@ sim = PSID.Simulation(
 print_device_states(sim)
 
 # We execute the simulation with an additional tolerance for the solver set at 1e-8.
-PSID.execute!(sim, IDA(); abstol = 1e-8)
+execute!(sim, IDA(); abstol = 1e-8)
 
 # Using `PowerSimulationsDynamics` tools for exploring the results, we can plot all the voltage
 # results for the buses
@@ -170,12 +169,12 @@ sys
 
 # Define Simulation problem using the same parameters:
 
-sim = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim = Simulation(
+    ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
     (0.0, 20.0), #time span
-    BranchTrip(1.0, "BUS 02-BUS 04-i_4");
+    BranchTrip(1.0, Line, "BUS 02-BUS 04-i_4");
     console_level = Logging.Info,
 )
 
@@ -189,7 +188,7 @@ scatter(res.eigenvalues)
 
 # We execute the simulation
 
-PSID.execute!(sim, IDA(); abstol = 1e-8)
+execute!(sim, IDA(); abstol = 1e-8)
 
 # Using `PowerSimulationsDynamics` tools for exploring the results, we can plot all the voltage
 # results for the buses
