@@ -60,8 +60,10 @@ To get started running the Jupyter notebooks included in this package, you can f
 - [PowerSimulationsDynamics.jl](https://github.com/NREL-SIIP/PowerSimulationsDynamics.jl) Examples
   - [One Machine Infinite Bus](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/01_omib.ipynb)
   - [Line Dynamics](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/02_line_dynamics.ipynb)
+  - [Inverter Model](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/03_inverter_model.ipynb)
+  - [WECC 240 Bus](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/04_240BusWECC_sim.ipynb)
 
-## Debugging:
+## Debugging
 
 On occasion, you may have constructed a `System` using PowerSystemsCaseBuilder.jl that needs
 to be reconstructed. In this case, you may receive an error such as:

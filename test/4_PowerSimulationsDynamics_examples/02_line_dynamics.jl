@@ -2,7 +2,6 @@
 
 using SIIPExamples
 using PowerSimulationsDynamics
-PSID = PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
@@ -41,8 +40,8 @@ Ybus_change = NetworkSwitch(
 tspan = (0.0, 30.0)
 
 #Define Simulation
-sim = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim = Simulation(
+    ResidualModel, #Type of model used
     threebus_sys, #system
     pwd(), #folder to output results
     tspan, #time span
@@ -50,12 +49,13 @@ sim = PSID.Simulation(
 )
 
 #Will print the initial states. It also give the symbols used to describe those states.
-print_device_states(sim)
+show_device_states(sim)
+
 #Will export a dictionary with the initial condition values to explore
-x0_init = PSID.get_initial_conditions(sim)
+x0_init = get_initial_conditions(sim)
 
 #Run the simulation
-PSID.execute!(
+execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -88,31 +88,29 @@ end
 #Obtain the new Ybus
 Ybus_fault_dyn = Ybus(sys3).data
 #Define Fault: Change of YBus
-Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
+Ybus_change_dyn = NetworkSwitch(
     1.0, #change at t = 1.0
     Ybus_fault_dyn, #New YBus
 )
 
-tspan = (0.0, 30.0)
-
-sim_dyn = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim_dyn = Simulation(
+    ResidualModel, #Type of model used
     threebus_sys_dyn, #system
     pwd(), #folder to output results
-    tspan, #time span
+    (0.0, 30.0), #time span
     Ybus_change_dyn, #Type of perturbation
 )
 
-PSID.execute!(
+execute!(
     sim_dyn, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
 )
 
 #Will print the initial states. It also give the symbols used to describe those states.
-print_device_states(sim_dyn)
+show_device_states(sim_dyn)
 #Will export a dictionary with the initial condition values to explore
-x0_init_dyn = PSID.get_initial_conditions(sim_dyn)
+x0_init_dyn = get_initial_conditions(sim_dyn)
 
 series2_dyn = get_voltage_magnitude_series(sim_dyn, 102)
 zoom_dyn = [
@@ -120,10 +118,11 @@ zoom_dyn = [
     (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
 ];
 
-Plots.plot(series2_dyn, label = "V_gen_dyn")
-Plots.plot!(series2, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
+plot(series2_dyn, label = "V_gen_dyn")
+plot!(series2, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
 
-Plots.plot(zoom_dyn, label = "V_gen_dyn")
-Plots.plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
+plot(zoom_dyn, label = "V_gen_dyn")
+plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+
