@@ -1,7 +1,7 @@
 name = "SIIPExamples"
 uuid = "2c79006f-6450-48c4-b124-fbadab4f299d"
 authors = ["Clayton Barrows", "Sourabh Dalvi"]
-version = "0.1.4"
+version = "0.1.5"
 
 [deps]
 AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
