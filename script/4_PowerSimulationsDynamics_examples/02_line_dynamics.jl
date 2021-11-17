@@ -22,11 +22,12 @@
 # explanations on all definitions and functions.
 
 # # Step 1: Package Initialization
-using SIIPExamples
+using SIIPExamples #hide
 using PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
+PSD = PowerSimulationsDynamics
 
 # # Step 2: Data creation
 file_dir = joinpath(
@@ -83,10 +84,10 @@ sim = Simulation(
 # We can obtain the initial conditions as:
 
 #Will print the initial states. It also give the symbols used to describe those states.
-show_device_states(sim)
+show_states_initial_value(sim)
 
 #Will export a dictionary with the initial condition values to explore
-x0_init = get_initial_conditions(sim)
+x0_init = PSD.get_initial_conditions(sim)
 
 # # Step 4: Run the simulation of the Static Lines System
 
@@ -98,8 +99,8 @@ execute!(
 )
 
 # # Step 5: Store the solution
-
-series2 = get_voltage_magnitude_series(sim, 102)
+results = read_results(sim)
+series2 = get_voltage_magnitude_series(results, 102)
 zoom = [
     (series2[1][ix], series2[2][ix]) for
     (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
@@ -162,13 +163,13 @@ execute!(
 # We can obtain the initial conditions as:
 
 #Will print the initial states. It also give the symbols used to describe those states.
-show_device_states(sim_dyn)
+show_states_initial_value(sim_dyn)
 #Will export a dictionary with the initial condition values to explore
-x0_init_dyn = get_initial_conditions(sim_dyn)
+x0_init_dyn = PSD.get_initial_conditions(sim_dyn)
 
 # # Step 5.1: Store the solution
-
-series2_dyn = get_voltage_magnitude_series(sim_dyn, 102)
+results_dyn = read_results(sim_dyn)
+series2_dyn = get_voltage_magnitude_series(results_dyn, 102)
 zoom_dyn = [
     (series2_dyn[1][ix], series2_dyn[2][ix]) for
     (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)

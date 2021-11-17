@@ -3,12 +3,12 @@
 using SIIPExamples # Only needed for the tutorial, comment if you want to run
 import DisplayAs # Only needed for the tutorial
 using PowerSimulationsDynamics
-PSID = PowerSimulationsDynamics
 using PowerSystems
 using Logging
 using Sundials
 using Plots
 gr()
+PSD = PowerSimulationsDynamics
 
 file_dir = joinpath(
     dirname(dirname(pathof(SIIPExamples))),
@@ -19,22 +19,23 @@ file_dir = joinpath(
 
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))
 
-sim = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim = Simulation(
+    ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
     (0.0, 20.0), #time span
-    BranchTrip(1.0, "BUS 02-BUS 04-i_4");
+    BranchTrip(1.0, Line, "BUS 02-BUS 04-i_4");
     console_level = Logging.Info,
 )
 
-print_device_states(sim)
+show_states_initial_value(sim)
 
-PSID.execute!(sim, IDA(); abstol = 1e-8)
+execute!(sim, IDA(); abstol = 1e-8)
 
+result = read_results(sim)
 p = plot()
 for b in get_components(Bus, sys)
-    voltage_series = get_voltage_magnitude_series(sim, get_number(b))
+    voltage_series = get_voltage_magnitude_series(result, get_number(b))
     plot!(
         p,
         voltage_series;
@@ -47,7 +48,7 @@ img = DisplayAs.PNG(p) # This line is only needed because of literate use displa
 
 p2 = plot()
 for g in get_components(ThermalStandard, sys)
-    state_series = get_state_series(sim, (get_name(g), :ω))
+    state_series = get_state_series(result, (get_name(g), :ω))
     plot!(
         p2,
         state_series;
@@ -122,12 +123,12 @@ add_component!(sys, inverter, storage)
 
 sys
 
-sim = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim = Simulation(
+    ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
     (0.0, 20.0), #time span
-    BranchTrip(1.0, "BUS 02-BUS 04-i_4");
+    BranchTrip(1.0, Line, "BUS 02-BUS 04-i_4");
     console_level = Logging.Info,
 )
 
@@ -135,11 +136,12 @@ res = small_signal_analysis(sim)
 
 scatter(res.eigenvalues)
 
-PSID.execute!(sim, IDA(); abstol = 1e-8)
+execute!(sim, IDA(); abstol = 1e-8)
 
+result = read_results(sim)
 p = plot()
 for b in get_components(Bus, sys)
-    voltage_series = get_voltage_magnitude_series(sim, get_number(b))
+    voltage_series = get_voltage_magnitude_series(result, get_number(b))
     plot!(
         p,
         voltage_series;
@@ -152,7 +154,7 @@ img = DisplayAs.PNG(p) # This line is only needed because of literate use displa
 
 p2 = plot()
 for g in get_components(ThermalStandard, sys)
-    state_series = get_state_series(sim, (get_name(g), :ω))
+    state_series = get_state_series(result, (get_name(g), :ω))
     plot!(
         p2,
         state_series;
@@ -161,8 +163,9 @@ for g in get_components(ThermalStandard, sys)
         label = "$(get_name(g)) - ω",
     )
 end
-state_series = get_state_series(sim, ("Battery", :ω_oc))
+state_series = get_state_series(result, ("Battery", :ω_oc))
 plot!(p2, state_series; xlabel = "Time", ylabel = "Speed [pu]", label = "Battery - ω")
 img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

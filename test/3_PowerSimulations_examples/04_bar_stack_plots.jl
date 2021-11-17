@@ -45,3 +45,4 @@ plot_demand(res.system, aggregation = Area)
 plot_fuel(res, stack = true)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

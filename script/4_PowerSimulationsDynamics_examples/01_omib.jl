@@ -20,6 +20,7 @@ using PowerSystems
 using Sundials
 using Plots
 gr()
+PSD = PowerSimulationsDynamics
 
 # `PowerSystems` (abbreviated with `PSY`) is used to properly define the data structure and establish an equilibrium
 # point initial condition with a power flow routine, while `Sundials` is
@@ -61,10 +62,10 @@ sim = Simulation(ResidualModel, omib_sys, pwd(), time_span, perturbation_trip)
 # and update `V_ref`, `P_ref` and hence `eq_p` (the internal voltage) to match the
 # solution of the power flow. It will also initialize the states in the equilibrium,
 # which can be printed with:
-show_device_states(sim)
+show_states_initial_value(sim)
 
 # To examine the calculated initial conditions, we can export them into a dictionary:
-x0_init = get_initial_conditions(sim)
+x0_init = PSD.get_initial_conditions(sim)
 
 # ## Run the Simulation
 
@@ -80,20 +81,23 @@ execute!(
 
 # ## Exploring the solution
 
+# First, we need to load the simulation results into memory
+results = read_results(sim)
+
 # `PowerSimulationsDynamics` has two functions to obtain different
 # states of the solution:
 #  - `get_state_series(sim, ("generator-102-1", :δ))`: can be used to obtain the solution as
 # a tuple of time and the required state. In this case, we are obtaining the rotor angle `:δ`
 # of the generator named `"generator-102-1"`.
 
-angle = get_state_series(sim, ("generator-102-1", :δ));
+angle = get_state_series(results, ("generator-102-1", :δ));
 plot(angle, xlabel = "time", ylabel = "rotor angle [rad]", label = "rotor angle")
 
 # - `get_voltagemag_series(sim, 102)`: can be used to obtain the voltage magnitude as a
 # tuple of time and voltage. In this case, we are obtaining the voltage magnitude at bus 102
 # (where the generator is located).
 
-volt = get_voltage_magnitude_series(sim, 102);
+volt = get_voltage_magnitude_series(results, 102);
 plot(volt, xlabel = "time", ylabel = "Voltage [pu]", label = "V_2")
 
 # ## Optional: Small Signal Analysis

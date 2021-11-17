@@ -24,6 +24,7 @@ using Logging
 using Sundials
 using Plots
 gr()
+PSD = PowerSimulationsDynamics
 
 # Create the system
 
@@ -48,17 +49,17 @@ sim = Simulation(
 
 # Now that the system is initialized, we can verify the system states for potential issues.
 
-print_device_states(sim)
+show_states_initial_value(sim)
 
 # We execute the simulation with an additional tolerance for the solver set at 1e-8.
 execute!(sim, IDA(); abstol = 1e-8)
 
 # Using `PowerSimulationsDynamics` tools for exploring the results, we can plot all the voltage
 # results for the buses
-
+result = read_results(sim)
 p = plot()
 for b in get_components(Bus, sys)
-    voltage_series = get_voltage_magnitude_series(sim, get_number(b))
+    voltage_series = get_voltage_magnitude_series(result, get_number(b))
     plot!(
         p,
         voltage_series;
@@ -73,7 +74,7 @@ img = DisplayAs.PNG(p) # This line is only needed because of literate use displa
 
 p2 = plot()
 for g in get_components(ThermalStandard, sys)
-    state_series = get_state_series(sim, (get_name(g), :ω))
+    state_series = get_state_series(result, (get_name(g), :ω))
     plot!(
         p2,
         state_series;
@@ -192,10 +193,10 @@ execute!(sim, IDA(); abstol = 1e-8)
 
 # Using `PowerSimulationsDynamics` tools for exploring the results, we can plot all the voltage
 # results for the buses
-
+result = read_results(sim)
 p = plot()
 for b in get_components(Bus, sys)
-    voltage_series = get_voltage_magnitude_series(sim, get_number(b))
+    voltage_series = get_voltage_magnitude_series(result, get_number(b))
     plot!(
         p,
         voltage_series;
@@ -209,7 +210,7 @@ img = DisplayAs.PNG(p) # This line is only needed because of literate use displa
 
 p2 = plot()
 for g in get_components(ThermalStandard, sys)
-    state_series = get_state_series(sim, (get_name(g), :ω))
+    state_series = get_state_series(result, (get_name(g), :ω))
     plot!(
         p2,
         state_series;
@@ -218,6 +219,6 @@ for g in get_components(ThermalStandard, sys)
         label = "$(get_name(g)) - ω",
     )
 end
-state_series = get_state_series(sim, ("Battery", :ω_oc))
+state_series = get_state_series(result, ("Battery", :ω_oc))
 plot!(p2, state_series; xlabel = "Time", ylabel = "Speed [pu]", label = "Battery - ω")
 img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
