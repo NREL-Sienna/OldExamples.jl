@@ -112,7 +112,7 @@ zoom = [
 
 # get component return the Branch on threebus_sys_dyn named "BUS 2-BUS 3-i_3"
 dyn_branch = DynamicBranch(get_component(Branch, threebus_sys_dyn, "BUS 2-BUS 3-i_3"))
-# Adding a dynamic line will inmediately remove the static line from the system.
+# Adding a dynamic line will immediately remove the static line from the system.
 add_component!(threebus_sys_dyn, dyn_branch)
 
 # Similarly, we construct the Ybus fault by creating a copy of the original system, but

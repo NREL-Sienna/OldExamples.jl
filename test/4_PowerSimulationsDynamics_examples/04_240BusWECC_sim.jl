@@ -51,4 +51,3 @@ plot(v1101, label = "RODAS4")
 plot!(v1101_ida, label = "IDA")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

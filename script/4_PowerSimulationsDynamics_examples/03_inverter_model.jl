@@ -5,11 +5,11 @@
 
 # ## Introduction
 
-# This tutorial will introduce the modeling of an inverter with Virtual Innertia in a multi-machine
+# This tutorial will introduce the modeling of an inverter with Virtual Inertia in a multi-machine
 # model of the system. We will load the data directly from PSS/e dynamic files
 
 # The tutorial uses a modified 14-bus system on which all the synchronous machines have been
-# substitued by generators with ESAC1A AVR's and no Turbine Governors.
+# substituted by generators with ESAC1A AVR's and no Turbine Governors.
 
 # In the first portion of the tutorial we will simulate the system with the original data and
 # cause a line trip between Buses 2 and 4. In the second part of the simulation, we will switch
@@ -94,7 +94,7 @@ res = small_signal_analysis(sim; reset_simulation = true)
 
 scatter(res.eigenvalues; legend = false)
 
-# ## Modifiying the system and adding storage
+# ## Modifying the system and adding storage
 
 # Reload the system for this example
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))

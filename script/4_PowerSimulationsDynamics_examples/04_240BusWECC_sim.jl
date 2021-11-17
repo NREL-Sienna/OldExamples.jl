@@ -48,7 +48,7 @@ execute!(sim_ida, IDA(), dtmax = 0.01)
 
 # ## Read the results and plot a system variable
 # After the simulation is completed, we can extract the results and make plots as desired.
-# In this case, we will plot the voltage magnited at the bus at which the line was connected.
+# In this case, we will plot the voltage magnitude at the bus at which the line was connected.
 res_ida = read_results(sim_ida)
 v1101_ida = get_voltage_magnitude_series(res_ida, 1101);
 plot(v1101_ida)
@@ -84,12 +84,12 @@ execute!(
 
 # ## Read the results
 # After the simulation is completed, we can extract the results and make plots as desired.
-# In this case, we will plot the voltage magnited at the bus at which the line was connected.
+# In this case, we will plot the voltage magnitude at the bus at which the line was connected.
 res_rodas = read_results(sim_rodas)
 
 # ## Compare the results
 # After the simulation is completed, we can extract the results and make plots as desired.
-# In this case, we will plot the voltage magnited at the bus at which the line was connected.
+# In this case, we will plot the voltage magnitude at the bus at which the line was connected.
 # For both of the solution techniques.
 v1101 = get_voltage_magnitude_series(res_rodas, 1101);
 plot(v1101, label = "RODAS4")
