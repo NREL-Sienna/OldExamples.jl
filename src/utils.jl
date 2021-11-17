@@ -8,7 +8,7 @@ AbstractTrees.children(x::Type) = subtypes(x)
 Prints the definition of a struct.
 """
 function print_struct(type)
-    mutable = type.mutable ? "mutable" : ""
+    mutable = ismutable(type) ? "mutable" : ""
     println("$mutable struct $type")
     for (fn, ft) in zip(fieldnames(type), fieldtypes(type))
         println("    $fn::$ft")

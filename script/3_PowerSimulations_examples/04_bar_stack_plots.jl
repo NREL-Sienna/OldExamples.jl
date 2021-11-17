@@ -14,11 +14,12 @@ pkgpath = dirname(dirname(pathof(SIIPExamples)))
 using PowerSystems #to load results
 using PowerSimulations #to load results
 using PowerGraphics
+using PowerSystemCaseBuilder
 
 # ### Results file
 # If you have already run some of the other examples, you should have generated some results
-# (If you haven't run some of the other simulaitons, you can run
-# `include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "2_sequential_simulations.jl"))`).
+# (If you haven't run some of the other simulations, you can run
+# `include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "02_sequential_simulations.jl"))`).
 # You can load the results into memory with:
 simulation_folder = joinpath(dirname(dirname(pathof(SIIPExamples))), "rts-test")
 simulation_folder =
@@ -26,6 +27,13 @@ simulation_folder =
 
 results = SimulationResults(simulation_folder);
 res = get_problem_results(results, "UC")
+
+# Since some of the plotting capabilities rely on input data as well as output data (e.g. fuel plots)
+# but the result deserialization doesn't load the `System`, we can add the `System` to the `results`
+# so that the plotting routines can find the requisite data.
+sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
+res.system_uuid = sys.internal.uuid
+set_system!(res, sys)
 
 # ## Plots
 # By default, PowerGraphics uses the GR graphics package as the backend for Plots.jl to
@@ -35,7 +43,7 @@ gr() # loads the GR backend
 timestamps = get_realized_timestamps(res)
 variables = read_realized_variables(res)
 
-plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps)
+plot_dataframe(variables[:P__ThermalStandard], timestamps)
 
 # However, interactive plotting can generate much more insightful figures, especially when
 # creating somewhat complex stacked figures. So, we can use the PlotlyJS backend for Plots,
@@ -47,13 +55,13 @@ plotlyjs()
 # create a variety of different figure styles. For example, a stacked area figure can be
 # created with the `stack = true` kwarg:
 
-plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps; stack = true)
+plot_dataframe(variables[:P__ThermalStandard], timestamps; stack = true)
 
 # Or a bar chart can be created with `bar = true`:
-plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps; bar = true)
+plot_dataframe(variables[:P__ThermalStandard], timestamps; bar = true)
 
 # Or a stacked bar chart...
-plot_dataframe(variables[:P__HydroEnergyReservoir], timestamps; bar = true, stack = true)
+plot_dataframe(variables[:P__ThermalStandard], timestamps; bar = true, stack = true)
 
 # PowerGraphics also supports some basic aggregation to create cleaner plots. For example,
 # we can create a plot of the different variables:
