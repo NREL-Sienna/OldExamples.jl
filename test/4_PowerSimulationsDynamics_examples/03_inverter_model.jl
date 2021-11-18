@@ -19,7 +19,7 @@ file_dir = joinpath(
 
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))
 
-sim = Simulation(
+sim = PSD.Simulation(
     ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
@@ -30,7 +30,7 @@ sim = Simulation(
 
 show_states_initial_value(sim)
 
-execute!(sim, IDA(); abstol = 1e-8)
+PSD.execute!(sim, IDA(); abstol = 1e-8)
 
 result = read_results(sim)
 p = plot()
@@ -123,7 +123,7 @@ add_component!(sys, inverter, storage)
 
 sys
 
-sim = Simulation(
+sim = PSD.Simulation(
     ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
@@ -136,7 +136,7 @@ res = small_signal_analysis(sim)
 
 scatter(res.eigenvalues)
 
-execute!(sim, IDA(); abstol = 1e-8)
+PSD.execute!(sim, IDA(); abstol = 1e-8)
 
 result = read_results(sim)
 p = plot()
@@ -168,3 +168,4 @@ plot!(p2, state_series; xlabel = "Time", ylabel = "Speed [pu]", label = "Battery
 img = DisplayAs.PNG(p2) # This line is only needed because of literate use display(p2) when running locally
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

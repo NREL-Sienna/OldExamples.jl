@@ -16,6 +16,7 @@ using PowerSystems
 using Sundials
 using Plots
 using OrdinaryDiffEq
+PSD = PowerSimulationsDynamics
 
 # ## Load the system
 # The system data is provided through PowerSystemCaseBuilder.
@@ -31,7 +32,7 @@ sys = build_system(PSSETestSystems, "psse_240_case_renewable_sys")
 # in `PowerSimulationsDynamics.jl` documentation
 
 using Logging
-sim_ida = Simulation(
+sim_ida = PSD.Simulation(
     ResidualModel,
     sys, #system
     pwd(),
@@ -44,7 +45,7 @@ sim_ida = Simulation(
 # We will now run the simulation using Sundials.jl solver IDA() by specifying the maximum
 # dt we want for the simulation. In our experience with this solver, solution times are faster
 # when supplying information about the maximum time step than the tolerances as we can see in the example
-execute!(sim_ida, IDA(), dtmax = 0.01)
+PSD.execute!(sim_ida, IDA(), dtmax = 0.01)
 
 # ## Read the results and plot a system variable
 # After the simulation is completed, we can extract the results and make plots as desired.
@@ -58,7 +59,7 @@ plot(v1101_ida)
 # about the formulation checkout the [Models Section](https://nrel-siip.github.io/PowerSimulationsDynamics.jl/stable/models/)
 # in `PowerSimulationsDynamics.jl` documentation
 
-sim_rodas = Simulation(
+sim_rodas = PSD.Simulation(
     MassMatrixModel,
     sys, #system
     pwd(),
@@ -73,7 +74,7 @@ sim_rodas = Simulation(
 # work with a specified dtmax but take a significantly longer time to solve.
 # When using OrdinaryDiffEq.jl solvers always pass the option `initializealg = NoInit()` to avoid
 # unnecessary re-initialization of the algebraic equations.
-execute!(
+PSD.execute!(
     sim_rodas,
     Rodas4(),
     saveat = 0.01,

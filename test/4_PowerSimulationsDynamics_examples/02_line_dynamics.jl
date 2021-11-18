@@ -41,7 +41,7 @@ Ybus_change = NetworkSwitch(
 tspan = (0.0, 30.0)
 
 #Define Simulation
-sim = Simulation(
+sim = PSD.Simulation(
     ResidualModel, #Type of model used
     threebus_sys, #system
     pwd(), #folder to output results
@@ -56,7 +56,7 @@ show_states_initial_value(sim)
 x0_init = PSD.get_initial_conditions(sim)
 
 #Run the simulation
-execute!(
+PSD.execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -95,7 +95,7 @@ Ybus_change_dyn = NetworkSwitch(
     Ybus_fault_dyn, #New YBus
 )
 
-sim_dyn = Simulation(
+sim_dyn = PSD.Simulation(
     ResidualModel, #Type of model used
     threebus_sys_dyn, #system
     pwd(), #folder to output results
@@ -103,7 +103,7 @@ sim_dyn = Simulation(
     Ybus_change_dyn, #Type of perturbation
 )
 
-execute!(
+PSD.execute!(
     sim_dyn, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -128,3 +128,4 @@ plot(zoom_dyn, label = "V_gen_dyn")
 plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

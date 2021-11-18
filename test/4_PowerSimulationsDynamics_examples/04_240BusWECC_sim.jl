@@ -7,11 +7,12 @@ using PowerSystems
 using Sundials
 using Plots
 using OrdinaryDiffEq
+PSD = PowerSimulationsDynamics
 
 sys = build_system(PSSETestSystems, "psse_240_case_renewable_sys")
 
 using Logging
-sim_ida = Simulation(
+sim_ida = PSD.Simulation(
     ResidualModel,
     sys, #system
     pwd(),
@@ -20,13 +21,13 @@ sim_ida = Simulation(
     console_level = Logging.Info,
 )
 
-execute!(sim_ida, IDA(), dtmax = 0.01)
+PSD.execute!(sim_ida, IDA(), dtmax = 0.01)
 
 res_ida = read_results(sim_ida)
 v1101_ida = get_voltage_magnitude_series(res_ida, 1101);
 plot(v1101_ida)
 
-sim_rodas = Simulation(
+sim_rodas = PSD.Simulation(
     MassMatrixModel,
     sys, #system
     pwd(),
@@ -35,7 +36,7 @@ sim_rodas = Simulation(
     console_level = Logging.Info,
 )
 
-execute!(
+PSD.execute!(
     sim_rodas,
     Rodas4(),
     saveat = 0.01,
@@ -51,3 +52,4 @@ plot(v1101, label = "RODAS4")
 plot!(v1101_ida, label = "IDA")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

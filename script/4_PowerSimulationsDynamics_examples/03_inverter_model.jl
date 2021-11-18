@@ -38,7 +38,7 @@ file_dir = joinpath(
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))
 
 # Define Simulation Problem with a 20 second simulation period and the branch trip at t = 1.0
-sim = Simulation(
+sim = PSD.Simulation(
     ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
@@ -52,7 +52,7 @@ sim = Simulation(
 show_states_initial_value(sim)
 
 # We execute the simulation with an additional tolerance for the solver set at 1e-8.
-execute!(sim, IDA(); abstol = 1e-8)
+PSD.execute!(sim, IDA(); abstol = 1e-8)
 
 # Using `PowerSimulationsDynamics` tools for exploring the results, we can plot all the voltage
 # results for the buses
@@ -170,7 +170,7 @@ sys
 
 # Define Simulation problem using the same parameters:
 
-sim = Simulation(
+sim = PSD.Simulation(
     ResidualModel, #Type of model used
     sys,         #system
     file_dir,       #path for the simulation output
@@ -189,7 +189,7 @@ scatter(res.eigenvalues)
 
 # We execute the simulation
 
-execute!(sim, IDA(); abstol = 1e-8)
+PSD.execute!(sim, IDA(); abstol = 1e-8)
 
 # Using `PowerSimulationsDynamics` tools for exploring the results, we can plot all the voltage
 # results for the buses

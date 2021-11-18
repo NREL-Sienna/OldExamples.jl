@@ -73,7 +73,7 @@ Ybus_change = NetworkSwitch(
 tspan = (0.0, 30.0)
 
 #Define Simulation
-sim = Simulation(
+sim = PSD.Simulation(
     ResidualModel, #Type of model used
     threebus_sys, #system
     pwd(), #folder to output results
@@ -92,7 +92,7 @@ x0_init = PSD.get_initial_conditions(sim)
 # # Step 4: Run the simulation of the Static Lines System
 
 #Run the simulation
-execute!(
+PSD.execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -145,7 +145,7 @@ Ybus_change_dyn = NetworkSwitch(
 # Now, we construct the simulation:
 
 # Define Simulation
-sim_dyn = Simulation(
+sim_dyn = PSD.Simulation(
     ResidualModel, #Type of model used
     threebus_sys_dyn, #system
     pwd(), #folder to output results
@@ -154,7 +154,7 @@ sim_dyn = Simulation(
 )
 
 # Run the simulation
-execute!(
+PSD.execute!(
     sim_dyn, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
