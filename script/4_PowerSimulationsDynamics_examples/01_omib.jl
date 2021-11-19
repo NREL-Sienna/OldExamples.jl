@@ -86,14 +86,14 @@ results = read_results(sim)
 
 # `PowerSimulationsDynamics` has two functions to obtain different
 # states of the solution:
-#  - `get_state_series(sim, ("generator-102-1", :δ))`: can be used to obtain the solution as
+#  - `get_state_series(results, ("generator-102-1", :δ))`: can be used to obtain the solution as
 # a tuple of time and the required state. In this case, we are obtaining the rotor angle `:δ`
 # of the generator named `"generator-102-1"`.
 
 angle = get_state_series(results, ("generator-102-1", :δ));
 plot(angle, xlabel = "time", ylabel = "rotor angle [rad]", label = "rotor angle")
 
-# - `get_voltagemag_series(sim, 102)`: can be used to obtain the voltage magnitude as a
+# - `get_voltage_magnitude_series(results, 102)`: can be used to obtain the voltage magnitude as a
 # tuple of time and voltage. In this case, we are obtaining the voltage magnitude at bus 102
 # (where the generator is located).
 
