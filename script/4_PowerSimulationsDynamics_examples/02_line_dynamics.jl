@@ -22,12 +22,12 @@
 # explanations on all definitions and functions.
 
 # # Step 1: Package Initialization
-using SIIPExamples
+using SIIPExamples #hide
 using PowerSimulationsDynamics
-PSID = PowerSimulationsDynamics
 using PowerSystems
 using Sundials
 using Plots
+PSD = PowerSimulationsDynamics
 
 # # Step 2: Data creation
 file_dir = joinpath(
@@ -73,8 +73,8 @@ Ybus_change = NetworkSwitch(
 tspan = (0.0, 30.0)
 
 #Define Simulation
-sim = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim = PSD.Simulation(
+    ResidualModel, #Type of model used
     threebus_sys, #system
     pwd(), #folder to output results
     tspan, #time span
@@ -84,22 +84,23 @@ sim = PSID.Simulation(
 # We can obtain the initial conditions as:
 
 #Will print the initial states. It also give the symbols used to describe those states.
-print_device_states(sim)
+show_states_initial_value(sim)
+
 #Will export a dictionary with the initial condition values to explore
-x0_init = PSID.get_initial_conditions(sim)
+x0_init = PSD.get_initial_conditions(sim)
 
 # # Step 4: Run the simulation of the Static Lines System
 
 #Run the simulation
-PSID.execute!(
+PSD.execute!(
     sim, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
 )
 
 # # Step 5: Store the solution
-
-series2 = get_voltage_magnitude_series(sim, 102)
+results = read_results(sim)
+series2 = get_voltage_magnitude_series(results, 102)
 zoom = [
     (series2[1][ix], series2[2][ix]) for
     (ix, s) in enumerate(series2[1]) if (s > 0.90 && s < 1.6)
@@ -111,7 +112,7 @@ zoom = [
 
 # get component return the Branch on threebus_sys_dyn named "BUS 2-BUS 3-i_3"
 dyn_branch = DynamicBranch(get_component(Branch, threebus_sys_dyn, "BUS 2-BUS 3-i_3"))
-# Adding a dynamic line will inmediately remove the static line from the system.
+# Adding a dynamic line will immediately remove the static line from the system.
 add_component!(threebus_sys_dyn, dyn_branch)
 
 # Similarly, we construct the Ybus fault by creating a copy of the original system, but
@@ -134,7 +135,7 @@ end
 #Obtain the new Ybus
 Ybus_fault_dyn = Ybus(sys3).data
 #Define Fault: Change of YBus
-Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
+Ybus_change_dyn = NetworkSwitch(
     1.0, #change at t = 1.0
     Ybus_fault_dyn, #New YBus
 )
@@ -143,20 +144,17 @@ Ybus_change_dyn = PowerSimulationsDynamics.NetworkSwitch(
 
 # Now, we construct the simulation:
 
-# Time span of our simulation
-tspan = (0.0, 30.0)
-
 # Define Simulation
-sim_dyn = PSID.Simulation(
-    PSID.ImplicitModel, #Type of model used
+sim_dyn = PSD.Simulation(
+    ResidualModel, #Type of model used
     threebus_sys_dyn, #system
     pwd(), #folder to output results
-    tspan, #time span
+    (0.0, 30.0), #time span
     Ybus_change_dyn, #Type of perturbation
 )
 
 # Run the simulation
-PSID.execute!(
+PSD.execute!(
     sim_dyn, #simulation structure
     IDA(), #Sundials DAE Solver
     dtmax = 0.02, #Maximum step size
@@ -165,13 +163,13 @@ PSID.execute!(
 # We can obtain the initial conditions as:
 
 #Will print the initial states. It also give the symbols used to describe those states.
-print_device_states(sim_dyn)
+show_states_initial_value(sim_dyn)
 #Will export a dictionary with the initial condition values to explore
-x0_init_dyn = PSID.get_initial_conditions(sim_dyn)
+x0_init_dyn = PSD.get_initial_conditions(sim_dyn)
 
 # # Step 5.1: Store the solution
-
-series2_dyn = get_voltage_magnitude_series(sim_dyn, 102)
+results_dyn = read_results(sim_dyn)
+series2_dyn = get_voltage_magnitude_series(results_dyn, 102)
 zoom_dyn = [
     (series2_dyn[1][ix], series2_dyn[2][ix]) for
     (ix, s) in enumerate(series2_dyn[1]) if (s > 0.90 && s < 1.6)
@@ -181,10 +179,10 @@ zoom_dyn = [
 
 # We can observe the effect of Dynamic Lines
 
-Plots.plot(series2_dyn, label = "V_gen_dyn")
-Plots.plot!(series2, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
+plot(series2_dyn, label = "V_gen_dyn")
+plot!(series2, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
 
 # that looks quite similar. The differences can be observed in the zoom plot:
 
-Plots.plot(zoom_dyn, label = "V_gen_dyn")
-Plots.plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")
+plot(zoom_dyn, label = "V_gen_dyn")
+plot!(zoom, label = "V_gen_st", xlabel = "Time [s]", ylabel = "Voltage [pu]")

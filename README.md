@@ -1,4 +1,8 @@
-# SIIPExamples.jl [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/SIIPExamples.jl/master) [![Master - CI](https://github.com/NREL-SIIP/PowerSystems.jl/workflows/Master%20-%20CI/badge.svg)](https://github.com/NREL-SIIP/PowerSystems.jl/actions/workflows/master-tests.yml)
+# SIIPExamples.jl
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/SIIPExamples.jl/master)
+[![Master - CI](https://github.com/NREL-SIIP/SIIPExamples.jl/workflows/Master%20-%20CI/badge.svg)](https://github.com/NREL-SIIP/SIIPExamples.jl/actions/workflows/master-tests.yml)
+[![codecov](https://codecov.io/gh/NREL-SIIP/SIIPExamples.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/NREL-SIIP/SIIPExamples.jl)
+[<img src="https://img.shields.io/badge/slack-@SIIP/Examples-blue.svg?logo=slack">](https://join.slack.com/t/nrel-siip/shared_invite/zt-glam9vdu-o8A9TwZTZqqNTKHa7q3BpQ)
 
 This package contains examples and tutorials for [Scalable Integrated Infrastructure Planning (SIIP) packages developed at the National Renewable Energy Laboratory (NREL)](https://www.nrel.gov/analysis/siip.html). This repository uses a template established by [JuMPTutorials.jl](https://github.com/JuliaOpt/JuMPTutorials.jl).
 
@@ -7,8 +11,8 @@ in many cases users may find the documentation pages for each package more infor
 
 - [InfrastructureSystems.jl docs](https://nrel-siip.github.io/InfrastructureSystems.jl/stable/)
 - [PowerSystems.jl docs](https://nrel-siip.github.io/PowerSystems.jl/stable/)
-- [PowerSimulations.jl docs](https://nrel-siip.github.io/PowerSimulations.jl/latest/)
-- [PowerGraphics.jl docs](https://nrel-siip.github.io/PowerGraphics.jl/latest/)
+- [PowerSimulations.jl docs](https://nrel-siip.github.io/PowerSimulations.jl/stable/)
+- [PowerGraphics.jl docs](https://nrel-siip.github.io/PowerGraphics.jl/stable/)
 - [PowerSimulationsDynamics.jl docs](https://nrel-siip.github.io/PowerSimulationsDynamics.jl/stable/)
 
 ## Run Notebooks in the Browser
@@ -61,8 +65,9 @@ To get started running the Jupyter notebooks included in this package, you can f
   - [One Machine Infinite Bus](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/01_omib.ipynb)
   - [Line Dynamics](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/02_line_dynamics.ipynb)
   - [Inverter Model](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/03_inverter_model.ipynb)
+  - [WECC240 Bus](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/4_PowerSimulationsDynamics_examples/04_240BusWECC_sim.ipynb)
 
-## Debugging:
+## Debugging
 
 On occasion, you may have constructed a `System` using PowerSystemsCaseBuilder.jl that needs
 to be reconstructed. In this case, you may receive an error such as:
