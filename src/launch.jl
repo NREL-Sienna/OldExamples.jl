@@ -137,9 +137,14 @@ Launches a notebook server for the specified `Examples` folder.
 """
 function notebook(example::Type{<:Examples}, notebook_target_dir = nothing)
     if isnothing(notebook_target_dir)
-        in_pkg_path =  startswith(pathof(SIIPExamples), pwd())
+        in_pkg_path = startswith(pathof(SIIPExamples), pwd())
         notebook_target_dir = in_pkg_path ? NB_DIR : mktempdir()
     end
-    literate_folder(example; execute = false, test = false, notebook_target_dir = notebook_target_dir)
+    literate_folder(
+        example;
+        execute = false,
+        test = false,
+        notebook_target_dir = notebook_target_dir,
+    )
     IJulia.notebook(dir = joinpath(notebook_target_dir, get_dir(example)))
 end
