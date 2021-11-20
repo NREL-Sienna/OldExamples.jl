@@ -30,15 +30,21 @@ end
 `literate_file(folder::AbstractString, file::AbstractString)`
 
 Checks if the file has been modified since the last Weave and updates the notebook and tests accordingly.
-* `folder` = Name of the folder the tutorial is in
-* `file` = Name of the tutorial file
-* `force` = force weave irrespective of file changes
+
+# Arguments
+* `folder`: Name of the folder the tutorial is in
+* `file`: Name of the tutorial file
+# Key word arguments
+* `force`: force literate irrespective of file changes
+* `notebook_target_dir`: folder to write notebook
+* `test::Bool`: build test file
 """
 function literate_file(folder, file; force = false, kwargs...)
     filename = splitext(file)[1]
     srcpath = joinpath(SCRIPT_DIR, folder, file)
     testpath = joinpath(TEST_DIR, folder)
-    notebookpath = joinpath(NB_DIR, folder)
+    notebook_path = get(kwargs, :notebook_target_dir, NB_DIR)
+    notebookpath = joinpath(notebook_path, folder)
     notebookfilepath = joinpath(notebookpath, join([filename, ".ipynb"]))
     configpath = joinpath(SCRIPT_DIR, folder, filename * "_config.json")
 
@@ -51,7 +57,7 @@ function literate_file(folder, file; force = false, kwargs...)
     literate = get(config, "literate", true)
 
     if literate
-        make_test = get(config, "test", true)
+        make_test = get(kwargs, :test, get(config, "test", true))
         make_notebook = get(config, "notebook", true)
 
         if make_test &&
@@ -117,7 +123,23 @@ function literate_all(; force = false, kwargs...)
     end
 end
 
-function notebook(example::Type{<:Examples})
-    literate_folder(example; execute = false)
-    IJulia.notebook(dir = joinpath(NB_DIR, get_dir(example)))
+"""
+`notebook(example::Type{<:Examples}; kwargs...)`
+
+Launches a notebook server for the specified `Examples` folder.
+
+# Arguments
+- `example::Type{<:Examples}`: The example category `JuliaExamples`, `PSYExamples`, `PSIExamples`, or `PSDExamples`
+- `notebook_target_dir = mktempdir()`: directory to create notebooks and launch server
+
+# Example
+`notebook(PSYExamples,  ".")`
+"""
+function notebook(example::Type{<:Examples}, notebook_target_dir = nothing)
+    if isnothing(notebook_target_dir)
+        in_pkg_path =  startswith(pathof(SIIPExamples), pwd())
+        notebook_target_dir = in_pkg_path ? NB_DIR : mktempdir()
+    end
+    literate_folder(example; execute = false, test = false, notebook_target_dir = notebook_target_dir)
+    IJulia.notebook(dir = joinpath(notebook_target_dir, get_dir(example)))
 end
