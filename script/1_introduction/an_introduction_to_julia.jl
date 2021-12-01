@@ -178,7 +178,7 @@ d2["D"][:foo]
 # ### For-Each Loops
 # Julia has native support for for-each style loops with the syntax `for <value> in <collection> end`.
 
-for i in 1:5
+for i = 1:5
     println(i)
 end
 
@@ -200,7 +200,7 @@ end
 # Julia control flow is similar to Matlab, using the keywords `if-elseif-else-end`, and the logical operators `||` and `&&` for *or* and *and* respectively.
 
 i = 10
-for i in 0:3:15
+for i = 0:3:15
     if i < 5
         println("$(i) is less than 5")
     elseif i < 10
@@ -219,11 +219,11 @@ end
 #
 # A list of increasing integers,
 
-[i for i in 1:5]
+[i for i = 1:5]
 
 # Matrices can be built by including multiple indices,
 
-[i * j for i in 1:5, j in 5:10]
+[i * j for i = 1:5, j = 5:10]
 
 # Conditional statements can be used to filter out some values,
 
@@ -308,7 +308,7 @@ println("immutable_type: $(immutable_type)")
 # No matter how wonderful Julia's base language is, at some point you will want to use an extension package.  Some of these are built-in, for example random number generation is available in the `Random` package in the standard library. These packages are loaded with the commands `using` and `import`.
 
 using Random
-[rand() for i in 1:10]
+[rand() for i = 1:10]
 
 # The Package Manager is used to install packages that are not part of Julia's standard library.
 # For example the following can be used to install JuMP,

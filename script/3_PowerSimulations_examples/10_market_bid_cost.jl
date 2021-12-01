@@ -36,7 +36,7 @@ include(
 
 # ### Creating the Time Series data for Energy bid
 MultiDay = collect(
-    DateTime("2020-01-01T00:00:00"):Hour(1):(DateTime("2020-01-01T00:00:00") + Hour(8783)),
+    DateTime("2020-01-01T00:00:00"):Hour(1):(DateTime("2020-01-01T00:00:00")+Hour(8783)),
 );
 
 # ### Adding a MarketBidCost time series
