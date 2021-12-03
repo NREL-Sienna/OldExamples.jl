@@ -13,39 +13,33 @@ template_uc
 
 template_ed = template_economic_dispatch()
 
-problems = SimulationProblems(
-    UC = OperationsProblem(template_uc, sys, optimizer = solver),
-    ED = OperationsProblem(
-        template_ed,
-        sys_RT,
-        optimizer = solver,
-        balance_slack_variables = true,
-    ),
+models = SimulationModels(
+    decision_models = [
+        DecisionModel(template_uc, sys, optimizer = solver, name = "UC"),
+        DecisionModel(template_ed, sys_RT, optimizer = solver, name = "ED"),
+    ]
 )
-
-feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
 
 feedforward = Dict(
-    ("ED", :devices, :ThermalStandard) => SemiContinuousFF(
-        binary_source_problem = PSI.ON,
-        affected_variables = [PSI.ACTIVE_POWER],
-    ),
+    "ED" => [
+        SemiContinuousFeedforward(
+            component_type = ThermalStandard,
+            source = OnVariable,
+            affected_values = [ActivePowerVariable],
+        ),
+    ],
 )
 
-intervals = Dict("UC" => (Hour(24), Consecutive()), "ED" => (Minute(15), Consecutive()))
-
 DA_RT_sequence = SimulationSequence(
-    problems = problems,
-    intervals = intervals,
+    models = models,
     ini_cond_chronology = InterProblemChronology(),
-    feedforward_chronologies = feedforward_chronologies,
-    feedforward = feedforward,
+    feedforwards = feedforward,
 )
 
 sim = Simulation(
     name = "rts-test",
     steps = 1,
-    problems = problems,
+    models = models,
     sequence = DA_RT_sequence,
     simulation_folder = dirname(dirname(pathof(SIIPExamples))),
 )
@@ -70,3 +64,4 @@ read_parameter(
 read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+
