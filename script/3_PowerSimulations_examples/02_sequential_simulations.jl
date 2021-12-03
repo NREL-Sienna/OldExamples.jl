@@ -47,14 +47,11 @@ template_ed = template_economic_dispatch()
 # different time periods, but the formulations applied to the components is constant within
 # a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s
 # and the `System`s that we've already created.
-problems = SimulationProblems(
-    UC = OperationsProblem(template_uc, sys, optimizer = solver),
-    ED = OperationsProblem(
-        template_ed,
-        sys_RT,
-        optimizer = solver,
-        balance_slack_variables = true,
-    ),
+models = SimulationModels(
+    decision_models = [
+        DecisionModel(template_uc, sys, optimizer = solver, name = "UC"),
+        DecisionModel(template_ed, sys_RT, optimizer = solver, name = "ED"),
+    ]
 )
 # Note that the "ED" problem has a `balance_slack_variables = true` argument. This adds slack
 # variables with a default penalty of 1e6 to the nodal energy balance constraint and helps
@@ -76,48 +73,40 @@ problems = SimulationProblems(
 #  - intra-stage chronologies: Define how information flows between multiple executions of a
 # single stage. e.g. the dispatch setpoints of the first period of an economic dispatch problem
 # are constrained by the ramping limits from setpoints in the final period of the previous problem.
-#
 
-# Let's define an inter-stage chronology that synchronizes information from 24 periods of
-# the first stage with a set of executions of the second stage:
-
-feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
-
-# ### `FeedForward` and `Cache`
+# ### `FeedForward`
 # The definition of exactly what information is passed using the defined chronologies is
-# accomplished with `FeedForward` and `Cache` objects. Specifically, `FeedForward` is used
+# accomplished with `FeedForward`. Specifically, `FeedForward` is used
 # to define what to do with information being passed with an inter-stage chronology. Let's
 # define a `FeedForward` that affects the semi-continuous range constraints of thermal generators
 # in the economic dispatch problems based on the value of the unit-commitment variables.
 
 feedforward = Dict(
-    ("ED", :devices, :ThermalStandard) => SemiContinuousFF(
-        binary_source_problem = PSI.ON,
-        affected_variables = [PSI.ACTIVE_POWER],
-    ),
+    "ED" => [
+        SemiContinuousFeedforward(
+            component_type = ThermalStandard,
+            source = OnVariable,
+            affected_values = [ActivePowerVariable],
+        ),
+    ],
 )
 
 # ### Sequencing
 # The stage problem length, look-ahead, and other details surrounding the temporal Sequencing
-# of stages are controlled using the `intervals` argument and the structure of the `Forecast`
-# data in the `System` of each problem.
-#  - intervals::Dict(String, Dates.Period) : defines the interval with which stage problems
-# advance after each execution. e.g. day-ahead problems have an interval of 24-hours
-#
-# So, to define a typical day-ahead - real-time sequence, we can define the following:
+# of stages are controlled using the structure of the time series data in the `System`s.
+# So, to define a typical day-ahead - real-time sequence:
 #  - Day ahead problems should represent 48 hours, advancing 24 hours after each execution (24-hour look-ahead)
 #  - Real time problems should represent 1 hour (12 5-minute periods), advancing 15 min after each execution (15 min look-ahead)
-
-intervals = Dict("UC" => (Hour(24), Consecutive()), "ED" => (Minute(15), Consecutive()))
-
-# Finally, we can put it all together:
+# We can adjust the time series data to reflect this structure in each `System`:
+# - `transform_single_time_series!(sys, 48, Hour(1))`
+# - `transform_single_time_series!(sys_RT, 12, Minute(15))`
+#
+# Now we can put it all together to define a `SimulationSequence`
 
 DA_RT_sequence = SimulationSequence(
-    problems = problems,
-    intervals = intervals,
+    models = models,
     ini_cond_chronology = InterProblemChronology(),
-    feedforward_chronologies = feedforward_chronologies,
-    feedforward = feedforward,
+    feedforwards = feedforward,
 )
 
 # ## `Simulation`
@@ -126,7 +115,7 @@ DA_RT_sequence = SimulationSequence(
 sim = Simulation(
     name = "rts-test",
     steps = 1,
-    problems = problems,
+    models = models,
     sequence = DA_RT_sequence,
     simulation_folder = dirname(dirname(pathof(SIIPExamples))),
 )
