@@ -3,6 +3,8 @@ using Pkg
 Pkg.instantiate()
 
 using SIIPExamples
-using Literate
+using PowerSystemCaseBuilder
 
+PowerSystemCaseBuilder.clear_all_serialized_system()
+SIIPExamples.literate_all(execute = false) # ensures that all notebooks exist
 SIIPExamples.literate_all(force = true)
