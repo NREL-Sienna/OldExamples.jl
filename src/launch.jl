@@ -19,8 +19,7 @@ function postprocess_notebook(nb)
             f,
             replace(
                 txt,
-                r"\"outputs\":\ \[\]\,\n\ \ \ \"cell_type\":\ \"markdown\"" =>
-                    "\"cell_type\": \"markdown\"",
+                r"\"outputs\":\ \[\]\,\n\ \ \ \"cell_type\":\ \"markdown\"" => "\"cell_type\": \"markdown\"",
             ),
         )
     end

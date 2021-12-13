@@ -41,4 +41,3 @@ op_problem = OperationsProblem(template_uc, sys; optimizer = solver, horizon = 2
 build!(op_problem, output_dir = mktempdir())
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-
