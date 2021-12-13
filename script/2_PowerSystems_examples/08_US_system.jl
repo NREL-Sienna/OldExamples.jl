@@ -63,7 +63,9 @@ function make_pwl(gen::DataFrame, traunches = 2)
     output_pct_cols = ["output_point_" * string(i) for i in 0:traunches]
     hr_cols = ["heat_rate_incr_" * string(i) for i in 1:traunches]
     pushfirst!(hr_cols, "heat_rate_avg_0")
-    pwl = DataFrame(repeat([Float64], 6), Symbol.(vcat(output_pct_cols, hr_cols)))
+    columns =
+        NamedTuple{Tuple(Symbol.(vcat(output_pct_cols, hr_cols)))}(repeat([Float64[]], 6))
+    pwl = DataFrame(columns)
     for row in eachrow(gen)
         traunch_len = (1.0 - row.Pmin / row.Pmax) / traunches
         pct = [row.Pmin / row.Pmax + i * traunch_len for i in 0:traunches]
