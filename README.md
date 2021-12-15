@@ -1,7 +1,6 @@
 # SIIPExamples.jl
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NREL-SIIP/SIIPExamples.jl/master)
 [![Master - CI](https://github.com/NREL-SIIP/SIIPExamples.jl/workflows/Master%20-%20CI/badge.svg)](https://github.com/NREL-SIIP/SIIPExamples.jl/actions/workflows/master-tests.yml)
-[![codecov](https://codecov.io/gh/NREL-SIIP/SIIPExamples.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/NREL-SIIP/SIIPExamples.jl)
 [<img src="https://img.shields.io/badge/slack-@SIIP/Examples-blue.svg?logo=slack">](https://join.slack.com/t/nrel-siip/shared_invite/zt-glam9vdu-o8A9TwZTZqqNTKHa7q3BpQ)
 
 This package contains examples and tutorials for [Scalable Integrated Infrastructure Planning (SIIP) packages developed at the National Renewable Energy Laboratory (NREL)](https://www.nrel.gov/analysis/siip.html). This repository uses a template established by [JuMPTutorials.jl](https://github.com/JuliaOpt/JuMPTutorials.jl).
