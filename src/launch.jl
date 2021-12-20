@@ -135,15 +135,29 @@ Launches a notebook server for the specified `Examples` folder.
 `notebook(PSYExamples,  ".")`
 """
 function notebook(example::Type{<:Examples}, notebook_target_dir = nothing)
+    pkg_path = dirname(dirname(pathof(SIIPExamples)))
     if isnothing(notebook_target_dir)
-        in_pkg_path = startswith(pathof(SIIPExamples), pwd())
+        in_pkg_path = startswith(pkg_path, pwd())
         notebook_target_dir = in_pkg_path ? NB_DIR : mktempdir()
+    else
+        in_pkg_path = startswith(pkg_path, notebook_target_dir)
     end
+
     literate_folder(
         example;
         execute = false,
         test = false,
         notebook_target_dir = notebook_target_dir,
+        preprocess = in_pkg_path ? nothing : set_env,
     )
     IJulia.notebook(dir = joinpath(notebook_target_dir, get_dir(example)))
+end
+
+"""
+Prepend each notebook with an environment path
+"""
+function set_env(str)
+    env_path = dirname(dirname(pathof(SIIPExamples)))
+    env_str = "] activate $(env_path)\n\n"
+    return env_str * str
 end
