@@ -8,57 +8,54 @@
 # PowerSimulations.jl supports simulations that consist of sequential optimization problems
 # where results from previous problems inform subsequent problems in a variety of ways. This
 # example demonstrates some of these capabilities to represent electricity market clearing.
+# This example is intended to be an extension of the
+# [OperationsProblem example.](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 
-# ## Dependencies
-# Since the `OperatiotnsProblem` is the fundamental building block of a sequential
-# simulation in PowerSimulations, we will build on the [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
-# by sourcing it as a dependency.
-using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(
-    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
-)
+# ### Hourly day-ahead system
+# First, we'll create a `System` with hourly data to represent day-ahead forecasted wind,
+# solar, and load profiles:
+sys_DA = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
 # ### 5-Minute system
-# We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.
 # The RTS data also includes 5-minute resolution time series data. So, we can create another
-# `System`:
+# `System` to represent 15 minute ahead forecasted data for a "real-time" market:
 sys_RT = build_system(PSITestSystems, "modified_RTS_GMLC_RT_sys")
 
-# ## `OperationsProblemTemplate`s define `Stage`s
+# ## `ProblemTemplate`s define stages
 # Sequential simulations in PowerSimulations are created by defining `OperationsProblems`
-# that represent `Stages`, and how information flows between executions of a `Stage` and
-# between different `Stage`s.
+# that represent stages, and how information flows between executions of a stage and
+# between different stages.
 #
 # Let's start by defining a two stage simulation that might look like a typical day-Ahead
 # and real-time electricity market clearing process.
 
-# ### We've already defined the reference model for the day-ahead unit commitment
-#set_device_model!(template_ed, GenericBattery, BookKeeping)
-template_uc
+# ### Day-ahead unit commitment stage
+# First, we can define a unit commitment template for the day ahead problem. We can use the
+# included UC template, but in this example, we'll replace the `ThermalBasicUnitCommitment`
+# with the slightly more complex `ThermalStandardUnitCommitment` for the thermal generators.
+template_uc = template_unit_commitment()
+set_device_model!(template_uc, ThermalStandard, ThermalStandardUnitCommitment)
 
 # ### Define the reference model for the real-time economic dispatch
 # In addition to the manual specification process demonstrated in the OperationsProblem
 # example, PSI also provides pre-specified templates for some standard problems:
 template_ed = template_economic_dispatch()
 
-# ### Define the `SimulationProblems`
-# `OperationsProblem`s define models. The actual problem will change as the stage gets updated to represent
+# ### Define the `SimulationModels`
+# `DecisionModel`s define the problems that are executed in the simulation.
+# The actual problem will change as the stage gets updated to represent
 # different time periods, but the formulations applied to the components is constant within
-# a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s
+# a stage. In this case, we want to define two stages with the `ProblemTemplate`s
 # and the `System`s that we've already created.
 models = SimulationModels(
     decision_models = [
-        DecisionModel(template_uc, sys, optimizer = solver, name = "UC"),
+        DecisionModel(template_uc, sys_DA, optimizer = solver, name = "UC"),
         DecisionModel(template_ed, sys_RT, optimizer = solver, name = "ED"),
     ]
 )
-# Note that the "ED" problem has a `balance_slack_variables = true` argument. This adds slack
-# variables with a default penalty of 1e6 to the nodal energy balance constraint and helps
-# ensure feasibility with some performance impacts.
 
 # ### `SimulationSequence`
-# Similar to an `OperationsProblemTemplate`, the `SimulationSequence` provides a template of
+# Similar to an `ProblemTemplate`, the `SimulationSequence` provides a template of
 # how to execute a sequential set of operations problems.
 
 #nb # print_struct(SimulationSequence)
@@ -98,7 +95,7 @@ feedforward = Dict(
 #  - Day ahead problems should represent 48 hours, advancing 24 hours after each execution (24-hour look-ahead)
 #  - Real time problems should represent 1 hour (12 5-minute periods), advancing 15 min after each execution (15 min look-ahead)
 # We can adjust the time series data to reflect this structure in each `System`:
-# - `transform_single_time_series!(sys, 48, Hour(1))`
+# - `transform_single_time_series!(sys_DA, 48, Hour(1))`
 # - `transform_single_time_series!(sys_RT, 12, Minute(15))`
 #
 # Now we can put it all together to define a `SimulationSequence`
@@ -112,12 +109,13 @@ DA_RT_sequence = SimulationSequence(
 # ## `Simulation`
 # Now, we can build and execute a simulation using the `SimulationSequence` and `Stage`s
 # that we've defined.
+file_path = mktempdir("rts-simulation")
 sim = Simulation(
     name = "rts-test",
-    steps = 1,
+    steps = 2,
     models = models,
     sequence = DA_RT_sequence,
-    simulation_folder = dirname(dirname(pathof(SIIPExamples))),
+    simulation_folder = mktempdir(".", cleanup = true),
 )
 
 # ### Build simulation
