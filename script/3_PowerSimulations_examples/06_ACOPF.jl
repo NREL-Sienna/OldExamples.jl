@@ -15,14 +15,13 @@ using SIIPExamples
 using PowerSystems
 using PowerSimulations
 using PowerSystemCaseBuilder
-using Dates
 
 # We can use the a [TAMU synthetic ERCOT dataset](https://electricgrids.engr.tamu.edu/electric-grid-test-cases/).
 # The TAMU data format relies on a folder containing `.m` or `.raw` files and `.csv`
 # files for the time series data. We have provided a parser for the TAMU data format with
 # the `TamuSystem()` function. A version of the system with only one week of time series
 # is included in PowerSystemCaseBuilder.jl, we can use that version here:
-sys = build_system(PSYTestSystems, "tamu_ACTIVSg2000_sys")
+sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 transform_single_time_series!(sys, 1, Hour(1))
 
 # Since we'll be doing non-linear optimization, we need a solver that supports non-linear
@@ -45,10 +44,19 @@ print_tree(PowerSimulations.PM.AbstractPowerModel)
 ed_template = ProblemTemplate(QCLSPowerModel)#, use_slacks = true)
 set_device_model!(ed_template, ThermalStandard, ThermalStandardDispatch)
 set_device_model!(ed_template, PowerLoad, StaticPowerLoad)
-#set_device_model!(ed_template, FixedAdmittance, StaticPowerLoad) #TODO add constructor for shunts in PSI
+set_device_model!(ed_template, Line, StaticBranch)
+set_device_model!(ed_template, TapTransformer, StaticBranch)
+set_device_model!(ed_template, Transformer2W, StaticBranch)
+set_device_model!(ed_template, HVDCLine, HVDCDispatch)
 
 # uc template
-uc_template = template_unit_commitment()
+uc_template = ProblemTemplate(CopperPlatePowerModel)
+set_device_model!(uc_template, ThermalStandard, ThermalBasicUnitCommitment)
+set_device_model!(uc_template, PowerLoad, StaticPowerLoad)
+set_device_model!(uc_template, Line, StaticBranch)
+set_device_model!(uc_template, TapTransformer, StaticBranch)
+set_device_model!(uc_template, Transformer2W, StaticBranch)
+set_device_model!(uc_template, HVDCLine, HVDCDispatch)
 
 # Now we can build a 4-hour economic dispatch / ACOPF problem with the TAMU data.
 models = SimulationModels(
