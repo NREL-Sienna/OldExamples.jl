@@ -25,7 +25,7 @@ using DataFrames
 # ### Optimization packages
 using Cbc # solver
 solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.05)
-odir = mktempdir() #tmpdir for build steps
+odir = mktempdir(".", cleanup = true) #tmpdir for build steps
 
 # ### Data
 # PowerSystemCaseBuilder links to some meaningless test data that is suitable for this example.

@@ -76,7 +76,7 @@ DA_RT_sequence = SimulationSequence(
 )
 
 # ## `Simulation`
-file_path = mktempdir( "5-bus-simulation")
+file_path = mktempdir(".", cleanup = true)
 sim = Simulation(
     name = "5bus-test",
     steps = 1,
