@@ -95,13 +95,16 @@ sequence = SimulationSequence(
 # Note that in the above feedforward definition, the `OnVariable` for the `ThermalStandard`
 # components is affecting both the `ActivePowerVariable` and the `ReactivePowerVariable`.
 # This is the connection that restricts the ACOPF to only represent active and reactive
-# power injections from the units that are committed in the UC problem.
+# power injections from the units that are committed in the UC problem. It's not guaranteed
+# that the UC result generates an AC feasible initial condition, so this problem selects
+# a particular period (`initial_time`) where the conditions are suitable.
 sim = Simulation(
     name = "UC-ACOPF",
     steps = 1,
     models = models,
     sequence = sequence,
     simulation_folder = sim_folder,
+    initial_time = DateTime("2020-07-01T14:00:00")
 )
 
 build!(sim)
