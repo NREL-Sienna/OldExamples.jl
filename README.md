@@ -26,7 +26,7 @@ _Prerequisites:_
 
 - Install [Julia](https://julialang.org)
 
-To get started running the Jupyter notebooks included in this package, you can follow the process in [this video](https://www.youtube.com/watch?v=n1NvcnLczJ8&feature=youtu.be) demonstrating the following steps:
+To get started running the Jupyter notebooks included in this package, you can follow the process in [this video](https://youtu.be/gHoGV4RDz-U) demonstrating the following steps:
 
 1. Install SIIPExamples: `using Pkg; Pkg.add("SIIPExamples")`
 2. Launch a notebook server for any of the example categories (`JuliaExamples, PSYExamples, PSIExamples, PSDExamples`): `notebook(PSYExamples)`
