@@ -31,7 +31,7 @@ PSD = PowerSimulationsDynamics
 # [dynamic systems data example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/09_loading_dynamic_systems_data.ipynb)
 # previously to generate the json file._
 file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
+    pkgdir(SIIPExamples),
     "script",
     "4_PowerSimulationsDynamics_examples",
     "Data",

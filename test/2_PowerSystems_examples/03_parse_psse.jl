@@ -4,7 +4,7 @@ using PowerSystems
 using TimeSeries
 
 PowerSystems.download(PowerSystems.TestData; branch = "master")
-base_dir = dirname(dirname(pathof(PowerSystems)));
+base_dir = pkgdir(PowerSystems);
 
 sys = System(joinpath(base_dir, "data", "psse_raw", "RTS-GMLC.RAW"));
 

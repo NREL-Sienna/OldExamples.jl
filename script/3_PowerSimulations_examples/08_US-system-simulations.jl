@@ -17,7 +17,7 @@ using PowerGraphics
 using Logging
 using Dates
 
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 PSI = PowerSimulations
 plotlyjs()
 

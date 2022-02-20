@@ -1,7 +1,7 @@
 #! format: off
 
 using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 using Dates
 
 using PowerSystems

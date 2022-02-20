@@ -5,7 +5,7 @@ abstract type PSYExamples <: Examples end
 abstract type PSIExamples <: Examples end
 abstract type PSDExamples <: Examples end
 
-const PACKAGE_DIR = dirname(dirname(pathof(SIIPExamples)))
+const PACKAGE_DIR = pkgdir(SIIPExamples)
 const SCRIPT_DIR = joinpath(PACKAGE_DIR, "script")
 const TEST_DIR = joinpath(PACKAGE_DIR, "test")
 const NB_DIR = joinpath(PACKAGE_DIR, "notebook")

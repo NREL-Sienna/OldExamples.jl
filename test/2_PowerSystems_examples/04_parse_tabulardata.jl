@@ -5,7 +5,7 @@ using TimeSeries
 using Dates
 
 PowerSystems.download(PowerSystems.TestData; branch = "master") # *note* add `force=true` to get a fresh copy
-base_dir = dirname(dirname(pathof(PowerSystems)));
+base_dir = pkgdir(PowerSystems);
 
 RTS_GMLC_DIR = joinpath(base_dir, "data", "RTS_GMLC");
 rawsys = PowerSystems.PowerSystemTableData(

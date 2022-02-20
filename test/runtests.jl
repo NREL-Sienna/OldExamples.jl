@@ -4,7 +4,7 @@ using Logging
 
 using Test
 
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 testpath = joinpath(pkgpath, "test")
 
 exclude = ["US-system-simulations.jl", "08_US_system.jl"]

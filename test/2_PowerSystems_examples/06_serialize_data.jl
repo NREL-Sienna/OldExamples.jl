@@ -2,7 +2,7 @@
 
 using SIIPExamples
 
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "02_parse_matpower.jl"))
 
 folder = mktempdir()

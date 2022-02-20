@@ -31,7 +31,7 @@ PSD = PowerSimulationsDynamics
 
 # # Step 2: Data creation
 file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
+    pkgdir(SIIPExamples),
     "script",
     "4_PowerSimulationsDynamics_examples",
     "Data",

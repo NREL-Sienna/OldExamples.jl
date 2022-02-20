@@ -10,7 +10,7 @@
 #
 # ## Dependencies
 using SIIPExamples #for path locations
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 using PowerSystems #to load results
 using PowerSimulations #to load results
 using PowerGraphics
@@ -21,7 +21,7 @@ using PowerSystemCaseBuilder
 # (If you haven't run some of the other simulations, you can run
 # `include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "02_sequential_simulations.jl"))`).
 # You can load the results into memory with:
-simulation_folder = joinpath(dirname(dirname(pathof(SIIPExamples))), "rts-test")
+simulation_folder = joinpath(pkgdir(SIIPExamples), "rts-test")
 simulation_folder =
     joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
 

@@ -4,7 +4,7 @@ using SIIPExamples
 using PowerSystems
 using JSON3
 
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "02_parse_matpower.jl"))
 
 FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts")

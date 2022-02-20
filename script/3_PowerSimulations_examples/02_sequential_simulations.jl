@@ -14,7 +14,7 @@
 # simulation in PowerSimulations, we will build on the [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 # by sourcing it as a dependency.
 using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 include(
     joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
 )
@@ -128,7 +128,7 @@ sim = Simulation(
     steps = 1,
     problems = problems,
     sequence = DA_RT_sequence,
-    simulation_folder = dirname(dirname(pathof(SIIPExamples))),
+    simulation_folder = pkgdir(SIIPExamples),
 )
 
 # ### Build simulation

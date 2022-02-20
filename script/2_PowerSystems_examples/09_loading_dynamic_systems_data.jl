@@ -58,7 +58,7 @@ const PSY = PowerSystems
 # To create the system you need to pass the location of the RAW file
 
 file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
+    pkgdir(SIIPExamples),
     "script",
     "4_PowerSimulationsDynamics_examples",
     "Data",

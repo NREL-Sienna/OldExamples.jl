@@ -135,7 +135,7 @@ Launches a notebook server for the specified `Examples` folder.
 `notebook(PSYExamples,  ".")`
 """
 function notebook(example::Type{<:Examples}, notebook_target_dir = nothing)
-    pkg_path = dirname(dirname(pathof(SIIPExamples)))
+    pkg_path = pkgdir(SIIPExamples)
     if isnothing(notebook_target_dir)
         in_pkg_path = startswith(pkg_path, pwd())
         notebook_target_dir = in_pkg_path ? NB_DIR : mktempdir()
@@ -157,7 +157,7 @@ end
 Prepend each notebook with an environment path
 """
 function set_env(str)
-    env_path = dirname(dirname(pathof(SIIPExamples)))
+    env_path = pkgdir(SIIPExamples)
     env_str = "] activate $(env_path)\n\n"
     return env_str * str
 end

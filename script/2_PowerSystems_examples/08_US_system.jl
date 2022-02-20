@@ -23,7 +23,7 @@ using CSV
 # PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
 println("downloading data...")
-datadir = joinpath(dirname(dirname(pathof(SIIPExamples))), "US-System")
+datadir = joinpath(pkgdir(SIIPExamples), "US-System")
 siip_data = joinpath(datadir, "SIIP")
 if !isdir(datadir)
     mkdir(datadir)
@@ -34,7 +34,7 @@ if !isdir(datadir)
 end
 
 config_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
+    pkgdir(SIIPExamples),
     "script",
     "2_PowerSystems_examples",
     "US_config",
