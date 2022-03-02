@@ -11,6 +11,26 @@
 # This example is intended to be an extension of the
 # [OperationsProblem example.](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 
+# ## Dependencies
+using SIIPExamples
+
+# ### Modeling Packages
+using PowerSystems
+using PowerSimulations
+const PSI = PowerSimulations
+using PowerSystemCaseBuilder
+using Dates
+
+# ### Optimization packages
+using Cbc #solver
+
+# ### Optimizer
+# It's most convenient to define an optimizer instance upfront and pass it into the
+# `DecisionModel` constructor. For this example, we can use the free Cbc solver with a
+# relatively relaxed MIP gap (`ratioGap`) setting to improve speed.
+
+solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+
 # ### Hourly day-ahead system
 # First, we'll create a `System` with hourly data to represent day-ahead forecasted wind,
 # solar, and load profiles:
@@ -39,7 +59,9 @@ set_device_model!(template_uc, ThermalStandard, ThermalStandardUnitCommitment)
 # ### Define the reference model for the real-time economic dispatch
 # In addition to the manual specification process demonstrated in the OperationsProblem
 # example, PSI also provides pre-specified templates for some standard problems:
-template_ed = template_economic_dispatch()
+template_ed = template_economic_dispatch(
+    network = NetworkModel(CopperPlatePowerModel, use_slacks = true),
+)
 
 # ### Define the `SimulationModels`
 # `DecisionModel`s define the problems that are executed in the simulation.
@@ -51,7 +73,7 @@ models = SimulationModels(
     decision_models = [
         DecisionModel(template_uc, sys_DA, optimizer = solver, name = "UC"),
         DecisionModel(template_ed, sys_RT, optimizer = solver, name = "ED"),
-    ]
+    ],
 )
 
 # ### `SimulationSequence`
@@ -134,10 +156,18 @@ results = SimulationResults(sim);
 uc_results = get_problem_results(results, "UC"); # UC stage result metadata
 ed_results = get_problem_results(results, "ED"); # ED stage result metadata
 
+# We can see that the results `uc_results` contain a number of variables:
+list_variable_names(uc_results)
+
+# and a number of parameters (this pattern also works for aux_variables, expressions, and duals)
+list_parameter_names(uc_results)
+
 # Now we can read the specific results of interest for a specific problem, time window (optional),
 # and set of variables, duals, or parameters (optional)
 
-read_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+read_variables(uc_results, ["ActivePowerVariable__RenewableDispatch",
+"ActivePowerVariable__HydroDispatch",
+"StopVariable__ThermalStandard"])
 
 # Or if we want the result of just one variable, parameter, or dual (must be defined in the
 # problem definition), we can use:

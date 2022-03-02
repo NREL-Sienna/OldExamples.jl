@@ -20,10 +20,6 @@ using PowerSimulations
 const PSI = PowerSimulations
 using PowerSystemCaseBuilder
 
-# ### Data management packages
-using Dates
-using DataFrames
-
 # ### Optimization packages
 using Cbc #solver
 
@@ -96,51 +92,56 @@ solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" =>
 # The construction of an `DecisionModel` essentially applies an `ProblemTemplate`
 # to `System` data to create a JuMP model.
 
-op_problem = DecisionModel(template_uc, sys; optimizer = solver, horizon = 24)
+problem = DecisionModel(template_uc, sys; optimizer = solver, horizon = 24)
 
-build!(op_problem, output_dir = mktempdir())
+build!(problem, output_dir = mktempdir())
 
 #nb # The principal component of the `DecisionModel` is the JuMP model. For small problems,
 #nb # you can inspect it by simply printing it to the screen:
 #nb # ```julia
-#nb # PSI.get_jump_model(op_problem)
+#nb # PSI.get_jump_model(problem)
 #nb # ```
 #nb #
 #nb # For anything of reasonable size, that will be unmanageable. But you can print to a file:
 #nb # ```julia
-#nb # f = open("testmodel.txt","w"); print(f,PSI.get_jump_model(op_problem)); close(f)
+#nb # f = open("testmodel.txt","w"); print(f,PSI.get_jump_model(problem)); close(f)
 #nb # ```
 #nb #
-#nb # In addition to the JuMP model, an `DecisionModel` keeps track of a bunch of metadata
-#nb # about the problem and some references to pretty names for constraints and variables.
-#nb # All of these details are contained within the `optimization_container` field.
-#
-#nb print_struct(typeof(op_problem.internal.optimization_container))
-#
-#nb # ### Solve an `DecisionModel`
-#
-#nb solve!(op_problem)
-#
-#nb # ## Results Inspection
-#nb # PowerSimulations collects the `DecisionModel` results into a struct:
-#
-#nb print_struct(PSI.ProblemResults)
-#
-#nb res = ProblemResults(op_problem);
-#
-#nb # ### Optimizer Stats
-#nb # The optimizer summary is included
-#
-#nb get_optimizer_stats(res)
-#
-#nb # ### Objective Function Value
-#
-#nb get_objective_value(res)
-#
-#nb # ### Variable Values
-#nb # The solution value data frames for variables can be accessed by:
-#
-#nb variable_values = get_variable_values(res)
-#
+# In addition to the JuMP model, an `DecisionModel` keeps track of a bunch of metadata
+# about the problem and some references to pretty names for constraints and variables.
+# All of these details are contained within the `optimization_container` field.
+
+print_struct(typeof(PSI.get_optimization_container(problem)))
+
+# ### Solve an `DecisionModel`
+
+solve!(problem)
+
+# ## Results Inspection
+# PowerSimulations collects the `DecisionModel` results into a struct:
+
+print_struct(PSI.ProblemResults)
+
+res = ProblemResults(problem);
+
+# ### Optimizer Stats
+# The optimizer summary is included
+
+get_optimizer_stats(res)
+
+# ### Objective Function Value
+
+get_objective_value(res)
+
+# ### Variable, Parameter, Auxillary Variable, Dual, and Expression Values
+# The solution value data frames for variables, parameters, auxillary variables, duals and
+# expressions can be accessed using the `read_` methods:
+
+read_variables(res)
+
+# Or, you can read a single parameter values for parameters that exist in the results.
+list_parameter_names(res)
+read_parameter(res, "ActivePowerTimeSeriesParameter__RenewableDispatch")
+
 # ## Plotting
 # Take a look at the examples in [the plotting folder.](../../notebook/3_PowerSimulations_examples/Plotting)
