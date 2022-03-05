@@ -60,7 +60,7 @@ set_device_model!(template_uc, ThermalStandard, ThermalStandardUnitCommitment)
 # In addition to the manual specification process demonstrated in the OperationsProblem
 # example, PSI also provides pre-specified templates for some standard problems:
 template_ed = template_economic_dispatch(
-    network = NetworkModel(CopperPlatePowerModel, use_slacks = true),
+    network = NetworkModel(StandardPTDFModel, PTDF = PTDF(sys_DA), use_slacks = true)#NetworkModel(CopperPlatePowerModel, use_slacks = true),
 )
 
 # ### Define the `SimulationModels`
