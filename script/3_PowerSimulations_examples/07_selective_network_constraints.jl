@@ -18,11 +18,11 @@ using PowerSystemCaseBuilder
 
 # ### Optimization packages
 # For this simple example, we can use the Cbc solver with a relatively relaxed tolerance.
-using Cbc #solver
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+using HiGHS # mip solver
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
 # ### Create a `System` from RTS-GMLC data
-sys = build_system(PSITestSystems, "test_RTS_GMLC_sys")
+sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
 # ### Selecting flow limited lines
 # Since PowerSimulations will apply constraints by component type (e.g. Line), we need to
@@ -42,7 +42,7 @@ end
 
 # Let's start with a standard unit commitment template using the `PTDFPowerModel` network
 # formulation which only constructs the admittance matrix rows corresponding to "bounded" lines:
-template = template_unit_commitment(transmission = PTDFPowerModel)
+template = template_unit_commitment(network = PTDFPowerModel)
 
 # Notice that there is no entry for `MonitoredLine`, so we can add one:
 set_device_model!(template, MonitoredLine, StaticBranch)
@@ -52,7 +52,7 @@ set_device_model!(template, MonitoredLine, StaticBranch)
 set_device_model!(template, Line, StaticBranchUnbounded)
 
 # ## Build an `OperationsProblem`
-uc_prob = OperationsProblem(template, sys, horizon = 24, optimizer = solver)
+uc_prob = DecisionModel(template, sys, horizon = 24, optimizer = solver)
 build!(uc_prob, output_dir = mktempdir())
 
 # Solve the relaxed problem

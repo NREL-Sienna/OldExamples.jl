@@ -174,7 +174,7 @@ read_variables(uc_results, ["ActivePowerVariable__RenewableDispatch",
 
 read_parameter(
     ed_results,
-    :P__max_active_power__RenewableFix_max_active_power,
+    "ActivePowerTimeSeriesParameter__RenewableFix",
     initial_time = DateTime("2020-01-01T06:00:00"),
     count = 5,
 )
@@ -182,7 +182,7 @@ read_parameter(
 # * note that this returns the results of each execution step in a separate dataframe *
 # If you want the realized results (without lookahead periods), you can call `read_realized_*`:
 
-read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+read_realized_variables(uc_results, [ "ActivePowerVariable__ThermalStandard", "ActivePowerVariable__RenewableDispatch" ])
 
 # ## Plotting
 # Take a look at the [plotting examples.](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/04_bar_stack_plots.ipynb)

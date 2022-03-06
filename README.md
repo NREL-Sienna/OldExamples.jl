@@ -50,7 +50,7 @@ To get started running the Jupyter notebooks included in this package, you can f
 - [PowerSimulations.jl](https://github.com/NREL-SIIP/PowerSimulations.jl) Examples
   - [Single Step UC RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
   - [Sequential DA-RT RTS Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/3_PowerSimulations_examples/02_sequential_simulations.ipynb)
-  - [Hydro Modeling](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/3_PowerSimulations_examples/05_hydropower_simulation.ipynb)
+  - [Hydro Modeling with tips to inspect formulations](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/3_PowerSimulations_examples/05_hydropower_simulation.ipynb)
   - [Sequential DA-RT 5bus Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/3_PowerSimulations_examples/03_5_bus_mkt_simulation.ipynb)
   - [ACOPF Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/3_PowerSimulations_examples/06_ACOPF.ipynb)
   - [Selective Line Enforcement Example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/notebook/3_PowerSimulations_examples/07_selective_network_constraints.ipynb)

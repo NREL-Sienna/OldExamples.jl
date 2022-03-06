@@ -23,10 +23,8 @@ using Dates
 using DataFrames
 
 # ### Optimization packages
-using Cbc # mip solver
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
-using Ipopt # solver that supports duals
-ipopt_solver = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
+using HiGHS # mip solver
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
 # ### 5-bus Data
 # The five bus system data here includes hourly day-ahead data, 5-minute real-time market
@@ -38,7 +36,7 @@ sys_RT = build_system(SIIPExampleSystems, "5_bus_matpower_RT")
 # ## `ProblemTemplate`s
 
 template_uc = template_unit_commitment(use_slacks = true)
-template_ed = template_economic_dispatch(duals = [CopperPlateBalanceConstraint])
+template_ed = template_economic_dispatch(network = NetworkModel(CopperPlatePowerModel, duals = [CopperPlateBalanceConstraint]))
 
 # ### Define the Simulation Sequence
 
@@ -54,7 +52,7 @@ models = SimulationModels(
             template_ed,
             sys_RT,
             name = "ED",
-            optimizer = ipopt_solver,
+            optimizer = solver,
         ),
     ]
 )
@@ -90,27 +88,24 @@ sim = Simulation(
 build!(sim)
 
 # ### Execute simulation
-# ```julia
+
 execute!(sim, enable_progress_bar = false)
-# ```
 
 ## Results
 # First we can load the result metadata
-# ```julia
-# results = SimulationResults(sim);
-# uc_results = get_problem_results(results, "UC")
-# ed_results = get_problem_results(results, "ED");
-# ```
+results = SimulationResults(sim);
+uc_results = get_problem_results(results, "UC")
+ed_results = get_problem_results(results, "ED");
 
-# Then we can read and examine the results of interest
-# ```julia
-# prices = read_dual(ed_results, :CopperPlateBalance)
-# ```
+# Then we can read and examine the results of interest. For example, if we want to read
+# marginal prices of the balance constraint, we can see what dual values are available:
+list_dual_names(ed_results)
+
+# Then, we can read the results of the dual
+prices = read_dual(ed_results, "CopperPlateBalanceConstraint__System")
 
 # or if we want to look at the realized values
-# ```julia
-# read_realized_duals(ed_results)[:CopperPlateBalance]
-# ```
+read_realized_dual(ed_results, "CopperPlateBalanceConstraint__System")
 
 # *note that in this simulation the prices are all equal to the balance slack
 # penalty value of $100000/MWh because there is unserved energy in the result*

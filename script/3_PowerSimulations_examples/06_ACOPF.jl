@@ -30,8 +30,8 @@ transform_single_time_series!(sys, 1, Hour(1))
 # So, we'll use Cbc for the UC problem.
 using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)
-using Cbc # solver
-uc_solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.05)
+using HiGHS # mip solver
+uc_solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
 # Here, we want do define an economic dispatch (linear generation decisions) with an ACOPF
 # network representation.
@@ -41,13 +41,14 @@ print_tree(PowerSimulations.PM.AbstractPowerModel)
 
 # First, we can setup a template with a suitable ACOPF network formulation, and formulations
 # that represent each of the relevant device categories
-ed_template = ProblemTemplate(QCLSPowerModel)
+ed_template = ProblemTemplate()
 set_device_model!(ed_template, ThermalStandard, ThermalStandardDispatch)
 set_device_model!(ed_template, PowerLoad, StaticPowerLoad)
 set_device_model!(ed_template, Line, StaticBranch)
 set_device_model!(ed_template, TapTransformer, StaticBranch)
 set_device_model!(ed_template, Transformer2W, StaticBranch)
 set_device_model!(ed_template, HVDCLine, HVDCDispatch)
+set_network_model!(ed_template, NetworkModel(ACPPowerModel, use_slacks = true))
 
 # We also need to setup a UC template with a simplified network representation
 uc_template = ProblemTemplate(DCPPowerModel)
@@ -100,11 +101,10 @@ sequence = SimulationSequence(
 # a particular period (`initial_time`) where the conditions are suitable.
 sim = Simulation(
     name = "UC-ACOPF",
-    steps = 1,
+    steps = 12,
     models = models,
     sequence = sequence,
     simulation_folder = sim_folder,
-    initial_time = DateTime("2020-07-01T14:00:00")
 )
 
 build!(sim)
@@ -112,3 +112,13 @@ build!(sim)
 # And solve it ...
 execute!(sim, enable_progress_bar = false)
 
+# And extract some results
+
+results = SimulationResults(sim)
+ac_results = get_problem_results(results, "ACOPF")
+
+slack_keys = [k for k in list_variable_keys(ac_results) if PSI.get_entry_type(k) ∈ [SystemBalanceSlackDown, SystemBalanceSlackUp]]
+slack_vars = read_realized_variables(ac_results, slack_keys)
+
+#nb # Plot the slack values
+#nb plot_results(slack_vars);

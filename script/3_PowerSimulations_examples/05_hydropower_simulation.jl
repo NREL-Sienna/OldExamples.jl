@@ -157,7 +157,7 @@ problems = SimulationModels(
 sequence = SimulationSequence(
     models = problems,
     feedforwards = Dict(
-        "DA" => [IntegralLimitFeedforward(
+        "DA" => [EnergyLimitFeedforward(
             component_type = HydroEnergyReservoir,
             source = ActivePowerVariable,
             affected_values = [ActivePowerVariable],
@@ -225,7 +225,7 @@ sequence = SimulationSequence(
     models = problems,
     feedforwards = Dict(
         "DA" => [
-            IntegralLimitFeedforward(
+            EnergyLimitFeedforward(
             component_type = HydroEnergyReservoir,
             source = ActivePowerVariable,
             affected_values = [ActivePowerVariable],
@@ -233,7 +233,7 @@ sequence = SimulationSequence(
         ),
         ],
         "ED" => [
-            IntegralLimitFeedforward(
+            EnergyLimitFeedforward(
             component_type = HydroEnergyReservoir,
             source = ActivePowerVariable,
             affected_values = [ActivePowerVariable],
