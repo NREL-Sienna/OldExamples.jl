@@ -27,7 +27,7 @@ transform_single_time_series!(sys, 1, Hour(1))
 
 # Since we'll be doing non-linear optimization, we need a solver that supports non-linear
 # problems. Ipopt is quite good. And, we'll need a separate solver that can handle integer variables.
-# So, we'll use Cbc for the UC problem.
+# So, we'll use HiGHS for the UC problem.
 using Ipopt
 solver = optimizer_with_attributes(Ipopt.Optimizer)
 using HiGHS # mip solver

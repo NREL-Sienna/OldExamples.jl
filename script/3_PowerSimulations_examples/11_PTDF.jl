@@ -19,7 +19,7 @@ using DataFrames
 # Since we'll be retrieving duals, we need a solver that returns duals values
 # here we use HiGHS.
 using HiGHS # mip solver
-solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.05)
 
 # We can use the same RTS data and some of the initialization as in
 # [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)

@@ -23,8 +23,8 @@ using Dates
 using DataFrames
 
 # ### Optimization packages
-using Cbc # solver
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.05)
+using HiGHS # solver
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.05)
 odir = mktempdir(".", cleanup = true) #tmpdir for build steps
 
 # ### Data

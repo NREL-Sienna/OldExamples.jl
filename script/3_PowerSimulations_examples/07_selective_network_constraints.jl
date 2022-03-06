@@ -17,7 +17,7 @@ using PowerSimulations
 using PowerSystemCaseBuilder
 
 # ### Optimization packages
-# For this simple example, we can use the Cbc solver with a relatively relaxed tolerance.
+# For this simple example, we can use the HiGHS solver with a relatively relaxed tolerance.
 using HiGHS # mip solver
 solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 

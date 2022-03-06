@@ -21,7 +21,7 @@ const PSI = PowerSimulations
 using PowerSystemCaseBuilder
 
 # ### Optimization packages
-using Cbc #solver
+using HiGHS # solver
 
 # ### Data
 # This data depends upon the [RTS-GMLC](https://github.com/gridmod/rts-gmlc) dataset. Let's
@@ -83,10 +83,10 @@ set_network_model!(template_uc, NetworkModel(CopperPlatePowerModel))
 
 # ### Optimizer
 # It's most convenient to define an optimizer instance upfront and pass it into the
-# `DecisionModel` constructor. For this example, we can use the free Cbc solver with a
+# `DecisionModel` constructor. For this example, we can use the free HiGHS solver with a
 # relatively relaxed MIP gap (`ratioGap`) setting to improve speed.
 
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
 # ### Build an `DecisionModel`
 # The construction of an `DecisionModel` essentially applies an `ProblemTemplate`

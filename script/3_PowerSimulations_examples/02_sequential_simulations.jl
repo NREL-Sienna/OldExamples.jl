@@ -22,14 +22,14 @@ using PowerSystemCaseBuilder
 using Dates
 
 # ### Optimization packages
-using Cbc #solver
+using HiGHS #solver
 
 # ### Optimizer
 # It's most convenient to define an optimizer instance upfront and pass it into the
-# `DecisionModel` constructor. For this example, we can use the free Cbc solver with a
+# `DecisionModel` constructor. For this example, we can use the free HiGHS solver with a
 # relatively relaxed MIP gap (`ratioGap`) setting to improve speed.
 
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
 # ### Hourly day-ahead system
 # First, we'll create a `System` with hourly data to represent day-ahead forecasted wind,
