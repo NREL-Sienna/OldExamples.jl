@@ -31,7 +31,6 @@ using HiGHS #solver
 # Create a `System` from RTS-GMLC data
 sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
-
 # ### Creating the Time Series data for Energy bid
 MultiDay = collect(
     DateTime("2020-01-01T00:00:00"):Hour(1):(DateTime("2020-01-01T00:00:00") + Hour(8783)),
@@ -71,12 +70,7 @@ set_device_model!(uc_template, ThermalMultiStart, ThermalMultiStartUnitCommitmen
 # Now we can build a 4-hour economic dispatch problem with the RTS data.
 solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
-problem = DecisionModel(
-    uc_template,
-    sys,
-    horizon = 4,
-    optimizer = solver,
-)
+problem = DecisionModel(uc_template, sys, horizon = 4, optimizer = solver)
 build!(problem, output_dir = mktempdir())
 
 # And solve it ...

@@ -60,7 +60,7 @@ set_device_model!(template_uc, ThermalStandard, ThermalStandardUnitCommitment)
 # In addition to the manual specification process demonstrated in the OperationsProblem
 # example, PSI also provides pre-specified templates for some standard problems:
 template_ed = template_economic_dispatch(
-    network = NetworkModel(StandardPTDFModel, PTDF = PTDF(sys_DA), use_slacks = true)#NetworkModel(CopperPlatePowerModel, use_slacks = true),
+    network = NetworkModel(StandardPTDFModel, PTDF = PTDF(sys_DA), use_slacks = true),#NetworkModel(CopperPlatePowerModel, use_slacks = true),
 )
 
 # ### Define the `SimulationModels`
@@ -131,7 +131,6 @@ DA_RT_sequence = SimulationSequence(
 # ## `Simulation`
 # Now, we can build and execute a simulation using the `SimulationSequence` and `Stage`s
 # that we've defined.
-file_path = mktempdir("rts-simulation")
 sim = Simulation(
     name = "rts-test",
     steps = 2,
@@ -165,9 +164,14 @@ list_parameter_names(uc_results)
 # Now we can read the specific results of interest for a specific problem, time window (optional),
 # and set of variables, duals, or parameters (optional)
 
-read_variables(uc_results, ["ActivePowerVariable__RenewableDispatch",
-"ActivePowerVariable__HydroDispatch",
-"StopVariable__ThermalStandard"])
+read_variables(
+    uc_results,
+    [
+        "ActivePowerVariable__RenewableDispatch",
+        "ActivePowerVariable__HydroDispatch",
+        "StopVariable__ThermalStandard",
+    ],
+)
 
 # Or if we want the result of just one variable, parameter, or dual (must be defined in the
 # problem definition), we can use:
@@ -182,7 +186,10 @@ read_parameter(
 # * note that this returns the results of each execution step in a separate dataframe *
 # If you want the realized results (without lookahead periods), you can call `read_realized_*`:
 
-read_realized_variables(uc_results, [ "ActivePowerVariable__ThermalStandard", "ActivePowerVariable__RenewableDispatch" ])
+read_realized_variables(
+    uc_results,
+    ["ActivePowerVariable__ThermalStandard", "ActivePowerVariable__RenewableDispatch"],
+)
 
 # ## Plotting
 # Take a look at the [plotting examples.](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/04_bar_stack_plots.ipynb)

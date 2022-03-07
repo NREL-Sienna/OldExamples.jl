@@ -66,14 +66,8 @@ set_device_model!(template, RenewableDispatch, RenewableFullDispatch)
 set_device_model!(template, PowerLoad, StaticPowerLoad)
 set_device_model!(template, HydroDispatch, FixedOutput)
 
-
 # ### Build and execute single step problem
-op_problem = DecisionModel(
-    template,
-    sys;
-    optimizer = solver,
-    horizon = 24,
-)
+op_problem = DecisionModel(template, sys; optimizer = solver, horizon = 24)
 
 build!(op_problem, output_dir = mktempdir(), console_level = Logging.Info)
 
@@ -90,17 +84,16 @@ sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"))
 models = SimulationModels(
     decision_models = [
         DecisionModel(
-        template,
-        sys,
-        name = "UC",
-        optimizer = solver,
-        system_to_file = false,
-    ),]
+            template,
+            sys,
+            name = "UC",
+            optimizer = solver,
+            system_to_file = false,
+        ),
+    ],
 )
-DA_sequence = SimulationSequence(
-    models = models,
-    ini_cond_chronology = IntraProblemChronology(),
-)
+DA_sequence =
+    SimulationSequence(models = models, ini_cond_chronology = IntraProblemChronology())
 
 # ### Define and build a simulation
 sim = Simulation(

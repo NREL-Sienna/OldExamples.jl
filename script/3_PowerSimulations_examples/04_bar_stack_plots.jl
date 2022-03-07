@@ -19,7 +19,9 @@ using PowerSystemCaseBuilder
 # ### Results file
 # If you have already run some of the other examples, you should have generated some results
 # (If you haven't run some of the other simulations, you can run
-include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "03_5_bus_mkt_simulation.jl"))
+include(
+    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "03_5_bus_mkt_simulation.jl"),
+)
 
 # Alternatively, you can load the results into memory with:
 # ```julia

@@ -1,6 +1,6 @@
+authors = ["Clayton Barrows", "Sourabh Dalvi"]
 name = "SIIPExamples"
 uuid = "2c79006f-6450-48c4-b124-fbadab4f299d"
-authors = ["Clayton Barrows", "Sourabh Dalvi"]
 version = "0.1.6"
 
 [deps]
@@ -34,4 +34,5 @@ TimeZones = "f269a46b-ccf7-5d73-abea-4c690281aa53"
 WebIO = "0f1e0344-ec1d-5b48-a673-e5cf874b6c29"
 
 [extras]
+CPUSummary = "2a0fbf3d-bb9c-48f3-b0a9-814d99fd7ab9"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

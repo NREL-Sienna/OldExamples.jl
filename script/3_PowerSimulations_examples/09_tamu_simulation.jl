@@ -34,19 +34,19 @@ transform_single_time_series!(sys, 24, Dates.Hour(24));
 
 sim_folder = mkpath(joinpath(pkgpath, "TAMU-sim"))
 models = SimulationModels(
-    decision_models = [DecisionModel(
-        template_unit_commitment(),
-        sys,
-        name = "UC",
-        optimizer = solver,
-    ),]
+    decision_models = [
+        DecisionModel(template_unit_commitment(), sys, name = "UC", optimizer = solver),
+    ],
 )
 # ### Define and build a simulation
 sim = Simulation(
     name = "TAMU-test",
     steps = 3,
     models = models,
-    sequence = SimulationSequence(models = models, ini_cond_chronology = InterProblemChronology()),
+    sequence = SimulationSequence(
+        models = models,
+        ini_cond_chronology = InterProblemChronology(),
+    ),
     simulation_folder = sim_folder,
 )
 

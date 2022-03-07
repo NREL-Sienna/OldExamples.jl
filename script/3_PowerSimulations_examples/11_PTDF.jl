@@ -13,6 +13,7 @@
 using SIIPExamples
 using PowerSystems
 using PowerSimulations
+const PSI = PowerSimulations
 using PowerSystemCaseBuilder
 using DataFrames
 
@@ -31,25 +32,27 @@ sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 # tree:
 print_tree(PowerSimulations.PM.AbstractPowerModel)
 
-
 # Calculate the PTDF matrix.
 PTDF_matrix = PTDF(sys)
 
 # For now, let's just choose a standard PTDF formulation.
-template = template_unit_commitment(network = NetworkModel(StandardPTDFModel, PTDF = PTDF_matrix, duals = [CopperPlateBalanceConstraint], use_slacks = false), use_slacks = true)
-for (k,v) in template.branches
+template = template_unit_commitment(
+    network = NetworkModel(
+        StandardPTDFModel,
+        PTDF = PTDF_matrix,
+        duals = [CopperPlateBalanceConstraint],
+        use_slacks = false,
+    ),
+    use_slacks = true,
+)
+for (k, v) in template.branches
     v.duals = [NetworkFlowConstraint]
 end
 
 # Now we can build a 4-hour economic dispatch / OPF problem with the RTS data.
 # Here, we have to pass the keyword argument `constraint_duals` to OperationsProblem
 # with the name of the constraint for which duals are required for them to be returned in the results.
-problem = DecisionModel(
-    template,
-    sys,
-    horizon = 24,
-    optimizer = solver,
-)
+problem = DecisionModel(template, sys, horizon = 24, optimizer = solver)
 build!(problem, output_dir = mktempdir())
 
 # And solve the problem and collect the results
@@ -60,15 +63,18 @@ solve!(problem)
 # subtracting the duals (μ) of `:network_flow` constraints multiplied by the PTDF matrix
 # from the  dual (λ) of `:CopperPlateBalance` constraint.
 res = ProblemResults(problem)
-duals = read_duals(res, [k for k in list_dual_keys(res) if PSI.get_entry_type(k) == NetworkFlowConstraint])
-λ =  read_dual(res, "CopperPlateBalanceConstraint__System")[:,2]
-flow_duals = outerjoin(values(duals)..., on = :DateTime,)
+duals = read_duals(
+    res,
+    [k for k in list_dual_keys(res) if PSI.get_entry_type(k) == NetworkFlowConstraint],
+)
+λ = read_dual(res, "CopperPlateBalanceConstraint__System")[:, 2]
+flow_duals = outerjoin(values(duals)..., on = :DateTime)
 μ = Matrix(flow_duals[:, PTDF_matrix.axes[1]])
 
 # Here we calculate LMP as λ + congestion component of the LMP which is a product of μ and the PTDF matrix.
-LMP = flow_duals[:,[:DateTime]]
+LMP = flow_duals[:, [:DateTime]]
 for bus in get_components(Bus, sys)
-    LMP[:,get_name(bus)] = λ .+ μ * PTDF_matrix[:, get_number(bus)]
+    LMP[:, get_name(bus)] = λ .+ μ * PTDF_matrix[:, get_number(bus)]
 end
 
 # Finally here we have the LMPs

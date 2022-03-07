@@ -36,25 +36,17 @@ sys_RT = build_system(SIIPExampleSystems, "5_bus_matpower_RT")
 # ## `ProblemTemplate`s
 
 template_uc = template_unit_commitment(use_slacks = true)
-template_ed = template_economic_dispatch(network = NetworkModel(CopperPlatePowerModel, duals = [CopperPlateBalanceConstraint]))
+template_ed = template_economic_dispatch(
+    network = NetworkModel(CopperPlatePowerModel, duals = [CopperPlateBalanceConstraint]),
+)
 
 # ### Define the Simulation Sequence
 
 models = SimulationModels(
     decision_models = [
-        DecisionModel(
-            template_uc,
-            sys_DA,
-            name = "UC",
-            optimizer = solver,
-        ),
-        DecisionModel(
-            template_ed,
-            sys_RT,
-            name = "ED",
-            optimizer = solver,
-        ),
-    ]
+        DecisionModel(template_uc, sys_DA, name = "UC", optimizer = solver),
+        DecisionModel(template_ed, sys_RT, name = "ED", optimizer = solver),
+    ],
 )
 
 feedforward = Dict(

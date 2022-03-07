@@ -10,11 +10,9 @@ using Dates
 using DataFrames
 using TimeSeries
 
-using Cbc #solver
+using HiGHS #solver
 
-include(
-    joinpath(SIIPExamples.TEST_DIR, SIIPExamples.PSY_EX_FOLDER, "04_parse_tabulardata.jl"),
-)
+sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
 MultiDay = collect(
     DateTime("2020-01-01T00:00:00"):Hour(1):(DateTime("2020-01-01T00:00:00") + Hour(8783)),
@@ -30,25 +28,18 @@ for gen in get_components(ThermalGen, sys)
     #set_variable_cost!(sys, gen, _time_series)
 end
 
-horizon = 24;
-interval = Dates.Hour(24);
-transform_single_time_series!(sys, horizon, interval)
+transform_single_time_series!(sys, 24, Dates.Hour(24))
 
-uc_template = template_unit_commitment(network = CopperPlatePowerModel)
+uc_template = template_unit_commitment()
 
 set_device_model!(uc_template, ThermalMultiStart, ThermalMultiStartUnitCommitment)
 
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
-problem = OperationsProblem(
-    uc_template,
-    sys,
-    horizon = 4,
-    optimizer = solver,
-    balance_slack_variables = true,
-)
+problem = DecisionModel(uc_template, sys, horizon = 4, optimizer = solver)
 build!(problem, output_dir = mktempdir())
 
 solve!(problem)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+

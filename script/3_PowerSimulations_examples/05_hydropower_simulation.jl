@@ -147,7 +147,7 @@ problems = SimulationModels(
             optimizer = solver,
             system_to_file = false,
         ),
-    ]
+    ],
 )
 
 # This builds the sequence and passes the the energy dispatch schedule for the `HydroEnergyReservoir`
@@ -157,13 +157,14 @@ problems = SimulationModels(
 sequence = SimulationSequence(
     models = problems,
     feedforwards = Dict(
-        "DA" => [EnergyLimitFeedforward(
-            component_type = HydroEnergyReservoir,
-            source = ActivePowerVariable,
-            affected_values = [ActivePowerVariable],
-            number_of_periods = get_forecast_horizon(c_sys5_hy_uc_targets)
-        ),
-        ]
+        "DA" => [
+            EnergyLimitFeedforward(
+                component_type = HydroEnergyReservoir,
+                source = ActivePowerVariable,
+                affected_values = [ActivePowerVariable],
+                number_of_periods = get_forecast_horizon(c_sys5_hy_uc_targets),
+            ),
+        ],
     ),
     ini_cond_chronology = IntraProblemChronology(),
 );
@@ -218,7 +219,7 @@ problems = SimulationModels(
             optimizer = solver,
             system_to_file = false,
         ),
-    ]
+    ],
 )
 
 sequence = SimulationSequence(
@@ -226,21 +227,20 @@ sequence = SimulationSequence(
     feedforwards = Dict(
         "DA" => [
             EnergyLimitFeedforward(
-            component_type = HydroEnergyReservoir,
-            source = ActivePowerVariable,
-            affected_values = [ActivePowerVariable],
-            number_of_periods = get_forecast_horizon(c_sys5_hy_uc_targets)
-        ),
+                component_type = HydroEnergyReservoir,
+                source = ActivePowerVariable,
+                affected_values = [ActivePowerVariable],
+                number_of_periods = get_forecast_horizon(c_sys5_hy_uc_targets),
+            ),
         ],
         "ED" => [
             EnergyLimitFeedforward(
-            component_type = HydroEnergyReservoir,
-            source = ActivePowerVariable,
-            affected_values = [ActivePowerVariable],
-            number_of_periods = get_forecast_horizon(c_sys5_hy_ed_targets)
-        ),
+                component_type = HydroEnergyReservoir,
+                source = ActivePowerVariable,
+                affected_values = [ActivePowerVariable],
+                number_of_periods = get_forecast_horizon(c_sys5_hy_ed_targets),
+            ),
         ],
-
     ),
     ini_cond_chronology = IntraProblemChronology(),
 );

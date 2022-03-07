@@ -64,20 +64,15 @@ set_service_model!(uc_template, VariableReserve{ReserveUp}, RangeReserve)
 # and then solve the ACOPF.
 models = SimulationModels(
     decision_models = [
-        DecisionModel(
-            uc_template,
-            sys,
-            name = "UC",
-            optimizer = uc_solver,
-        ),
+        DecisionModel(uc_template, sys, name = "UC", optimizer = uc_solver),
         DecisionModel(
             ed_template,
             sys,
             name = "ACOPF",
             optimizer = solver,
             initialize_model = false,
-        )
-    ]
+        ),
+    ],
 )
 sequence = SimulationSequence(
     models = models,
@@ -117,7 +112,10 @@ execute!(sim, enable_progress_bar = false)
 results = SimulationResults(sim)
 ac_results = get_problem_results(results, "ACOPF")
 
-slack_keys = [k for k in list_variable_keys(ac_results) if PSI.get_entry_type(k) ∈ [SystemBalanceSlackDown, SystemBalanceSlackUp]]
+slack_keys = [
+    k for k in list_variable_keys(ac_results) if
+    PSI.get_entry_type(k) ∈ [SystemBalanceSlackDown, SystemBalanceSlackUp]
+]
 slack_vars = read_realized_variables(ac_results, slack_keys)
 
 #nb # Plot the slack values

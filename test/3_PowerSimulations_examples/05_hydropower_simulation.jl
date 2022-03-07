@@ -10,9 +10,9 @@ using PowerSystemCaseBuilder
 using Dates
 using DataFrames
 
-using Cbc # solver
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.05)
-odir = mktempdir() #tmpdir for build steps
+using HiGHS # solver
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.05)
+odir = mktempdir(".", cleanup = true) #tmpdir for build steps
 
 c_sys5_hy_wk = build_system(SIIPExampleSystems, "5_bus_hydro_wk_sys")
 c_sys5_hy_uc = build_system(SIIPExampleSystems, "5_bus_hydro_uc_sys")
@@ -28,149 +28,158 @@ print_tree(HydroGen)
 
 print_tree(PSI.AbstractHydroFormulation)
 
-template = OperationsProblemTemplate()
+template = ProblemTemplate()
 set_device_model!(template, HydroEnergyReservoir, HydroDispatchRunOfRiver)
 set_device_model!(template, HydroDispatch, FixedOutput)
 set_device_model!(template, PowerLoad, StaticPowerLoad)
 
-op_problem = OperationsProblem(template, c_sys5_hy_uc, horizon = 2)
-build!(op_problem, output_dir = odir)
+prob = DecisionModel(template, c_sys5_hy_uc, horizon = 2)
+build!(prob, output_dir = odir)
 
-op_problem.internal.optimization_container.JuMPmodel
+PSI.get_jump_model(prob)
 
-template = OperationsProblemTemplate()
+template = ProblemTemplate()
 set_device_model!(template, HydroEnergyReservoir, HydroDispatchReservoirBudget)
 set_device_model!(template, PowerLoad, StaticPowerLoad)
 
-op_problem = PSI.OperationsProblem(template, c_sys5_hy_uc, horizon = 2)
-build!(op_problem, output_dir = odir)
+prob = DecisionModel(template, c_sys5_hy_uc, horizon = 2)
+build!(prob, output_dir = odir)
 
-op_problem.internal.optimization_container.JuMPmodel
+PSI.get_jump_model(prob)
 
-template = OperationsProblemTemplate()
+template = ProblemTemplate()
 set_device_model!(template, HydroEnergyReservoir, HydroDispatchReservoirStorage)
 set_device_model!(template, PowerLoad, StaticPowerLoad)
 
-op_problem = PSI.OperationsProblem(template, c_sys5_hy_uc_targets, horizon = 24)
-build!(op_problem, output_dir = odir)
+prob = DecisionModel(template, c_sys5_hy_uc_targets, horizon = 24)
+build!(prob, output_dir = odir)
 
-op_problem.internal.optimization_container.JuMPmodel
+PSI.get_jump_model(prob)
 
-template_md = OperationsProblemTemplate()
-set_device_model!(template_md, ThermalStandard, ThermalDispatch)
+template_md = ProblemTemplate()
+set_device_model!(template_md, ThermalStandard, ThermalStandardDispatch)
 set_device_model!(template_md, PowerLoad, StaticPowerLoad)
 set_device_model!(template_md, HydroEnergyReservoir, HydroDispatchReservoirStorage)
 
-template_da = OperationsProblemTemplate()
-set_device_model!(template_da, ThermalStandard, ThermalDispatch)
+template_da = ProblemTemplate()
+set_device_model!(template_da, ThermalStandard, ThermalStandardDispatch)
 set_device_model!(template_da, PowerLoad, StaticPowerLoad)
 set_device_model!(template_da, HydroEnergyReservoir, HydroDispatchReservoirStorage)
 
-problems = SimulationProblems(
-    MD = OperationsProblem(
-        template_md,
-        c_sys5_hy_wk_targets,
-        optimizer = solver,
-        system_to_file = false,
-    ),
-    DA = OperationsProblem(
-        template_da,
-        c_sys5_hy_uc_targets,
-        optimizer = solver,
-        system_to_file = false,
-    ),
+problems = SimulationModels(
+    decision_models = [
+        DecisionModel(
+            template_md,
+            c_sys5_hy_wk_targets,
+            name = "MD",
+            optimizer = solver,
+            system_to_file = false,
+        ),
+        DecisionModel(
+            template_da,
+            c_sys5_hy_uc_targets,
+            name = "DA",
+            optimizer = solver,
+            system_to_file = false,
+        ),
+    ],
 )
 
 sequence = SimulationSequence(
-    problems = problems,
-    feedforward_chronologies = Dict(("MD" => "DA") => Synchronize(periods = 2)),
-    intervals = Dict("MD" => (Hour(48), Consecutive()), "DA" => (Hour(24), Consecutive())),
-    feedforward = Dict(
-        ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_source_problem = PSI.ACTIVE_POWER,
-            affected_variables = [PSI.ACTIVE_POWER],
-        ),
+    models = problems,
+    feedforwards = Dict(
+        "DA" => [
+            EnergyLimitFeedforward(
+                component_type = HydroEnergyReservoir,
+                source = ActivePowerVariable,
+                affected_values = [ActivePowerVariable],
+                number_of_periods = get_forecast_horizon(c_sys5_hy_uc_targets),
+            ),
+        ],
     ),
-    cache = Dict(("MD", "DA") => StoredEnergy(HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = IntraProblemChronology(),
 );
 
 sim = Simulation(
     name = "hydro",
     steps = 1,
-    problems = problems,
+    models = problems,
     sequence = sequence,
     simulation_folder = odir,
 )
 
 build!(sim)
 
-sim.problems["MD"].internal.optimization_container.JuMPmodel
+PSI.get_jump_model(sim.models.decision_models[1])
 
-sim.problems["DA"].internal.optimization_container.JuMPmodel
+PSI.get_jump_model(sim.models.decision_models[2])
 
 transform_single_time_series!(c_sys5_hy_wk, 2, Hour(24)) # TODO fix PSI to enable longer intervals of stage 1
 
-problems = SimulationProblems(
-    MD = OperationsProblem(
-        template_md,
-        c_sys5_hy_wk_targets,
-        optimizer = solver,
-        system_to_file = false,
-    ),
-    DA = OperationsProblem(
-        template_da,
-        c_sys5_hy_uc_targets,
-        optimizer = solver,
-        system_to_file = false,
-    ),
-    ED = OperationsProblem(
-        template_da,
-        c_sys5_hy_ed_targets,
-        optimizer = solver,
-        system_to_file = false,
-    ),
+problems = SimulationModels(
+    decision_models = [
+        DecisionModel(
+            template_md,
+            c_sys5_hy_wk_targets,
+            name = "MD",
+            optimizer = solver,
+            system_to_file = false,
+        ),
+        DecisionModel(
+            template_da,
+            c_sys5_hy_uc_targets,
+            name = "DA",
+            optimizer = solver,
+            system_to_file = false,
+        ),
+        DecisionModel(
+            template_da,
+            c_sys5_hy_ed_targets,
+            name = "ED",
+            optimizer = solver,
+            system_to_file = false,
+        ),
+    ],
 )
 
 sequence = SimulationSequence(
-    problems = problems,
-    feedforward_chronologies = Dict(
-        ("MD" => "DA") => Synchronize(periods = 2),
-        ("DA" => "ED") => Synchronize(periods = 24),
+    models = problems,
+    feedforwards = Dict(
+        "DA" => [
+            EnergyLimitFeedforward(
+                component_type = HydroEnergyReservoir,
+                source = ActivePowerVariable,
+                affected_values = [ActivePowerVariable],
+                number_of_periods = get_forecast_horizon(c_sys5_hy_uc_targets),
+            ),
+        ],
+        "ED" => [
+            EnergyLimitFeedforward(
+                component_type = HydroEnergyReservoir,
+                source = ActivePowerVariable,
+                affected_values = [ActivePowerVariable],
+                number_of_periods = get_forecast_horizon(c_sys5_hy_ed_targets),
+            ),
+        ],
     ),
-    intervals = Dict(
-        "MD" => (Hour(48), Consecutive()),
-        "DA" => (Hour(24), Consecutive()),
-        "ED" => (Hour(1), Consecutive()),
-    ),
-    feedforward = Dict(
-        ("DA", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_source_problem = PSI.ACTIVE_POWER,
-            affected_variables = [PSI.ACTIVE_POWER],
-        ),
-        ("ED", :devices, :HydroEnergyReservoir) => IntegralLimitFF(
-            variable_source_problem = PSI.ACTIVE_POWER,
-            affected_variables = [PSI.ACTIVE_POWER],
-        ),
-    ),
-    cache = Dict(("MD", "DA") => StoredEnergy(HydroEnergyReservoir, PSI.ENERGY)),
     ini_cond_chronology = IntraProblemChronology(),
 );
 
 sim = Simulation(
     name = "hydro",
     steps = 1,
-    problems = problems,
+    models = problems,
     sequence = sequence,
     simulation_folder = odir,
 )
 
 build!(sim)
 
-sim.problems["MD"].internal.optimization_container.JuMPmodel
+PSI.get_jump_model(sim.models.decision_models[1])
 
-sim.problems["DA"].internal.optimization_container.JuMPmodel
+PSI.get_jump_model(sim.models.decision_models[2])
 
-sim.problems["ED"].internal.optimization_container.JuMPmodel
+PSI.get_jump_model(sim.models.decision_models[3])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
+
