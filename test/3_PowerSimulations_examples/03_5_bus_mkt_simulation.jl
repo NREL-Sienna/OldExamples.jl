@@ -67,4 +67,3 @@ prices = read_dual(ed_results, "CopperPlateBalanceConstraint__System")
 read_realized_dual(ed_results, "CopperPlateBalanceConstraint__System")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

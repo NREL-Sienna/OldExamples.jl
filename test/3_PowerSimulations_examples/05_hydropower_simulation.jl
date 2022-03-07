@@ -182,4 +182,3 @@ PSI.get_jump_model(sim.models.decision_models[2])
 PSI.get_jump_model(sim.models.decision_models[3])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-

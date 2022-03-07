@@ -41,4 +41,3 @@ uc_results = get_problem_results(sim_results, "UC")
 read_realized_variable(uc_results, "OnVariable__ThermalStandard")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
-
