@@ -119,14 +119,14 @@ PSI.get_jump_model(prob)
 # so that we can maintain computational tractability while getting an estimate of system
 # requirements/capabilities.
 template_md = ProblemTemplate()
-set_device_model!(template_md, ThermalStandard, ThermalStandardDispatch)
+set_device_model!(template_md, ThermalStandard, ThermalDispatchNoMin)
 set_device_model!(template_md, PowerLoad, StaticPowerLoad)
 set_device_model!(template_md, HydroEnergyReservoir, HydroDispatchReservoirStorage)
 
 # For the daily model, we can increase the modeling detail since we'll be solving shorter
 # problems.
 template_da = ProblemTemplate()
-set_device_model!(template_da, ThermalStandard, ThermalStandardDispatch)
+set_device_model!(template_da, ThermalStandard, ThermalBasicUnitCommitment)
 set_device_model!(template_da, PowerLoad, StaticPowerLoad)
 set_device_model!(template_da, HydroEnergyReservoir, HydroDispatchReservoirStorage)
 #-
@@ -139,6 +139,7 @@ problems = SimulationModels(
             name = "MD",
             optimizer = solver,
             system_to_file = false,
+            initialize_model = false,
         ),
         DecisionModel(
             template_da,
@@ -146,6 +147,7 @@ problems = SimulationModels(
             name = "DA",
             optimizer = solver,
             system_to_file = false,
+            initialize_model = false,
         ),
     ],
 )
@@ -166,7 +168,7 @@ sequence = SimulationSequence(
             ),
         ],
     ),
-    ini_cond_chronology = IntraProblemChronology(),
+    ini_cond_chronology = InterProblemChronology(),
 );
 
 #-
@@ -196,6 +198,13 @@ PSI.get_jump_model(sim.models.decision_models[2])
 # #### 3-Stage Simulation:
 transform_single_time_series!(c_sys5_hy_wk, 2, Hour(24)) # TODO fix PSI to enable longer intervals of stage 1
 
+# For the real time model, we can increase the modeling detail since we'll be solving shorter
+# problems.
+template_ed = ProblemTemplate()
+set_device_model!(template_ed, ThermalStandard, ThermalDispatchNoMin)
+set_device_model!(template_ed, PowerLoad, StaticPowerLoad)
+set_device_model!(template_ed, HydroEnergyReservoir, HydroDispatchReservoirStorage)
+
 problems = SimulationModels(
     decision_models = [
         DecisionModel(
@@ -204,6 +213,7 @@ problems = SimulationModels(
             name = "MD",
             optimizer = solver,
             system_to_file = false,
+            initialize_model = false,
         ),
         DecisionModel(
             template_da,
@@ -211,13 +221,15 @@ problems = SimulationModels(
             name = "DA",
             optimizer = solver,
             system_to_file = false,
+            initialize_model = false,
         ),
         DecisionModel(
-            template_da,
+            template_ed,
             c_sys5_hy_ed_targets,
             name = "ED",
             optimizer = solver,
             system_to_file = false,
+            initialize_model = false,
         ),
     ],
 )
@@ -242,7 +254,7 @@ sequence = SimulationSequence(
             ),
         ],
     ),
-    ini_cond_chronology = IntraProblemChronology(),
+    ini_cond_chronology = InterProblemChronology(),
 );
 
 #-
