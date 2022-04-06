@@ -110,13 +110,13 @@ execute!(sim, enable_progress_bar = false)
 # And extract some results
 
 results = SimulationResults(sim)
-ac_results = get_problem_results(results, "ACOPF")
+ac_results = get_decision_problem_results(results, "ACOPF")
 
 slack_keys = [
     k for k in list_variable_keys(ac_results) if
     PSI.get_entry_type(k) ∈ [SystemBalanceSlackDown, SystemBalanceSlackUp]
 ]
-slack_vars = read_realized_variables(ac_results, slack_keys)
+slack_vars = Dict([k => read_realized_variables(ac_results, k) for k in slack_keys])
 
 #nb # Plot the slack values
 #nb plot_results(slack_vars);

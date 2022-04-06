@@ -116,6 +116,6 @@ build!(
 
 # ### Load and analyze results
 #nb results = SimulationResults(sim);
-#nb uc_results = get_problem_results(results, "UC");
+#nb uc_results = get_decision_problem_results(results, "UC");
 
 #nb plot_fuel(uc_results)

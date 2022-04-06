@@ -57,5 +57,5 @@ execute!(sim)
 
 # ### Load and analyze results
 sim_results = SimulationResults(sim);
-uc_results = get_problem_results(sim_results, "UC")
+uc_results = get_decision_problem_results(sim_results, "UC")
 read_realized_variable(uc_results, "OnVariable__ThermalStandard")

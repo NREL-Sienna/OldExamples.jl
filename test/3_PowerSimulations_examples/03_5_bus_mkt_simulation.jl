@@ -57,8 +57,8 @@ execute!(sim, enable_progress_bar = false)
 # Results
 
 results = SimulationResults(sim);
-uc_results = get_problem_results(results, "UC")
-ed_results = get_problem_results(results, "ED");
+uc_results = get_decision_problem_results(results, "UC")
+ed_results = get_decision_problem_results(results, "ED");
 
 list_dual_names(ed_results)
 

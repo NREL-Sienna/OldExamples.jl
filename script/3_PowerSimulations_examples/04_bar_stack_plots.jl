@@ -30,7 +30,7 @@ include(
 #     joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
 #
 # results = SimulationResults(simulation_folder);
-# uc_results = get_problem_results(results, "UC")
+# uc_results = get_decision_problem_results(results, "UC")
 # ```
 
 # Since some of the plotting capabilities rely on input data as well as output data (e.g. fuel plots)

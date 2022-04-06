@@ -59,21 +59,24 @@ build!(sim)
 execute!(sim, enable_progress_bar = false)
 
 results = SimulationResults(sim);
-uc_results = get_problem_results(results, "UC"); # UC stage result metadata
-ed_results = get_problem_results(results, "ED"); # ED stage result metadata
+uc_results = get_decision_problem_results(results, "UC"); # UC stage result metadata
+ed_results = get_decision_problem_results(results, "ED"); # ED stage result metadata
+
+read_variables(uc_results)
+
+read_parameters(uc_results)
 
 list_variable_names(uc_results)
 
 list_parameter_names(uc_results)
 
-read_variables(
-    uc_results,
-    [
+Dict([
+    v => read_variable(uc_results, v) for v in [
         "ActivePowerVariable__RenewableDispatch",
         "ActivePowerVariable__HydroDispatch",
         "StopVariable__ThermalStandard",
-    ],
-)
+    ]
+])
 
 read_parameter(
     ed_results,

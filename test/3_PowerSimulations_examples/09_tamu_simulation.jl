@@ -37,7 +37,7 @@ build!(sim)
 execute!(sim)
 
 sim_results = SimulationResults(sim);
-uc_results = get_problem_results(sim_results, "UC")
+uc_results = get_decision_problem_results(sim_results, "UC")
 read_realized_variable(uc_results, "OnVariable__ThermalStandard")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

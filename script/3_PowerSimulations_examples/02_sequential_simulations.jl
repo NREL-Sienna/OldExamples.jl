@@ -152,10 +152,16 @@ execute!(sim, enable_progress_bar = false)
 # requests to the specific data of interest. This allows you to efficiently access the
 # results of interest without overloading resources.
 results = SimulationResults(sim);
-uc_results = get_problem_results(results, "UC"); # UC stage result metadata
-ed_results = get_problem_results(results, "ED"); # ED stage result metadata
+uc_results = get_decision_problem_results(results, "UC"); # UC stage result metadata
+ed_results = get_decision_problem_results(results, "ED"); # ED stage result metadata
 
-# We can see that the results `uc_results` contain a number of variables:
+# We can read all the result variables
+read_variables(uc_results)
+
+# or all the parameters
+read_parameters(uc_results)
+
+# We can just list the variable names contained in `uc_results`:
 list_variable_names(uc_results)
 
 # and a number of parameters (this pattern also works for aux_variables, expressions, and duals)
@@ -164,14 +170,13 @@ list_parameter_names(uc_results)
 # Now we can read the specific results of interest for a specific problem, time window (optional),
 # and set of variables, duals, or parameters (optional)
 
-read_variables(
-    uc_results,
-    [
+Dict([
+    v => read_variable(uc_results, v) for v in [
         "ActivePowerVariable__RenewableDispatch",
         "ActivePowerVariable__HydroDispatch",
         "StopVariable__ThermalStandard",
-    ],
-)
+    ]
+])
 
 # Or if we want the result of just one variable, parameter, or dual (must be defined in the
 # problem definition), we can use:

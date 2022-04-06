@@ -35,10 +35,10 @@ build!(problem, output_dir = mktempdir())
 solve!(problem)
 
 res = ProblemResults(problem)
-duals = read_duals(
-    res,
-    [k for k in list_dual_keys(res) if PSI.get_entry_type(k) == NetworkFlowConstraint],
-)
+duals = Dict([
+    k => read_dual(res, k) for
+    k in list_dual_keys(res) if PSI.get_entry_type(k) == NetworkFlowConstraint
+])
 λ = read_dual(res, "CopperPlateBalanceConstraint__System")[:, 2]
 flow_duals = outerjoin(values(duals)..., on = :DateTime)
 μ = Matrix(flow_duals[:, PTDF_matrix.axes[1]])

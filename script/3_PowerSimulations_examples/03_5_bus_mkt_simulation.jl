@@ -86,8 +86,8 @@ execute!(sim, enable_progress_bar = false)
 ## Results
 # First we can load the result metadata
 results = SimulationResults(sim);
-uc_results = get_problem_results(results, "UC")
-ed_results = get_problem_results(results, "ED");
+uc_results = get_decision_problem_results(results, "UC")
+ed_results = get_decision_problem_results(results, "ED");
 
 # Then we can read and examine the results of interest. For example, if we want to read
 # marginal prices of the balance constraint, we can see what dual values are available:
