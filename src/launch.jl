@@ -158,6 +158,6 @@ Prepend each notebook with an environment path
 """
 function set_env(str)
     env_path = dirname(dirname(pathof(SIIPExamples)))
-    env_str = "] activate $(env_path)\n\n"
+    env_str = "using Pkg;\nPkg.activate(\"$(env_path)\");\nPkg.instantiate();\n\n"
     return env_str * str
 end

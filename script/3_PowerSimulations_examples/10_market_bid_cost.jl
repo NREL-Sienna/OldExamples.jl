@@ -25,14 +25,11 @@ using DataFrames
 using TimeSeries
 
 # ### Optimization packages
-using Cbc #solver
+using HiGHS #solver
 
 # ### Data
-# This data depends upon the [RTS-GMLC](https://github.com/gridmod/rts-gmlc) dataset that we
-# assembled in the [tabular data parsing example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb).
-include(
-    joinpath(SIIPExamples.TEST_DIR, SIIPExamples.PSY_EX_FOLDER, "04_parse_tabulardata.jl"),
-)
+# Create a `System` from RTS-GMLC data
+sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
 # ### Creating the Time Series data for Energy bid
 MultiDay = collect(
@@ -57,9 +54,7 @@ for gen in get_components(ThermalGen, sys)
 end
 
 # ### Transforming SingleTimeSeries into Deterministic
-horizon = 24;
-interval = Dates.Hour(24);
-transform_single_time_series!(sys, horizon, interval)
+transform_single_time_series!(sys, 24, Dates.Hour(24))
 
 # In the [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 # we defined a unit-commitment problem with a copper plate representation of the network.
@@ -67,21 +62,15 @@ transform_single_time_series!(sys, horizon, interval)
 # formulation for thermal device representation.
 
 # For now, let's just choose a standard UC formulation.
-uc_template = template_unit_commitment(network = CopperPlatePowerModel)
+uc_template = template_unit_commitment()
 
 # And adjust the thermal generator formulation to use `ThermalMultiStartUnitCommitment`
 set_device_model!(uc_template, ThermalMultiStart, ThermalMultiStartUnitCommitment)
 
 # Now we can build a 4-hour economic dispatch problem with the RTS data.
-solver = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 1, "ratioGap" => 0.5)
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
 
-problem = OperationsProblem(
-    uc_template,
-    sys,
-    horizon = 4,
-    optimizer = solver,
-    balance_slack_variables = true,
-)
+problem = DecisionModel(uc_template, sys, horizon = 4, optimizer = solver)
 build!(problem, output_dir = mktempdir())
 
 # And solve it ...

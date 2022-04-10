@@ -22,7 +22,7 @@ PSI = PowerSimulations
 plotlyjs()
 
 # ### Optimization packages
-# You can use the cbc solver as in one of the other PowerSimulations.jl examples, but on
+# You can use the free solvers as in one of the other PowerSimulations.jl examples, but on
 # large problems it's useful to have a solver with better performance. I'll use the Xpress
 # solver since I have a license, but others such as Gurobi or CPLEX work well too.
 using Xpress
@@ -57,7 +57,7 @@ end
 # ### Create a `template`
 # Now we can create a `template` that applies an unbounded formulation to `Line`s and the standard
 # flow limited formulation to `MonitoredLine`s.
-template = OperationsProblemTemplate(DCPPowerModel)
+template = ProblemTemplate(DCPPowerModel)
 set_device_model!(template, Line, StaticBranchUnbounded)
 set_device_model!(template, TapTransformer, StaticBranchUnbounded)
 set_device_model!(template, MonitoredLine, StaticBranch)
@@ -66,18 +66,8 @@ set_device_model!(template, RenewableDispatch, RenewableFullDispatch)
 set_device_model!(template, PowerLoad, StaticPowerLoad)
 set_device_model!(template, HydroDispatch, FixedOutput)
 
-ptdf = PTDF(sys)
-
 # ### Build and execute single step problem
-op_problem = OperationsProblem(
-    template,
-    sys;
-    optimizer = solver,
-    horizon = 24,
-    balance_slack_variables = false,
-    use_parameters = true,
-    PTDF = ptdf,
-)
+op_problem = DecisionModel(template, sys; optimizer = solver, horizon = 24)
 
 build!(op_problem, output_dir = mktempdir(), console_level = Logging.Info)
 
@@ -91,28 +81,25 @@ plot_fuel(res)
 # In addition to defining the formulation template, sequential simulations require
 # definitions for how information flows between problems.
 sim_folder = mkpath(joinpath(pkgpath, "Texas-sim"))
-problems = SimulationProblems(
-    UC = OperationsProblem(
-        template,
-        sys,
-        optimizer = solver,
-        balance_slack_variables = true,
-        system_to_file = false,
-        PTDF = ptdf,
-    ),
+models = SimulationModels(
+    decision_models = [
+        DecisionModel(
+            template,
+            sys,
+            name = "UC",
+            optimizer = solver,
+            system_to_file = false,
+        ),
+    ],
 )
-intervals = Dict("UC" => (Hour(24), Consecutive()))
-DA_sequence = SimulationSequence(
-    problems = problems,
-    intervals = intervals,
-    ini_cond_chronology = IntraProblemChronology(),
-)
+DA_sequence =
+    SimulationSequence(models = models, ini_cond_chronology = IntraProblemChronology())
 
 # ### Define and build a simulation
 sim = Simulation(
     name = "Texas-test",
     steps = 3,
-    problems = problems,
+    models = models,
     sequence = DA_sequence,
     simulation_folder = "Texas-sim",
 )
@@ -129,6 +116,6 @@ build!(
 
 # ### Load and analyze results
 #nb results = SimulationResults(sim);
-#nb uc_results = get_problem_results(results, "UC");
+#nb uc_results = get_decision_problem_results(results, "UC");
 
 #nb plot_fuel(uc_results)

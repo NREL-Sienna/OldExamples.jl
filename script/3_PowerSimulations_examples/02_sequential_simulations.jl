@@ -8,60 +8,76 @@
 # PowerSimulations.jl supports simulations that consist of sequential optimization problems
 # where results from previous problems inform subsequent problems in a variety of ways. This
 # example demonstrates some of these capabilities to represent electricity market clearing.
+# This example is intended to be an extension of the
+# [OperationsProblem example.](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
 
 # ## Dependencies
-# Since the `OperatiotnsProblem` is the fundamental building block of a sequential
-# simulation in PowerSimulations, we will build on the [OperationsProblem example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/01_operations_problems.ipynb)
-# by sourcing it as a dependency.
 using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(
-    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
-)
+
+# ### Modeling Packages
+using PowerSystems
+using PowerSimulations
+const PSI = PowerSimulations
+using PowerSystemCaseBuilder
+using Dates
+
+# ### Optimization packages
+using HiGHS #solver
+
+# ### Optimizer
+# It's most convenient to define an optimizer instance upfront and pass it into the
+# `DecisionModel` constructor. For this example, we can use the free HiGHS solver with a
+# relatively relaxed MIP gap (`ratioGap`) setting to improve speed.
+
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
+
+# ### Hourly day-ahead system
+# First, we'll create a `System` with hourly data to represent day-ahead forecasted wind,
+# solar, and load profiles:
+sys_DA = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
 # ### 5-Minute system
-# We had already created a `sys::System` from hourly RTS data in the OperationsProblem example.
 # The RTS data also includes 5-minute resolution time series data. So, we can create another
-# `System`:
+# `System` to represent 15 minute ahead forecasted data for a "real-time" market:
 sys_RT = build_system(PSITestSystems, "modified_RTS_GMLC_RT_sys")
 
-# ## `OperationsProblemTemplate`s define `Stage`s
+# ## `ProblemTemplate`s define stages
 # Sequential simulations in PowerSimulations are created by defining `OperationsProblems`
-# that represent `Stages`, and how information flows between executions of a `Stage` and
-# between different `Stage`s.
+# that represent stages, and how information flows between executions of a stage and
+# between different stages.
 #
 # Let's start by defining a two stage simulation that might look like a typical day-Ahead
 # and real-time electricity market clearing process.
 
-# ### We've already defined the reference model for the day-ahead unit commitment
-#set_device_model!(template_ed, GenericBattery, BookKeeping)
-template_uc
+# ### Day-ahead unit commitment stage
+# First, we can define a unit commitment template for the day ahead problem. We can use the
+# included UC template, but in this example, we'll replace the `ThermalBasicUnitCommitment`
+# with the slightly more complex `ThermalStandardUnitCommitment` for the thermal generators.
+template_uc = template_unit_commitment()
+set_device_model!(template_uc, ThermalStandard, ThermalStandardUnitCommitment)
 
 # ### Define the reference model for the real-time economic dispatch
 # In addition to the manual specification process demonstrated in the OperationsProblem
 # example, PSI also provides pre-specified templates for some standard problems:
-template_ed = template_economic_dispatch()
-
-# ### Define the `SimulationProblems`
-# `OperationsProblem`s define models. The actual problem will change as the stage gets updated to represent
-# different time periods, but the formulations applied to the components is constant within
-# a stage. In this case, we want to define two stages with the `OperationsProblemTemplate`s
-# and the `System`s that we've already created.
-problems = SimulationProblems(
-    UC = OperationsProblem(template_uc, sys, optimizer = solver),
-    ED = OperationsProblem(
-        template_ed,
-        sys_RT,
-        optimizer = solver,
-        balance_slack_variables = true,
-    ),
+template_ed = template_economic_dispatch(
+    network = NetworkModel(StandardPTDFModel, PTDF = PTDF(sys_DA), use_slacks = true),#NetworkModel(CopperPlatePowerModel, use_slacks = true),
 )
-# Note that the "ED" problem has a `balance_slack_variables = true` argument. This adds slack
-# variables with a default penalty of 1e6 to the nodal energy balance constraint and helps
-# ensure feasibility with some performance impacts.
+
+# ### Define the `SimulationModels`
+# `DecisionModel`s define the problems that are executed in the simulation.
+# The actual problem will change as the stage gets updated to represent
+# different time periods, but the formulations applied to the components is constant within
+# a stage. In this case, we want to define two stages with the `ProblemTemplate`s
+# and the `System`s that we've already created.
+models = SimulationModels(
+    decision_models = [
+        DecisionModel(template_uc, sys_DA, optimizer = solver, name = "UC"),
+        DecisionModel(template_ed, sys_RT, optimizer = solver, name = "ED"),
+    ],
+)
 
 # ### `SimulationSequence`
-# Similar to an `OperationsProblemTemplate`, the `SimulationSequence` provides a template of
+# Similar to an `ProblemTemplate`, the `SimulationSequence` provides a template of
 # how to execute a sequential set of operations problems.
 
 #nb # print_struct(SimulationSequence)
@@ -76,48 +92,40 @@ problems = SimulationProblems(
 #  - intra-stage chronologies: Define how information flows between multiple executions of a
 # single stage. e.g. the dispatch setpoints of the first period of an economic dispatch problem
 # are constrained by the ramping limits from setpoints in the final period of the previous problem.
-#
 
-# Let's define an inter-stage chronology that synchronizes information from 24 periods of
-# the first stage with a set of executions of the second stage:
-
-feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
-
-# ### `FeedForward` and `Cache`
+# ### `FeedForward`
 # The definition of exactly what information is passed using the defined chronologies is
-# accomplished with `FeedForward` and `Cache` objects. Specifically, `FeedForward` is used
+# accomplished with `FeedForward`. Specifically, `FeedForward` is used
 # to define what to do with information being passed with an inter-stage chronology. Let's
 # define a `FeedForward` that affects the semi-continuous range constraints of thermal generators
 # in the economic dispatch problems based on the value of the unit-commitment variables.
 
 feedforward = Dict(
-    ("ED", :devices, :ThermalStandard) => SemiContinuousFF(
-        binary_source_problem = PSI.ON,
-        affected_variables = [PSI.ACTIVE_POWER],
-    ),
+    "ED" => [
+        SemiContinuousFeedforward(
+            component_type = ThermalStandard,
+            source = OnVariable,
+            affected_values = [ActivePowerVariable],
+        ),
+    ],
 )
 
 # ### Sequencing
 # The stage problem length, look-ahead, and other details surrounding the temporal Sequencing
-# of stages are controlled using the `intervals` argument and the structure of the `Forecast`
-# data in the `System` of each problem.
-#  - intervals::Dict(String, Dates.Period) : defines the interval with which stage problems
-# advance after each execution. e.g. day-ahead problems have an interval of 24-hours
-#
-# So, to define a typical day-ahead - real-time sequence, we can define the following:
+# of stages are controlled using the structure of the time series data in the `System`s.
+# So, to define a typical day-ahead - real-time sequence:
 #  - Day ahead problems should represent 48 hours, advancing 24 hours after each execution (24-hour look-ahead)
 #  - Real time problems should represent 1 hour (12 5-minute periods), advancing 15 min after each execution (15 min look-ahead)
-
-intervals = Dict("UC" => (Hour(24), Consecutive()), "ED" => (Minute(15), Consecutive()))
-
-# Finally, we can put it all together:
+# We can adjust the time series data to reflect this structure in each `System`:
+# - `transform_single_time_series!(sys_DA, 48, Hour(1))`
+# - `transform_single_time_series!(sys_RT, 12, Minute(15))`
+#
+# Now we can put it all together to define a `SimulationSequence`
 
 DA_RT_sequence = SimulationSequence(
-    problems = problems,
-    intervals = intervals,
+    models = models,
     ini_cond_chronology = InterProblemChronology(),
-    feedforward_chronologies = feedforward_chronologies,
-    feedforward = feedforward,
+    feedforwards = feedforward,
 )
 
 # ## `Simulation`
@@ -125,10 +133,10 @@ DA_RT_sequence = SimulationSequence(
 # that we've defined.
 sim = Simulation(
     name = "rts-test",
-    steps = 1,
-    problems = problems,
+    steps = 2,
+    models = models,
     sequence = DA_RT_sequence,
-    simulation_folder = dirname(dirname(pathof(SIIPExamples))),
+    simulation_folder = mktempdir(".", cleanup = true),
 )
 
 # ### Build simulation
@@ -144,20 +152,38 @@ execute!(sim, enable_progress_bar = false)
 # requests to the specific data of interest. This allows you to efficiently access the
 # results of interest without overloading resources.
 results = SimulationResults(sim);
-uc_results = get_problem_results(results, "UC"); # UC stage result metadata
-ed_results = get_problem_results(results, "ED"); # ED stage result metadata
+uc_results = get_decision_problem_results(results, "UC"); # UC stage result metadata
+ed_results = get_decision_problem_results(results, "ED"); # ED stage result metadata
+
+# We can read all the result variables
+read_variables(uc_results)
+
+# or all the parameters
+read_parameters(uc_results)
+
+# We can just list the variable names contained in `uc_results`:
+list_variable_names(uc_results)
+
+# and a number of parameters (this pattern also works for aux_variables, expressions, and duals)
+list_parameter_names(uc_results)
 
 # Now we can read the specific results of interest for a specific problem, time window (optional),
 # and set of variables, duals, or parameters (optional)
 
-read_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+Dict([
+    v => read_variable(uc_results, v) for v in [
+        "ActivePowerVariable__RenewableDispatch",
+        "ActivePowerVariable__HydroDispatch",
+        "StopVariable__ThermalStandard",
+    ]
+])
 
 # Or if we want the result of just one variable, parameter, or dual (must be defined in the
 # problem definition), we can use:
 
 read_parameter(
     ed_results,
-    :P__max_active_power__RenewableFix_max_active_power,
+    "ActivePowerTimeSeriesParameter__RenewableFix",
     initial_time = DateTime("2020-01-01T06:00:00"),
     count = 5,
 )
@@ -165,7 +191,10 @@ read_parameter(
 # * note that this returns the results of each execution step in a separate dataframe *
 # If you want the realized results (without lookahead periods), you can call `read_realized_*`:
 
-read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+read_realized_variables(
+    uc_results,
+    ["ActivePowerVariable__ThermalStandard", "ActivePowerVariable__RenewableDispatch"],
+)
 
 # ## Plotting
 # Take a look at the [plotting examples.](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/3_PowerSimulations_examples/04_bar_stack_plots.ipynb)

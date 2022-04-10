@@ -5,6 +5,8 @@ extra
 *.h5
 *.txt
 *.log
+*.svg
+notebook
 RTS-GMLC-master
 5-bus-simulation
 TAMU-sim

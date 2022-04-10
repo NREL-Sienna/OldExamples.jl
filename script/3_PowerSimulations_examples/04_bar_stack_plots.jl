@@ -19,31 +19,34 @@ using PowerSystemCaseBuilder
 # ### Results file
 # If you have already run some of the other examples, you should have generated some results
 # (If you haven't run some of the other simulations, you can run
-# `include(joinpath(pkgpath, "test", "3_PowerSimulations_examples", "02_sequential_simulations.jl"))`).
-# You can load the results into memory with:
-simulation_folder = joinpath(dirname(dirname(pathof(SIIPExamples))), "rts-test")
-simulation_folder =
-    joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
+include(
+    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "03_5_bus_mkt_simulation.jl"),
+)
 
-results = SimulationResults(simulation_folder);
-res = get_problem_results(results, "UC")
+# Alternatively, you can load the results into memory with:
+# ```julia
+# simulation_folder = joinpath(dirname(dirname(pathof(SIIPExamples))), "rts-test")
+# simulation_folder =
+#     joinpath(simulation_folder, "$(maximum(parse.(Int64,readdir(simulation_folder))))")
+#
+# results = SimulationResults(simulation_folder);
+# uc_results = get_decision_problem_results(results, "UC")
+# ```
 
 # Since some of the plotting capabilities rely on input data as well as output data (e.g. fuel plots)
 # but the result deserialization doesn't load the `System`, we can add the `System` to the `results`
 # so that the plotting routines can find the requisite data.
-sys = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
-res.system_uuid = sys.internal.uuid
-set_system!(res, sys)
+set_system!(uc_results, sys_DA)
 
 # ## Plots
 # By default, PowerGraphics uses the GR graphics package as the backend for Plots.jl to
 # generate figures. This creates static plots and should execute without any extra steps.
-# For example, we can create a plot of a particular variable in the `res` object:
+# For example, we can create a plot of a particular variable in the `uc_results` object:
 gr() # loads the GR backend
-timestamps = get_realized_timestamps(res)
-variables = read_realized_variables(res)
+timestamps = get_realized_timestamps(uc_results)
+variable = read_realized_variable(uc_results, "ActivePowerVariable__ThermalStandard")
 
-plot_dataframe(variables[:P__ThermalStandard], timestamps)
+plot_dataframe(variable, timestamps)
 
 # However, interactive plotting can generate much more insightful figures, especially when
 # creating somewhat complex stacked figures. So, we can use the PlotlyJS backend for Plots,
@@ -55,30 +58,30 @@ plotlyjs()
 # create a variety of different figure styles. For example, a stacked area figure can be
 # created with the `stack = true` kwarg:
 
-plot_dataframe(variables[:P__ThermalStandard], timestamps; stack = true)
+plot_dataframe(variable, timestamps; stack = true)
 
 # Or a bar chart can be created with `bar = true`:
-plot_dataframe(variables[:P__ThermalStandard], timestamps; bar = true)
+plot_dataframe(variable, timestamps; bar = true)
 
 # Or a stacked bar chart...
-plot_dataframe(variables[:P__ThermalStandard], timestamps; bar = true, stack = true)
+plot_dataframe(variable, timestamps; bar = true, stack = true)
 
 # PowerGraphics also supports some basic aggregation to create cleaner plots. For example,
 # we can create a plot of the different variables:
-generation = get_generation_data(res)
+generation = get_generation_data(uc_results)
 plot_pgdata(generation, stack = true)
 
-reserves = get_service_data(res)
+reserves = get_service_data(uc_results)
 plot_pgdata(reserves)
 
 # Another standard aggregation is available to plot demand values:
-plot_demand(res)
+plot_demand(uc_results)
 
 # The `plot_demand` function can also be called with the `System` rather than the `StageResults`
 # to inspect the input data. This method can also display demands aggregated by a specified
 # `<:Topology`:
-plot_demand(res.system, aggregation = Area)
+plot_demand(uc_results.system, aggregation = Area)
 
 # Another standard aggregation exists based on the fuel categories of the generators in the
 # `System`
-plot_fuel(res, stack = true)
+plot_fuel(uc_results)

@@ -1,53 +1,57 @@
 #! format: off
 
 using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
-include(
-    joinpath(pkgpath, "test", "3_PowerSimulations_examples", "01_operations_problems.jl"),
-)
+
+using PowerSystems
+using PowerSimulations
+const PSI = PowerSimulations
+using PowerSystemCaseBuilder
+using Dates
+
+using HiGHS #solver
+
+solver = optimizer_with_attributes(HiGHS.Optimizer, "mip_rel_gap" => 0.5)
+
+sys_DA = build_system(PSITestSystems, "modified_RTS_GMLC_DA_sys")
 
 sys_RT = build_system(PSITestSystems, "modified_RTS_GMLC_RT_sys")
 
-#set_device_model!(template_ed, GenericBattery, BookKeeping)
-template_uc
+template_uc = template_unit_commitment()
+set_device_model!(template_uc, ThermalStandard, ThermalStandardUnitCommitment)
 
-template_ed = template_economic_dispatch()
-
-problems = SimulationProblems(
-    UC = OperationsProblem(template_uc, sys, optimizer = solver),
-    ED = OperationsProblem(
-        template_ed,
-        sys_RT,
-        optimizer = solver,
-        balance_slack_variables = true,
-    ),
+template_ed = template_economic_dispatch(
+    network = NetworkModel(StandardPTDFModel, PTDF = PTDF(sys_DA), use_slacks = true),#NetworkModel(CopperPlatePowerModel, use_slacks = true),
 )
 
-feedforward_chronologies = Dict(("UC" => "ED") => Synchronize(periods = 24))
+models = SimulationModels(
+    decision_models = [
+        DecisionModel(template_uc, sys_DA, optimizer = solver, name = "UC"),
+        DecisionModel(template_ed, sys_RT, optimizer = solver, name = "ED"),
+    ],
+)
 
 feedforward = Dict(
-    ("ED", :devices, :ThermalStandard) => SemiContinuousFF(
-        binary_source_problem = PSI.ON,
-        affected_variables = [PSI.ACTIVE_POWER],
-    ),
+    "ED" => [
+        SemiContinuousFeedforward(
+            component_type = ThermalStandard,
+            source = OnVariable,
+            affected_values = [ActivePowerVariable],
+        ),
+    ],
 )
 
-intervals = Dict("UC" => (Hour(24), Consecutive()), "ED" => (Minute(15), Consecutive()))
-
 DA_RT_sequence = SimulationSequence(
-    problems = problems,
-    intervals = intervals,
+    models = models,
     ini_cond_chronology = InterProblemChronology(),
-    feedforward_chronologies = feedforward_chronologies,
-    feedforward = feedforward,
+    feedforwards = feedforward,
 )
 
 sim = Simulation(
     name = "rts-test",
-    steps = 1,
-    problems = problems,
+    steps = 2,
+    models = models,
     sequence = DA_RT_sequence,
-    simulation_folder = dirname(dirname(pathof(SIIPExamples))),
+    simulation_folder = mktempdir(".", cleanup = true),
 )
 
 build!(sim)
@@ -55,18 +59,35 @@ build!(sim)
 execute!(sim, enable_progress_bar = false)
 
 results = SimulationResults(sim);
-uc_results = get_problem_results(results, "UC"); # UC stage result metadata
-ed_results = get_problem_results(results, "ED"); # ED stage result metadata
+uc_results = get_decision_problem_results(results, "UC"); # UC stage result metadata
+ed_results = get_decision_problem_results(results, "ED"); # ED stage result metadata
 
-read_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+read_variables(uc_results)
+
+read_parameters(uc_results)
+
+list_variable_names(uc_results)
+
+list_parameter_names(uc_results)
+
+Dict([
+    v => read_variable(uc_results, v) for v in [
+        "ActivePowerVariable__RenewableDispatch",
+        "ActivePowerVariable__HydroDispatch",
+        "StopVariable__ThermalStandard",
+    ]
+])
 
 read_parameter(
     ed_results,
-    :P__max_active_power__RenewableFix_max_active_power,
+    "ActivePowerTimeSeriesParameter__RenewableFix",
     initial_time = DateTime("2020-01-01T06:00:00"),
     count = 5,
 )
 
-read_realized_variables(uc_results, names = [:P__ThermalStandard, :P__RenewableDispatch])
+read_realized_variables(
+    uc_results,
+    ["ActivePowerVariable__ThermalStandard", "ActivePowerVariable__RenewableDispatch"],
+)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
