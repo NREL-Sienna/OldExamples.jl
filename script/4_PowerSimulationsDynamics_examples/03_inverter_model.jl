@@ -28,12 +28,8 @@ PSD = PowerSimulationsDynamics
 
 # Create the system
 
-file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
-    "script",
-    "4_PowerSimulationsDynamics_examples",
-    "Data",
-)
+file_dir =
+    joinpath(pkgdir(SIIPExamples), "script", "4_PowerSimulationsDynamics_examples", "Data")
 
 sys = System(joinpath(file_dir, "14bus.raw"), joinpath(file_dir, "dyn_data.dyr"))
 

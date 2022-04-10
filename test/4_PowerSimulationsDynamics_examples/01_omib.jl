@@ -9,7 +9,7 @@ gr()
 PSD = PowerSimulationsDynamics
 
 file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
+    pkgdir(SIIPExamples),
     "script",
     "4_PowerSimulationsDynamics_examples",
     "Data",

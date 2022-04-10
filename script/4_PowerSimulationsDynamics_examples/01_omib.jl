@@ -30,12 +30,8 @@ PSD = PowerSimulationsDynamics
 # _The following command requires that you have executed the
 # [dynamic systems data example](https://nbviewer.jupyter.org/github/NREL-SIIP/SIIPExamples.jl/blob/master/notebook/2_PowerSystems_examples/09_loading_dynamic_systems_data.ipynb)
 # previously to generate the json file._
-file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
-    "script",
-    "4_PowerSimulationsDynamics_examples",
-    "Data",
-)
+file_dir =
+    joinpath(pkgdir(SIIPExamples), "script", "4_PowerSimulationsDynamics_examples", "Data")
 omib_sys = System(joinpath(file_dir, "omib_sys.json"))
 
 # ## Build the simulation and initialize the problem

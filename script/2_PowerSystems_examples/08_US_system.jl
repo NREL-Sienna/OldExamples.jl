@@ -23,7 +23,7 @@ using CSV
 # PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
 println("downloading data...")
-datadir = joinpath(dirname(dirname(pathof(SIIPExamples))), "US-System")
+datadir = joinpath(pkgdir(SIIPExamples), "US-System")
 siip_data = joinpath(datadir, "SIIP")
 if !isdir(datadir)
     mkdir(datadir)
@@ -33,12 +33,8 @@ if !isdir(datadir)
     SIIPExamples.unzip(SIIPExamples.os, tempfilename, datadir)
 end
 
-config_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
-    "script",
-    "2_PowerSystems_examples",
-    "US_config",
-)
+config_dir =
+    joinpath(pkgdir(SIIPExamples), "script", "2_PowerSystems_examples", "US_config")
 
 # ### Data Formatting
 # This is a big dataset. Typically one would only want to include one of the interconnects

@@ -57,12 +57,8 @@ const PSY = PowerSystems
 
 # To create the system you need to pass the location of the RAW file
 
-file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
-    "script",
-    "4_PowerSimulationsDynamics_examples",
-    "Data",
-)
+file_dir =
+    joinpath(pkgdir(SIIPExamples), "script", "4_PowerSimulationsDynamics_examples", "Data")
 omib_sys = System(joinpath(file_dir, "OMIB.raw"))
 
 # This system does not have an injection device in bus 1 (the reference bus).

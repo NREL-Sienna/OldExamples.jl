@@ -15,7 +15,7 @@ using TimeSeries
 # PowerSystems.jl links to some test data that is suitable for this example.
 # Let's download the test data
 PowerSystems.download(PowerSystems.TestData; branch = "master")
-base_dir = dirname(dirname(pathof(PowerSystems)));
+base_dir = pkgdir(PowerSystems);
 
 # ### Create a `System`
 

@@ -9,7 +9,7 @@
 
 # ## Dependencies
 using SIIPExamples
-pkgpath = dirname(dirname(pathof(SIIPExamples)))
+pkgpath = pkgdir(SIIPExamples)
 using Dates
 
 # ### Modeling Packages

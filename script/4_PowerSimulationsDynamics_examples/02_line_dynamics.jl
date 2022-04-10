@@ -30,12 +30,8 @@ using Plots
 PSD = PowerSimulationsDynamics
 
 # # Step 2: Data creation
-file_dir = joinpath(
-    dirname(dirname(pathof(SIIPExamples))),
-    "script",
-    "4_PowerSimulationsDynamics_examples",
-    "Data",
-)
+file_dir =
+    joinpath(pkgdir(SIIPExamples), "script", "4_PowerSimulationsDynamics_examples", "Data")
 threebus_sys = System(joinpath(file_dir, "threebus_sys.json"));
 
 # In addition, we will create a new copy of the system on which we will simulate the same
