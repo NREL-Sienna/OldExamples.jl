@@ -7,7 +7,11 @@ using JSON3
 pkgpath = pkgdir(SIIPExamples)
 include(joinpath(pkgpath, "test", "2_PowerSystems_examples", "02_parse_matpower.jl"))
 
-FORECASTS_DIR = joinpath(base_dir, "forecasts", "5bus_ts")
+base_dir = PowerSystems.download(PowerSystems.TestData; branch = "master");
+
+# Directory where the forecast data is stored
+FORECASTS_DIR = joinpath(base_dir, "5-Bus", "5bus_ts")
+
 fname = joinpath(FORECASTS_DIR, "timeseries_pointers_da.json")
 open(fname, "r") do f
     JSON3.@pretty JSON3.read(f)
